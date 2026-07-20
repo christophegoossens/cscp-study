@@ -325,32 +325,66 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a2e;line-hei
 <div id="toast">✓ Progress saved</div>
 <script>
 (function(){
-  var STORE_KEY = 'cscp_plan_status';
+  // ── JSONBin cloud sync ────────────────────────────────────────────
+  var BIN_ID  = '6a5e8d18f5f4af5e29a99da3';
+  var API_KEY = '$2a$10$aib8ir5eQj9wFZj0z/QSV.JYFbz98u/JiTzMUQVXa2qiYaY8gEFWq';
+  var BIN_URL = 'https://api.jsonbin.io/v3/b/' + BIN_ID;
+  var HEADERS = { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY };
 
-  // ── Load saved state ──────────────────────────────────────────────
-  function load(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)||'{}'); }catch(e){ return {}; } }
-  function save(state){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); showToast(); }
-  var state = load();
+  var state = {};
+  var saveTimer = null;
 
-  function showToast(){
+  function showToast(msg){
     var t = document.getElementById('toast');
+    t.textContent = msg || '✓ Progress saved';
     t.classList.add('show');
     clearTimeout(t._timer);
-    t._timer = setTimeout(function(){ t.classList.remove('show'); }, 1800);
+    t._timer = setTimeout(function(){ t.classList.remove('show'); }, 2000);
+  }
+
+  // ── Apply state to DOM ───────────────────────────────────────────
+  function applyState(){
+    document.querySelectorAll('.topic-row').forEach(function(row){
+      var link = row.querySelector('a.topic-link');
+      if(!link) return;
+      var id = link.getAttribute('href');
+      row.classList.remove('is-done','is-flag');
+      if(state[id]==='done') row.classList.add('is-done');
+      if(state[id]==='flag') row.classList.add('is-flag');
+    });
+    updateProgress();
+  }
+
+  // ── Cloud load ───────────────────────────────────────────────────
+  fetch(BIN_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      state = (data.record && data.record.topics) ? data.record.topics : {};
+      applyState();
+    })
+    .catch(function(){ showToast('⚠ Could not load cloud data'); });
+
+  // ── Cloud save (debounced 800ms) ──────────────────────────────────
+  function scheduleSave(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function(){
+      fetch(BIN_URL, {
+        method: 'PUT',
+        headers: HEADERS,
+        body: JSON.stringify({ topics: state })
+      })
+      .then(function(r){ return r.json(); })
+      .then(function(){ showToast('✓ Saved to cloud'); })
+      .catch(function(){ showToast('⚠ Save failed — check connection'); });
+    }, 800);
   }
 
   // ── Add buttons to every topic-row that has a link ───────────────
-  var rows = document.querySelectorAll('.topic-row');
-  rows.forEach(function(row){
+  document.querySelectorAll('.topic-row').forEach(function(row){
     var link = row.querySelector('a.topic-link');
-    if (!link) return; // skip review rows
-    var id = link.getAttribute('href');  // unique per topic
+    if (!link) return;
+    var id = link.getAttribute('href');
 
-    // Apply saved state
-    if (state[id] === 'done') row.classList.add('is-done');
-    if (state[id] === 'flag') row.classList.add('is-flag');
-
-    // Create buttons
     var wrap = document.createElement('span');
     wrap.className = 'status-btns';
 
@@ -370,7 +404,7 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a2e;line-hei
       row.classList.remove('is-done','is-flag');
       if (!isDone){ row.classList.add('is-done'); state[id]='done'; }
       else { delete state[id]; }
-      save(state); updateProgress();
+      updateProgress(); scheduleSave();
     });
 
     btnFlag.addEventListener('click', function(e){
@@ -379,7 +413,7 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a2e;line-hei
       row.classList.remove('is-done','is-flag');
       if (!isFlag){ row.classList.add('is-flag'); state[id]='flag'; }
       else { delete state[id]; }
-      save(state); updateProgress();
+      updateProgress(); scheduleSave();
     });
 
     wrap.appendChild(btnDone);
@@ -390,12 +424,10 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a2e;line-hei
   // ── Progress bar ─────────────────────────────────────────────────
   var allLinks = document.querySelectorAll('.topic-link');
   var total = allLinks.length;
-
-  var progWrap = document.querySelector('.progress-wrap');
-  var progBar  = document.querySelector('.progress-bar-inner');
+  var progBar   = document.querySelector('.progress-bar-inner');
   var progLabel = document.querySelector('.progress-label');
-  var statDone = document.querySelector('.stat-done .val');
-  var statFlag = document.querySelector('.stat-flag .val');
+  var statDone  = document.querySelector('.stat-done .val');
+  var statFlag  = document.querySelector('.stat-flag .val');
 
   function updateProgress(){
     var doneCount = 0, flagCount = 0;
@@ -405,21 +437,20 @@ body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a2e;line-hei
       if(state[id]==='flag') flagCount++;
     });
     var pct = total > 0 ? Math.round(doneCount/total*100) : 0;
-    if(progBar)  progBar.style.width = pct+'%';
+    if(progBar)   progBar.style.width = pct+'%';
     if(progLabel) progLabel.textContent = doneCount+' of '+total+' topics done ('+pct+'%)  ·  '+flagCount+' flagged for review';
-    if(statDone) statDone.textContent = doneCount;
-    if(statFlag) statFlag.textContent = flagCount;
+    if(statDone)  statDone.textContent = doneCount;
+    if(statFlag)  statFlag.textContent = flagCount;
   }
   updateProgress();
 
   // ── Reset button ─────────────────────────────────────────────────
   document.querySelector('.reset-btn').addEventListener('click', function(){
-    if(!confirm('Clear all progress?')) return;
+    if(!confirm('Clear all progress on ALL devices?')) return;
     state = {};
-    localStorage.removeItem(STORE_KEY);
     document.querySelectorAll('.topic-row').forEach(function(r){ r.classList.remove('is-done','is-flag'); });
     updateProgress();
-    showToast();
+    scheduleSave();
   });
 })();
 </script>
