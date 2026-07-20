@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 2 Quiz — Forecasting Deep Dive, S&OP & Global Networks</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f4f7fb;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;min-height:100vh}
+header{background:var(--blue);color:#fff;padding:22px 36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+header h1{font-size:1.4rem}
+header p{font-size:.85rem;opacity:.75;margin-top:3px}
+.badge{background:rgba(255,255,255,.18);padding:6px 16px;border-radius:20px;font-size:.9rem;font-weight:700;white-space:nowrap}
+.container{max-width:860px;margin:0 auto;padding:28px 18px}
+.quiz-meta{display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.meta-pill{background:var(--card);border-radius:8px;padding:10px 18px;font-size:.85rem;box-shadow:0 2px 6px rgba(0,0,0,.08);display:flex;align-items:center;gap:8px}
+.meta-pill strong{color:var(--accent)}
+.progress-wrap{background:var(--card);border-radius:10px;padding:16px 20px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07)}
+.progress-label{display:flex;justify-content:space-between;font-size:.83rem;color:#666;margin-bottom:8px}
+.progress-bar{height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:.4s}
+.score-summary{background:var(--card);border-radius:10px;padding:18px 22px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.score-num{font-size:1.6rem;font-weight:700;color:var(--accent)}
+.score-label{font-size:.85rem;color:#555}
+.btn-reset{background:#fee2e2;color:#991b1b;border:none;padding:9px 18px;border-radius:7px;font-size:.88rem;font-weight:600;cursor:pointer}
+.btn-reset:hover{background:#fecaca}
+.q-block{background:var(--card);border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.q-num-badge{background:var(--blue);color:#fff;border-radius:8px;padding:4px 10px;font-size:.8rem;font-weight:700;white-space:nowrap;margin-top:1px}
+.q-topic{font-size:.75rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.q-text{font-size:.94rem;font-weight:600;line-height:1.55;color:#1a1a2e}
+.q-scenario{background:#f0f7ff;border-left:4px solid var(--accent);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:14px;font-size:.87rem;line-height:1.5;color:#1e3a5f;font-style:italic}
+.q-calc{background:#fef9ec;border-left:4px solid var(--orange);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:14px;font-size:.87rem;line-height:1.6;color:#7c4a00;font-family:monospace}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.88rem;line-height:1.45;transition:.15s;user-select:none}
+.opt:hover:not(.correct):not(.wrong):not(.disabled){background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46;font-weight:500}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.opt.disabled{cursor:default}
+.opt-letter{background:#f3f4f6;color:#374151;border-radius:5px;padding:2px 7px;font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.opt.correct .opt-letter{background:#059669;color:#fff}
+.opt.wrong .opt-letter{background:#dc2626;color:#fff}
+.feedback{margin-top:14px;border-radius:8px;overflow:hidden;display:none}
+.fb-result{padding:8px 14px;font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:7px}
+.fb-correct{background:#d1fae5;color:#065f46}
+.fb-wrong{background:#fee2e2;color:#991b1b}
+.fb-exp{padding:10px 14px;font-size:.85rem;line-height:1.55;background:#f9fafb;border-top:1px solid #f0f0f0;color:#374151}
+.fb-exp strong{color:var(--blue)}
+.section-header{font-size:1rem;font-weight:700;color:var(--blue);margin:28px 0 12px;padding-left:12px;border-left:4px solid var(--orange)}
+footer{text-align:center;padding:30px;color:#9ca3af;font-size:.8rem}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <p>Day 2 End-of-Day Quiz · CSCP Exam Prep</p>
+    <h1>Forecasting Deep Dive, S&amp;OP &amp; Global Supply Chain Networks</h1>
+  </div>
+  <div class="badge">25 Questions</div>
+</header>
+
+<div class="container">
+
+  <div class="quiz-meta">
+    <div class="meta-pill">📅 Day 2 — 21 July 2026</div>
+    <div class="meta-pill">📖 Module 1 (finish) + Module 2: <strong>100%</strong></div>
+    <div class="meta-pill">🎯 Target score: <strong>80%+ (20/25)</strong></div>
+    <div class="meta-pill">⏱ Estimated: <strong>30–35 min</strong></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress</span><span id="prog-text">0 of 25 answered</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="score-summary">
+    <div><div class="score-num" id="score-num">0 / 25</div><div class="score-label">Current Score</div></div>
+    <button class="btn-reset" onclick="resetQuiz()">🔄 Reset Quiz</button>
+  </div>
+
+  <!-- SECTION 1: Forecasting Calculations & Methods -->
+  <div class="section-header">Section 1 · Forecasting Methods &amp; Calculations (Q1–Q8)</div>
+
+  <!-- Q1 -->
+  <div class="q-block" id="qb0">
+    <div class="q-header"><span class="q-num-badge">Q1</span>
+      <div><div class="q-topic">Moving Average Calculation</div>
+        <div class="q-text">Using a 3-period moving average, what is the forecast for April given the following data?</div>
+      </div>
+    </div>
+    <div class="q-calc">January: 100 units · February: 120 units · March: 110 units</div>
+    <div class="q-opts">
+      <label class="opt" id="o0_0" onclick="pick(0,0,1)"><span class="opt-letter">A</span> 100 units</label>
+      <label class="opt" id="o0_1" onclick="pick(0,1,1)"><span class="opt-letter">B</span> 110 units</label>
+      <label class="opt" id="o0_2" onclick="pick(0,2,1)"><span class="opt-letter">C</span> 115 units</label>
+      <label class="opt" id="o0_3" onclick="pick(0,3,1)"><span class="opt-letter">D</span> 120 units</label>
+    </div>
+    <div class="feedback" id="fb0">
+      <div class="fb-result" id="fbr0"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> Moving Average = (100 + 120 + 110) ÷ 3 = 330 ÷ 3 = <strong>110 units</strong>. A simple moving average gives equal weight to all N periods. The key limitation: it lags behind trends and reacts slowly to demand changes.</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block" id="qb1">
+    <div class="q-header"><span class="q-num-badge">Q2</span>
+      <div><div class="q-topic">Weighted Moving Average</div>
+        <div class="q-text">Using a weighted moving average with the weights below, what is the forecast for April?</div>
+      </div>
+    </div>
+    <div class="q-calc">Most recent period (March): weight 0.5 · Previous period (February): weight 0.3 · Oldest period (January): weight 0.2
+Demand: January = 80 · February = 90 · March = 100</div>
+    <div class="q-opts">
+      <label class="opt" id="o1_0" onclick="pick(1,0,1)"><span class="opt-letter">A</span> 90 units</label>
+      <label class="opt" id="o1_1" onclick="pick(1,1,1)"><span class="opt-letter">B</span> 93 units</label>
+      <label class="opt" id="o1_2" onclick="pick(1,2,1)"><span class="opt-letter">C</span> 96 units</label>
+      <label class="opt" id="o1_3" onclick="pick(1,3,1)"><span class="opt-letter">D</span> 85 units</label>
+    </div>
+    <div class="feedback" id="fb1">
+      <div class="fb-result" id="fbr1"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> Forecast = (100 × 0.5) + (90 × 0.3) + (80 × 0.2) = 50 + 27 + 16 = <strong>93 units</strong>. The weighted moving average gives more influence to recent periods — making it more responsive than a simple moving average. Note: weights must always sum to 1.0.</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block" id="qb2">
+    <div class="q-header"><span class="q-num-badge">Q3</span>
+      <div><div class="q-topic">MSE vs MAD</div>
+        <div class="q-text">Why is Mean Squared Error (MSE) less commonly used as a primary forecast error metric compared to MAD?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o2_0" onclick="pick(2,0,1)"><span class="opt-letter">A</span> MSE requires a minimum of 12 data points to be statistically valid</label>
+      <label class="opt" id="o2_1" onclick="pick(2,1,1)"><span class="opt-letter">B</span> MSE disproportionately penalizes large errors (by squaring them), making results harder to interpret in original units</label>
+      <label class="opt" id="o2_2" onclick="pick(2,2,1)"><span class="opt-letter">C</span> MSE can only be applied to seasonal demand patterns</label>
+      <label class="opt" id="o2_3" onclick="pick(2,3,1)"><span class="opt-letter">D</span> MAD accounts for bias while MSE does not</label>
+    </div>
+    <div class="feedback" id="fb2">
+      <div class="fb-result" id="fbr2"></div>
+      <div class="fb-exp"><strong>Key point:</strong> MSE squares each error — so a single large error (e.g., 10²=100) gets far more weight than ten small errors (e.g., 10 × 1²=10). This makes MSE sensitive to outliers and results are in squared units (hard to interpret). MAD is in the same units as demand and easier to communicate. MSE is still useful when large errors are particularly costly.</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block" id="qb3">
+    <div class="q-header"><span class="q-num-badge">Q4</span>
+      <div><div class="q-topic">MAPE Calculation</div>
+        <div class="q-text">Actual demand was 200 units and the forecast was 180 units. What is the MAPE (Mean Absolute Percentage Error) for this period?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o3_0" onclick="pick(3,0,1)"><span class="opt-letter">A</span> 5%</label>
+      <label class="opt" id="o3_1" onclick="pick(3,1,1)"><span class="opt-letter">B</span> 10%</label>
+      <label class="opt" id="o3_2" onclick="pick(3,2,1)"><span class="opt-letter">C</span> 11.1%</label>
+      <label class="opt" id="o3_3" onclick="pick(3,3,1)"><span class="opt-letter">D</span> 20%</label>
+    </div>
+    <div class="feedback" id="fb3">
+      <div class="fb-result" id="fbr3"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> MAPE = |Actual − Forecast| ÷ Actual × 100 = |200 − 180| ÷ 200 × 100 = 20 ÷ 200 × 100 = <strong>10%</strong>. Note: MAPE divides by <em>Actual</em>, not Forecast. Option C (11.1%) would result from dividing by the forecast instead — a common trap. MAPE is useful for comparing forecast accuracy across products with different volumes.</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block" id="qb4">
+    <div class="q-header"><span class="q-num-badge">Q5</span>
+      <div><div class="q-topic">Tracking Signal — Bias Direction</div>
+        <div class="q-text">A product's tracking signal has been consistently at −5.5 for the past four months. This indicates that the forecast is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o4_0" onclick="pick(4,0,1)"><span class="opt-letter">A</span> Highly accurate — the absolute value is within the ±6 range</label>
+      <label class="opt" id="o4_1" onclick="pick(4,1,1)"><span class="opt-letter">B</span> Consistently overestimating demand (negative bias — forecast is too high)</label>
+      <label class="opt" id="o4_2" onclick="pick(4,2,1)"><span class="opt-letter">C</span> Consistently underestimating demand (positive bias — forecast is too low)</label>
+      <label class="opt" id="o4_3" onclick="pick(4,3,1)"><span class="opt-letter">D</span> Experiencing purely random variation with no directional bias</label>
+    </div>
+    <div class="feedback" id="fb4">
+      <div class="fb-result" id="fbr4"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Tracking Signal = Cumulative Error ÷ MAD. Cumulative Error = Σ(Actual − Forecast). A <em>negative</em> tracking signal means cumulative error is negative → actuals are consistently LOWER than the forecast → the forecast is too HIGH (overestimating). Also note: "consistently" at −5.5 is a warning sign regardless of whether it's within ±4 to ±6 range — the lack of oscillation signals bias.</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block" id="qb5">
+    <div class="q-header"><span class="q-num-badge">Q6</span>
+      <div><div class="q-topic">Forecast Accuracy Principle</div>
+        <div class="q-text">According to ASCM forecasting principles, which of the following forecasts would GENERALLY be the MOST accurate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o5_0" onclick="pick(5,0,1)"><span class="opt-letter">A</span> A 12-month forecast for a single SKU</label>
+      <label class="opt" id="o5_1" onclick="pick(5,1,1)"><span class="opt-letter">B</span> A 3-month forecast for a product family</label>
+      <label class="opt" id="o5_2" onclick="pick(5,2,1)"><span class="opt-letter">C</span> A 24-month forecast for a product family</label>
+      <label class="opt" id="o5_3" onclick="pick(5,3,1)"><span class="opt-letter">D</span> A 6-month forecast for a single SKU</label>
+    </div>
+    <div class="feedback" id="fb5">
+      <div class="fb-result" id="fbr5"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Two ASCM principles combine here: (1) <em>Aggregate forecasts are more accurate</em> — random errors cancel out across products. (2) <em>Shorter-horizon forecasts are more accurate</em> — less uncertainty. The best combination is: short horizon + aggregate level = a 3-month product family forecast beats all other options listed.</div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-block" id="qb6">
+    <div class="q-header"><span class="q-num-badge">Q7</span>
+      <div><div class="q-topic">Qualitative vs Quantitative Forecasting</div>
+        <div class="q-text">A pharmaceutical company is preparing to launch a first-in-class drug with no comparable products on the market. Which forecasting approach is MOST appropriate for initial demand planning?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o6_0" onclick="pick(6,0,1)"><span class="opt-letter">A</span> Exponential smoothing using market launch data from the past 3 periods</label>
+      <label class="opt" id="o6_1" onclick="pick(6,1,1)"><span class="opt-letter">B</span> A qualitative approach such as a market research panel or Delphi technique</label>
+      <label class="opt" id="o6_2" onclick="pick(6,2,1)"><span class="opt-letter">C</span> A 6-month simple moving average based on industry sales</label>
+      <label class="opt" id="o6_3" onclick="pick(6,3,1)"><span class="opt-letter">D</span> Naive forecasting using last quarter's competitor sales as a proxy</label>
+    </div>
+    <div class="feedback" id="fb6">
+      <div class="fb-result" id="fbr6"></div>
+      <div class="fb-exp"><strong>Key point:</strong> When there is <em>no historical data for the specific product</em>, qualitative methods are required. All time-series methods (moving average, exponential smoothing, naive) need prior demand data. The Delphi method or market research panels allow expert judgment to fill the gap. The main risk of qualitative methods is <em>bias</em>.</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-block" id="qb7">
+    <div class="q-header"><span class="q-num-badge">Q8</span>
+      <div><div class="q-topic">Naive Forecasting</div>
+        <div class="q-text">A planner uses naive forecasting. Actual demand in March was 450 units. What is the forecast for April?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o7_0" onclick="pick(7,0,1)"><span class="opt-letter">A</span> The average of all historical periods</label>
+      <label class="opt" id="o7_1" onclick="pick(7,1,1)"><span class="opt-letter">B</span> 450 units — the same as the most recent actual demand</label>
+      <label class="opt" id="o7_2" onclick="pick(7,2,1)"><span class="opt-letter">C</span> The result of exponential smoothing with α = 0.5</label>
+      <label class="opt" id="o7_3" onclick="pick(7,3,1)"><span class="opt-letter">D</span> The trend extrapolated from the last 3 months</label>
+    </div>
+    <div class="feedback" id="fb7">
+      <div class="fb-result" id="fbr7"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The <em>naive forecast</em> is the simplest possible method: next period's forecast = last period's actual demand. In this case, April forecast = 450 units. It requires no historical analysis and is often used as a benchmark to test whether more complex methods add value. Naive forecasting with α=1 in exponential smoothing produces the same result.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: S&OP & Planning Hierarchy -->
+  <div class="section-header">Section 2 · S&amp;OP &amp; Planning Hierarchy (Q9–Q12)</div>
+
+  <!-- Q9 -->
+  <div class="q-block" id="qb8">
+    <div class="q-header"><span class="q-num-badge">Q9</span>
+      <div><div class="q-topic">S&OP Output</div>
+        <div class="q-text">What is the PRIMARY output of a successful S&amp;OP process?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o8_0" onclick="pick(8,0,2)"><span class="opt-letter">A</span> A detailed production schedule for each individual SKU</label>
+      <label class="opt" id="o8_1" onclick="pick(8,1,2)"><span class="opt-letter">B</span> A list of approved purchase orders for key suppliers</label>
+      <label class="opt" id="o8_2" onclick="pick(8,2,2)"><span class="opt-letter">C</span> A consensus demand and production plan at aggregate (product family) level</label>
+      <label class="opt" id="o8_3" onclick="pick(8,3,2)"><span class="opt-letter">D</span> A capital investment plan for new manufacturing capacity</label>
+    </div>
+    <div class="feedback" id="fb8">
+      <div class="fb-result" id="fbr8"></div>
+      <div class="fb-exp"><strong>Key point:</strong> S&OP produces a <em>consensus plan at product family level</em> — not individual SKUs (that's the MPS). The consensus plan aligns sales, marketing, supply chain, and finance around one agreed number. This plan then feeds into the MPS, which disaggregates it into specific items and dates.</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-block" id="qb9">
+    <div class="q-header"><span class="q-num-badge">Q10</span>
+      <div><div class="q-topic">IBP vs S&OP</div>
+        <div class="q-text">Integrated Business Planning (IBP) is considered an advancement over traditional S&amp;OP primarily because it:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o9_0" onclick="pick(9,0,2)"><span class="opt-letter">A</span> Is performed on a weekly rather than monthly cadence</label>
+      <label class="opt" id="o9_1" onclick="pick(9,1,2)"><span class="opt-letter">B</span> Focuses exclusively on supply-side planning constraints</label>
+      <label class="opt" id="o9_2" onclick="pick(9,2,2)"><span class="opt-letter">C</span> More deeply integrates financial planning and business strategy with operational plans</label>
+      <label class="opt" id="o9_3" onclick="pick(9,3,2)"><span class="opt-letter">D</span> Replaces the Master Production Schedule in the planning hierarchy</label>
+    </div>
+    <div class="feedback" id="fb9">
+      <div class="fb-result" id="fbr9"></div>
+      <div class="fb-exp"><strong>Key point:</strong> IBP extends S&OP by connecting the supply chain plan more tightly to <em>financial targets and long-term business strategy</em>. In standard S&OP, finance is a participant; in IBP, financial modeling is embedded throughout. The planning horizon is typically extended (18–36 months vs. 12–18 in S&OP).</div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-block" id="qb10">
+    <div class="q-header"><span class="q-num-badge">Q11</span>
+      <div><div class="q-topic">Aggregate Planning Strategies</div>
+        <div class="q-text">A company maintains a constant workforce throughout the year and builds up finished goods inventory during slow periods to meet peak demand later. This aggregate planning approach is BEST described as a:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o10_0" onclick="pick(10,0,1)"><span class="opt-letter">A</span> Chase strategy</label>
+      <label class="opt" id="o10_1" onclick="pick(10,1,1)"><span class="opt-letter">B</span> Level strategy</label>
+      <label class="opt" id="o10_2" onclick="pick(10,2,1)"><span class="opt-letter">C</span> Mixed strategy</label>
+      <label class="opt" id="o10_3" onclick="pick(10,3,1)"><span class="opt-letter">D</span> Demand management strategy</label>
+    </div>
+    <div class="feedback" id="fb10">
+      <div class="fb-result" id="fbr10"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Level strategy</em> = constant production rate, stable workforce, use inventory/backorders to absorb demand variation. <em>Chase strategy</em> = match production to demand — adjusting workforce size or output up and down. Mixed strategy combines elements of both. Level is preferred when workforce stability matters; chase when holding inventory is costly.</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-block" id="qb11">
+    <div class="q-header"><span class="q-num-badge">Q12</span>
+      <div><div class="q-topic">DRP</div>
+        <div class="q-text">DRP (Distribution Requirements Planning) is primarily used to:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o11_0" onclick="pick(11,0,2)"><span class="opt-letter">A</span> Schedule production runs at the factory level based on the MPS</label>
+      <label class="opt" id="o11_1" onclick="pick(11,1,2)"><span class="opt-letter">B</span> Calculate component requirements from the bill of materials (BOM)</label>
+      <label class="opt" id="o11_2" onclick="pick(11,2,2)"><span class="opt-letter">C</span> Plan and time inventory replenishment needs at distribution centers</label>
+      <label class="opt" id="o11_3" onclick="pick(11,3,2)"><span class="opt-letter">D</span> Manage supplier payment terms and procurement contracts</label>
+    </div>
+    <div class="feedback" id="fb11">
+      <div class="fb-result" id="fbr11"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>DRP</em> is the distribution equivalent of MRP — it determines <em>when and how much</em> to replenish at each distribution center based on demand forecasts and lead times. MRP calculates material needs from the BOM. RCCP checks capacity feasibility for the MPS. The planning flow is: S&OP → MPS → MRP (manufacturing) / DRP (distribution).</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Supply Chain Design -->
+  <div class="section-header">Section 3 · Supply Chain Design — Lean, Agile &amp; Network (Q13–Q17)</div>
+
+  <!-- Q13 -->
+  <div class="q-block" id="qb12">
+    <div class="q-header"><span class="q-num-badge">Q13</span>
+      <div><div class="q-topic">Agile vs Lean — Scenario</div>
+        <div class="q-text">A fast-fashion retailer launches new clothing styles every 4–6 weeks with highly unpredictable demand and a short selling window. Which supply chain strategy is MOST appropriate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o12_0" onclick="pick(12,0,3)"><span class="opt-letter">A</span> Lean — to minimize waste and production cost</label>
+      <label class="opt" id="o12_1" onclick="pick(12,1,3)"><span class="opt-letter">B</span> Efficient — to optimize for long production runs</label>
+      <label class="opt" id="o12_2" onclick="pick(12,2,3)"><span class="opt-letter">C</span> Leagile — to use lean upstream and agile downstream</label>
+      <label class="opt" id="o12_3" onclick="pick(12,3,3)"><span class="opt-letter">D</span> Agile — to respond quickly to unpredictable demand</label>
+    </div>
+    <div class="feedback" id="fb12">
+      <div class="fb-result" id="fbr12"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Agile supply chains</em> prioritize speed and flexibility over cost efficiency — ideal for volatile demand, short product life cycles, and high customization needs (like fast fashion). <em>Lean</em> suits stable, high-volume, predictable products. <em>Leagile</em> is a hybrid — lean to the decoupling point, agile downstream from it.</div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="q-block" id="qb13">
+    <div class="q-header"><span class="q-num-badge">Q14</span>
+      <div><div class="q-topic">Leagile / Decoupling Point</div>
+        <div class="q-text">In a leagile supply chain, what happens at the Customer Order Decoupling Point (CODP)?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o13_0" onclick="pick(13,0,1)"><span class="opt-letter">A</span> The supply chain shifts from agile (upstream) to lean (downstream)</label>
+      <label class="opt" id="o13_1" onclick="pick(13,1,1)"><span class="opt-letter">B</span> The supply chain shifts from lean push (upstream) to agile pull (downstream from customer orders)</label>
+      <label class="opt" id="o13_2" onclick="pick(13,2,1)"><span class="opt-letter">C</span> The supplier takes over inventory replenishment from the customer</label>
+      <label class="opt" id="o13_3" onclick="pick(13,3,1)"><span class="opt-letter">D</span> Demand data begins to be shared electronically with all supply chain partners</label>
+    </div>
+    <div class="feedback" id="fb13">
+      <div class="fb-result" id="fbr13"></div>
+      <div class="fb-exp"><strong>Key point:</strong> In a leagile supply chain, <em>upstream</em> of the CODP = lean/push (production driven by forecasts, optimized for cost). <em>Downstream</em> of the CODP = agile/pull (driven by actual customer orders, optimized for speed/flexibility). The CODP is where the switch from forecast-driven to order-driven production occurs — essentially where you "postpone" commitment to a final product.</div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="q-block" id="qb14">
+    <div class="q-header"><span class="q-num-badge">Q15</span>
+      <div><div class="q-topic">Responsive Supply Chain</div>
+        <div class="q-text">A supply chain designed primarily for RESPONSIVENESS (rather than cost efficiency) would MOST LIKELY feature:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o14_0" onclick="pick(14,0,1)"><span class="opt-letter">A</span> Long production runs, minimal product variety, and centralized distribution</label>
+      <label class="opt" id="o14_1" onclick="pick(14,1,1)"><span class="opt-letter">B</span> Excess buffer capacity, flexible manufacturing, and fast delivery options</label>
+      <label class="opt" id="o14_2" onclick="pick(14,2,1)"><span class="opt-letter">C</span> Single-source suppliers selected purely on lowest unit cost</label>
+      <label class="opt" id="o14_3" onclick="pick(14,3,1)"><span class="opt-letter">D</span> Centralized inventory to minimize total inventory holding cost</label>
+    </div>
+    <div class="feedback" id="fb14">
+      <div class="fb-result" id="fbr14"></div>
+      <div class="fb-exp"><strong>Key point:</strong> A responsive supply chain sacrifices cost efficiency to gain speed and flexibility. This means: <em>excess capacity</em> (to scale up quickly), <em>flexible processes</em> (to handle variety), and <em>premium logistics options</em> (faster but costlier). Efficient chains do the opposite — they minimize cost at the expense of flexibility.</div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="q-block" id="qb15">
+    <div class="q-header"><span class="q-num-badge">Q16</span>
+      <div><div class="q-topic">Network Design</div>
+        <div class="q-text">A company is redesigning its global supply chain network. Which of the following is a PRIMARY factor to consider in this network design decision?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o15_0" onclick="pick(15,0,1)"><span class="opt-letter">A</span> Employee Net Promoter Scores at each manufacturing site</label>
+      <label class="opt" id="o15_1" onclick="pick(15,1,1)"><span class="opt-letter">B</span> Location and number of facilities, inventory positioning, transportation modes, and make-vs-buy decisions</label>
+      <label class="opt" id="o15_2" onclick="pick(15,2,1)"><span class="opt-letter">C</span> Social media presence in each target market</label>
+      <label class="opt" id="o15_3" onclick="pick(15,3,1)"><span class="opt-letter">D</span> Number of product variants in the marketing catalog</label>
+    </div>
+    <div class="feedback" id="fb15">
+      <div class="fb-result" id="fbr15"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Supply chain network design decisions center on: (1) <em>Facility location and sizing</em>, (2) <em>Inventory positioning</em> (where to hold stock in the network), (3) <em>Transportation modes</em> (cost vs. speed trade-off), (4) <em>Make-vs-buy</em> (vertical integration decisions), and (5) Number of echelons. These structural choices create the cost/service profile of the supply chain.</div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="q-block" id="qb16">
+    <div class="q-header"><span class="q-num-badge">Q17</span>
+      <div><div class="q-topic">ERP Systems</div>
+        <div class="q-text">Which of the following BEST describes the role of an ERP system in supply chain management?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o16_0" onclick="pick(16,0,1)"><span class="opt-letter">A</span> It manages warehouse operations such as put-away, picking, and shipping</label>
+      <label class="opt" id="o16_1" onclick="pick(16,1,1)"><span class="opt-letter">B</span> It integrates core business processes (finance, HR, manufacturing, supply chain) into a single unified platform</label>
+      <label class="opt" id="o16_2" onclick="pick(16,2,1)"><span class="opt-letter">C</span> It provides route optimization and carrier selection for outbound shipments</label>
+      <label class="opt" id="o16_3" onclick="pick(16,3,1)"><span class="opt-letter">D</span> It enables anonymous expert consensus for demand forecasting</label>
+    </div>
+    <div class="feedback" id="fb16">
+      <div class="fb-result" id="fbr16"></div>
+      <div class="fb-exp"><strong>Key point:</strong> ERP = the enterprise backbone that integrates <em>all core business functions</em>. Option A describes a WMS; Option C describes a TMS; Option D describes the Delphi method. APS sits on top of ERP to add advanced optimization. Common ERP examples: SAP S/4HANA, Oracle, Microsoft Dynamics.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Technology & Connectivity -->
+  <div class="section-header">Section 4 · Technology, Connectivity &amp; Systems (Q18–Q21)</div>
+
+  <!-- Q18 -->
+  <div class="q-block" id="qb17">
+    <div class="q-header"><span class="q-num-badge">Q18</span>
+      <div><div class="q-topic">WMS vs TMS</div>
+        <div class="q-text">A logistics director wants to optimize carrier selection, plan multi-stop delivery routes, and track freight costs across all shipments. Which system is MOST appropriate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o17_0" onclick="pick(17,0,2)"><span class="opt-letter">A</span> WMS (Warehouse Management System)</label>
+      <label class="opt" id="o17_1" onclick="pick(17,1,2)"><span class="opt-letter">B</span> ERP</label>
+      <label class="opt" id="o17_2" onclick="pick(17,2,2)"><span class="opt-letter">C</span> TMS (Transportation Management System)</label>
+      <label class="opt" id="o17_3" onclick="pick(17,3,2)"><span class="opt-letter">D</span> APS (Advanced Planning and Scheduling)</label>
+    </div>
+    <div class="feedback" id="fb17">
+      <div class="fb-result" id="fbr17"></div>
+      <div class="fb-exp"><strong>Key point — system map:</strong> <em>WMS</em> = manages warehouse operations (receiving, put-away, picking, packing, shipping). <em>TMS</em> = manages transportation (carrier selection, route optimization, freight audit & payment). <em>ERP</em> = enterprise backbone. <em>APS</em> = advanced planning and optimization algorithms. Knowing which system handles which function is a frequent exam topic.</div>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="q-block" id="qb18">
+    <div class="q-header"><span class="q-num-badge">Q19</span>
+      <div><div class="q-topic">Blockchain in Supply Chain</div>
+        <div class="q-text">A food company wants to give regulators the ability to trace any product back to its farm of origin within seconds, with a tamper-proof audit trail. Which technology is MOST appropriate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o18_0" onclick="pick(18,0,1)"><span class="opt-letter">A</span> EDI (Electronic Data Interchange)</label>
+      <label class="opt" id="o18_1" onclick="pick(18,1,1)"><span class="opt-letter">B</span> Blockchain — providing an immutable, shared, transparent record of transactions</label>
+      <label class="opt" id="o18_2" onclick="pick(18,2,1)"><span class="opt-letter">C</span> RFID — for real-time tracking of individual products</label>
+      <label class="opt" id="o18_3" onclick="pick(18,3,1)"><span class="opt-letter">D</span> IoT — for sensor-based data collection at each farm</label>
+    </div>
+    <div class="feedback" id="fb18">
+      <div class="fb-result" id="fbr18"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Blockchain</em> creates an immutable, distributed ledger — once recorded, records cannot be altered. This makes it ideal for provenance tracking and compliance audit trails. RFID tracks physical location in real time; IoT gathers sensor data; EDI is a document exchange protocol. The key differentiator for blockchain is <em>immutability + shared access across parties</em>.</div>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="q-block" id="qb19">
+    <div class="q-header"><span class="q-num-badge">Q20</span>
+      <div><div class="q-topic">CPFR vs VMI</div>
+        <div class="q-text">A grocery retailer shares its point-of-sale data and promotional calendar with its key supplier. They jointly build a 12-week demand forecast and agree on replenishment quantities. This collaboration is BEST described as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o19_0" onclick="pick(19,0,2)"><span class="opt-letter">A</span> VMI (Vendor-Managed Inventory)</label>
+      <label class="opt" id="o19_1" onclick="pick(19,1,2)"><span class="opt-letter">B</span> EDI integration</label>
+      <label class="opt" id="o19_2" onclick="pick(19,2,2)"><span class="opt-letter">C</span> CPFR (Collaborative Planning, Forecasting, and Replenishment)</label>
+      <label class="opt" id="o19_3" onclick="pick(19,3,2)"><span class="opt-letter">D</span> S&OP alignment</label>
+    </div>
+    <div class="feedback" id="fb19">
+      <div class="fb-result" id="fbr19"></div>
+      <div class="fb-exp"><strong>Key point — CPFR vs VMI:</strong> <em>CPFR</em> = joint planning, forecasting, AND replenishment by both parties. <em>VMI</em> = the supplier alone manages and replenishes customer inventory (the customer is passive). The key distinction: CPFR is <em>collaborative</em> (both parties participate in forecasting). VMI shifts responsibility to the supplier. If the question mentions "jointly" or "co-develop," it's CPFR.</div>
+    </div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="q-block" id="qb20">
+    <div class="q-header"><span class="q-num-badge">Q21</span>
+      <div><div class="q-topic">SCOR Processes</div>
+        <div class="q-text">A supply chain team auditing the SCOR "Make" process would MOST LIKELY be examining:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o20_0" onclick="pick(20,0,2)"><span class="opt-letter">A</span> Freight carrier contracts and last-mile delivery performance</label>
+      <label class="opt" id="o20_1" onclick="pick(20,1,2)"><span class="opt-letter">B</span> Supplier qualification, purchase order management, and inbound quality</label>
+      <label class="opt" id="o20_2" onclick="pick(20,2,2)"><span class="opt-letter">C</span> Manufacturing scheduling, assembly, testing, and release of finished goods</label>
+      <label class="opt" id="o20_3" onclick="pick(20,3,2)"><span class="opt-letter">D</span> Returns processing and reverse logistics flows</label>
+    </div>
+    <div class="feedback" id="fb20">
+      <div class="fb-result" id="fbr20"></div>
+      <div class="fb-exp"><strong>Key point — SCOR process map:</strong> Plan = aggregate demand/supply balancing. <em>Source</em> = supplier management, purchasing, inbound. <em>Make</em> = manufacturing, assembly, testing, packaging, release. <em>Deliver</em> = order management, outbound logistics, last mile. <em>Return</em> = reverse logistics. <em>Enable</em> = foundational capabilities (data, rules, IT, people). Know what each process covers — this is a frequent exam format.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: Metrics Calculations -->
+  <div class="section-header">Section 5 · Supply Chain Metrics &amp; Calculations (Q22–Q25)</div>
+
+  <!-- Q22 -->
+  <div class="q-block" id="qb21">
+    <div class="q-header"><span class="q-num-badge">Q22</span>
+      <div><div class="q-topic">Perfect Order Fulfillment</div>
+        <div class="q-text">A company ships 1,000 orders in a month. Of these: 20 were delivered late, 15 were incomplete (missing items), and 10 had incorrect documentation — some orders had more than one issue. If exactly 940 orders had absolutely no problems, what is the Perfect Order Fulfillment rate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o21_0" onclick="pick(21,0,2)"><span class="opt-letter">A</span> 98.3% (average of the three individual metrics)</label>
+      <label class="opt" id="o21_1" onclick="pick(21,1,2)"><span class="opt-letter">B</span> 95% (subtracting only the late orders)</label>
+      <label class="opt" id="o21_2" onclick="pick(21,2,2)"><span class="opt-letter">C</span> 94% (orders with zero issues ÷ total orders)</label>
+      <label class="opt" id="o21_3" onclick="pick(21,3,2)"><span class="opt-letter">D</span> 97% (subtracting only the documentation errors)</label>
+    </div>
+    <div class="feedback" id="fb21">
+      <div class="fb-result" id="fbr21"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Perfect Order Fulfillment = orders meeting ALL criteria simultaneously ÷ total orders. An order that's late but complete and correctly documented still fails the perfect order standard. The correct measure is: 940 ÷ 1,000 = <strong>94%</strong>. A common exam trap is averaging the individual metrics (2% + 1.5% + 1% = 4.5% → 95.5%) — that's wrong because some orders had multiple defects.</div>
+    </div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="q-block" id="qb22">
+    <div class="q-header"><span class="q-num-badge">Q23</span>
+      <div><div class="q-topic">Cash-to-Cash Cycle Time</div>
+        <div class="q-text">A company reports: Days Inventory Outstanding (DIO) = 45 days, Days Sales Outstanding (DSO) = 30 days, Days Payable Outstanding (DPO) = 25 days. What is the cash-to-cash cycle time?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o22_0" onclick="pick(22,0,1)"><span class="opt-letter">A</span> 45 days</label>
+      <label class="opt" id="o22_1" onclick="pick(22,1,1)"><span class="opt-letter">B</span> 50 days</label>
+      <label class="opt" id="o22_2" onclick="pick(22,2,1)"><span class="opt-letter">C</span> 100 days</label>
+      <label class="opt" id="o22_3" onclick="pick(22,3,1)"><span class="opt-letter">D</span> 40 days</label>
+    </div>
+    <div class="feedback" id="fb22">
+      <div class="fb-result" id="fbr22"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> Cash-to-Cash = DIO + DSO − DPO = 45 + 30 − 25 = <strong>50 days</strong>. <em>DIO</em> = how long cash is tied up in inventory. <em>DSO</em> = how long to collect from customers. <em>DPO</em> = how long the company delays paying suppliers (this extends your cash cycle favorably). Companies aim to minimize C2C — negative C2C (like Amazon) means you collect from customers before paying suppliers.</div>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="q-block" id="qb23">
+    <div class="q-header"><span class="q-num-badge">Q24</span>
+      <div><div class="q-topic">Inventory Turns &amp; Days of Supply</div>
+        <div class="q-text">A company's annual Cost of Goods Sold (COGS) is $24 million and average inventory is $4 million. What is its approximate Days of Supply?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o23_0" onclick="pick(23,0,2)"><span class="opt-letter">A</span> 6 days</label>
+      <label class="opt" id="o23_1" onclick="pick(23,1,2)"><span class="opt-letter">B</span> 30 days</label>
+      <label class="opt" id="o23_2" onclick="pick(23,2,2)"><span class="opt-letter">C</span> 61 days</label>
+      <label class="opt" id="o23_3" onclick="pick(23,3,2)"><span class="opt-letter">D</span> 90 days</label>
+    </div>
+    <div class="feedback" id="fb23">
+      <div class="fb-result" id="fbr23"></div>
+      <div class="fb-exp"><strong>Calculation (two methods):</strong> Method 1: Inventory Turns = COGS ÷ Avg Inventory = $24M ÷ $4M = <strong>6 turns/year</strong>. Then Days of Supply = 365 ÷ 6 = <strong>≈ 61 days</strong>. Method 2: Daily COGS = $24M ÷ 365 = $65,753/day. Days of Supply = $4M ÷ $65,753 = ≈ 61 days. Option A (6 days) confuses inventory turns with days of supply — a common trap.</div>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="q-block" id="qb24">
+    <div class="q-header"><span class="q-num-badge">Q25</span>
+      <div><div class="q-topic">Integration Scenario</div>
+        <div class="q-text">
+          <div style="background:#f0f7ff;border-left:4px solid #2e86de;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px;font-style:italic;font-size:.87rem;color:#1e3a5f">Scenario: GlobalRetail has a fully implemented ERP system connecting finance, purchasing, and inventory. However, their distribution center team still uses spreadsheets to manage picking, put-away, and inventory locations. Shipment tracking relies on phone calls to carriers, and they cannot see estimated delivery times until goods actually arrive.</div>
+          Which combination of systems would BEST address GlobalRetail's operational gaps?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o24_0" onclick="pick(24,0,1)"><span class="opt-letter">A</span> Blockchain and IoT for end-to-end transaction transparency</label>
+      <label class="opt" id="o24_1" onclick="pick(24,1,1)"><span class="opt-letter">B</span> A WMS for warehouse operations and a TMS for real-time shipment tracking</label>
+      <label class="opt" id="o24_2" onclick="pick(24,2,1)"><span class="opt-letter">C</span> An APS to optimize their production scheduling and capacity</label>
+      <label class="opt" id="o24_3" onclick="pick(24,3,1)"><span class="opt-letter">D</span> CPFR to improve collaboration with their key suppliers</label>
+    </div>
+    <div class="feedback" id="fb24">
+      <div class="fb-result" id="fbr24"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The two gaps described are: (1) <em>Warehouse operations</em> — spreadsheets for picking, put-away, locations → WMS fixes this. (2) <em>Shipment visibility</em> — no carrier tracking → TMS fixes this. Blockchain/IoT would help with supply chain visibility but don't directly address DC operations. APS is for planning/scheduling. CPFR is for supplier collaboration. Always match the tool to the specific problem described.</div>
+    </div>
+  </div>
+
+  <!-- Final Score -->
+  <div style="background:var(--card);border-radius:12px;padding:24px;margin-top:28px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center">
+    <div style="font-size:1rem;color:#555;margin-bottom:6px">Final Score</div>
+    <div style="font-size:2.4rem;font-weight:700;color:var(--accent)" id="final-score">0 / 25</div>
+    <div style="font-size:.9rem;color:#777;margin-top:4px" id="final-pct">Answer all questions to see your result</div>
+    <div style="margin-top:16px;font-size:.85rem;color:#555" id="final-msg"></div>
+  </div>
+
+</div>
+
+<footer>Day 2 Quiz · CSCP Exam Prep · Christophe Goossens · July 2026</footer>
+
+<script>
+const TOTAL = 25;
+let answered = new Array(TOTAL).fill(false);
+let score = 0;
+
+function pick(qIdx, optIdx, correctOpt) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const isCorrect = (optIdx === correctOpt);
+  if (isCorrect) score++;
+
+  const chosen = document.getElementById('o' + qIdx + '_' + optIdx);
+  chosen.classList.add(isCorrect ? 'correct' : 'wrong');
+  chosen.classList.add('disabled');
+
+  if (!isCorrect) {
+    const corEl = document.getElementById('o' + qIdx + '_' + correctOpt);
+    if (corEl) corEl.classList.add('correct');
+  }
+
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById('o' + qIdx + '_' + i);
+    if (el) el.classList.add('disabled');
+  }
+
+  const fb = document.getElementById('fb' + qIdx);
+  const fbr = document.getElementById('fbr' + qIdx);
+  fb.style.display = 'block';
+  fbr.textContent = isCorrect ? '✅ Correct!' : '❌ Incorrect';
+  fbr.className = 'fb-result ' + (isCorrect ? 'fb-correct' : 'fb-wrong');
+
+  updateUI();
+}
+
+function updateUI() {
+  const answeredCount = answered.filter(Boolean).length;
+  const pct = Math.round(answeredCount / TOTAL * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = answeredCount + ' of ' + TOTAL + ' answered';
+  document.getElementById('score-num').textContent = score + ' / ' + TOTAL;
+  document.getElementById('final-score').textContent = score + ' / ' + TOTAL;
+
+  if (answeredCount === TOTAL) {
+    const scorePct = Math.round(score / TOTAL * 100);
+    document.getElementById('final-pct').textContent = scorePct + '% (' + (scorePct >= 80 ? 'Target reached! ✅' : 'Below 80% target — review missed questions') + ')';
+    let msg = '';
+    if (scorePct >= 92) msg = '🏆 Outstanding! Module 1 + 2 material is well mastered.';
+    else if (scorePct >= 80) msg = '✅ Good work! Review any missed questions before Day 3.';
+    else if (scorePct >= 64) msg = '⚠️ Check the sections you struggled with — especially calculations.';
+    else msg = '🔄 Re-read the module summaries and retry this quiz before continuing.';
+    document.getElementById('final-msg').textContent = msg;
+  } else {
+    document.getElementById('final-pct').textContent = 'Answer all questions to see your result';
+  }
+}
+
+function resetQuiz() {
+  answered = new Array(TOTAL).fill(false);
+  score = 0;
+  for (let q = 0; q < TOTAL; q++) {
+    for (let i = 0; i < 4; i++) {
+      const el = document.getElementById('o' + q + '_' + i);
+      if (el) el.className = 'opt';
+    }
+    const fb = document.getElementById('fb' + q);
+    if (fb) fb.style.display = 'none';
+  }
+  updateUI();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+updateUI();
+</script>
+</body>
+</html>
