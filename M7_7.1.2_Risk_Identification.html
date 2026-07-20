@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>7.1.2: Risk Identification</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 7: Risk Management</div>
+  <div class="hdr-title">7.1.2 · Risk Identification</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Risk Identification Methods</div><div class="block-body"><div class="def-box"><b>Risk identification</b>: The process of systematically finding and documenting all potential supply chain risks — the foundation of risk management. You cannot manage a risk you haven't identified.</div><div class="key-point">Risk identification methods:</div><ul><li><b>Risk register</b>: A living document cataloging all identified risks, their probability, impact, and response strategies</li><li><b>Supply chain mapping</b>: Visually mapping the supply chain from raw material to customer — revealing single points of failure, concentration risks, and geographic exposures</li><li><b>Supplier audits</b>: On-site visits to assess supplier operational, financial, and compliance health</li><li><b>Scenario planning</b>: Structured 'what-if' exercises imagining specific disruption scenarios (e.g., 'what if our main port is closed for 30 days?')</li><li><b>FMEA (Failure Mode and Effects Analysis)</b>: Systematic analysis of how each supply chain component can fail and what the consequences are</li></ul><div class="def-box"><b>Risk register</b>: A centralized document (or database) listing all identified risks with: description, category, probability rating, impact rating, risk score (probability × impact), risk owner, current mitigation status, and response plan.</div></div></div><div class="block"><div class="block-title">Supply Chain Mapping for Risk</div><div class="block-body"><div class="def-box"><b>Supply chain mapping</b>: Creating a visual representation of the entire supply chain — all suppliers (Tier 1, Tier 2, Tier 3), manufacturing locations, distribution centers, and transportation routes — to identify vulnerabilities.</div><div class="key-point">Tier 1 vs. Tier 2/3 suppliers: Tier 1 = direct suppliers. Tier 2 = suppliers to Tier 1. Tier 3 = suppliers to Tier 2. Many companies focus only on Tier 1 — but Tier 2/3 disruptions (e.g., a single raw material supplier) can cascade through the whole chain. COVID-19 semiconductor shortage was largely a Tier 3+ problem.</div><div class="def-box"><b>Geographic concentration risk</b>: Over-reliance on suppliers or facilities in a single geographic area — vulnerable to regional disasters, geopolitical events, or regulatory changes affecting that location.</div><div class="key-point">Supply chain mapping reveals: single points of failure (one supplier, one route, one port), geographic concentration (all suppliers in one region), and dependency chains (one Tier 2 supplier providing components to multiple Tier 1 suppliers — an invisible shared risk).</div></div></div><div class="block"><div class="block-title">Risk Identification Tools</div><div class="block-body"><div class="def-box"><b>FMEA (Failure Mode and Effects Analysis)</b>: A structured risk identification tool that systematically asks: for each supply chain process or component, what can go wrong (failure mode)? What is the effect? What is the likelihood, severity, and detectability? FMEA generates a Risk Priority Number (RPN) = Severity × Occurrence × Detection.</div><div class="formula">RPN = Severity × Occurrence × Detection</div><div class="def-box"><b>PESTLE analysis</b>: A macro-environment scanning tool identifying Political, Economic, Social, Technological, Legal, and Environmental factors that could affect the supply chain. Used for strategic risk identification at the market and regulatory level.</div><div class="key-point">Risk identification is never complete — supply chains, markets, and geopolitics continuously evolve. Risk registers must be regularly reviewed and updated to capture emerging risks (e.g., new suppliers added, new geographies, new regulations).</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Risk register — what it contains</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A living document cataloging all identified risks:
+
+• Risk ID and description
+• Risk category (supply, demand, operational, environmental, etc.)
+• Probability rating (1–5 or low/medium/high)
+• Impact rating (1–5 or low/medium/high)
+• Risk score = Probability × Impact
+• Risk owner (accountable person)
+• Current mitigation measures
+• Response plan (if risk materializes)
+• Review date
+
+Priority: highest-scoring risks get the most mitigation investment.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">FMEA — Failure Mode and Effects Analysis</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Systematic tool asking: What can go wrong? What is the effect? How likely/severe/detectable?
+
+RPN = Severity × Occurrence × Detection
+• Severity (1–10): how bad is the effect?
+• Occurrence (1–10): how often does this failure mode happen?
+• Detection (1–10): how likely is it to be caught before causing harm? (10 = impossible to detect)
+
+Highest RPN = highest priority for risk mitigation. Originally from automotive/aerospace — widely applied in supply chain risk.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Supply chain mapping — why Tier 2/3 matter</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Most companies know their Tier 1 suppliers (direct). Fewer map Tier 2 (suppliers of suppliers) or Tier 3.
+
+Problem: a single Tier 2 or 3 supplier may supply multiple Tier 1 suppliers in your chain → if THAT supplier fails, it simultaneously disrupts multiple Tier 1 nodes.
+
+Example: COVID-19 semiconductor shortage. Many auto, electronics, and appliance manufacturers shared common Tier 2/3 chip manufacturers — when those failed, the disruption cascaded everywhere simultaneously.
+
+Lesson: map beyond Tier 1 to reveal hidden concentration and dependency.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Scenario planning in supply chain risk</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Structured 'what-if' exercise: imagine a specific disruption scenario and work through the response.
+
+Steps:
+1. Define scenario (e.g., 'Port of Shanghai closed for 45 days')
+2. Identify affected supply flows
+3. Assess inventory coverage (how long can we serve customers?)
+4. Identify response options (alternate routing, substitute sourcing, demand rationing)
+5. Estimate cost and timeline of each option
+6. Develop response playbook
+
+Value: pre-thinking responses means faster, better decisions when the scenario actually occurs.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Geographic concentration risk — definition and mitigation</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Over-reliance on suppliers, manufacturing, or distribution in a single geographic region.
+
+Vulnerabilities: regional natural disasters (Japan earthquake 2011), geopolitical events (trade war with China), regulatory changes (export restrictions), labor unrest, currency crises.
+
+Mitigation:
+• Geographic diversification: add suppliers/facilities in different regions
+• Nearshoring: move some production closer to consumption market
+• Maintain backup sourcing options in different geographies (even at premium cost normally)</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">PESTLE analysis for supply chain risk</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Macro-environment scanning for strategic risks:
+
+Political: tariffs, trade policy changes, political instability, sanctions
+Economic: recession, currency volatility, commodity prices, inflation
+Social: labor market changes, consumer preference shifts, ESG demands
+Technological: automation risk, cyber threats, technology disruption
+Legal: regulation changes (GDPR, EPR, FSMA), compliance requirements
+Environmental: climate change, natural disaster frequency, carbon regulations
+
+PESTLE identifies external risks the supply chain cannot control but must monitor and plan for.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">Supply chain mapping beyond Tier 1 is important for risk management because:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> Tier 1 suppliers are usually the most reliable; Tier 2/3 are less critical</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> A single Tier 2 or Tier 3 supplier may supply multiple Tier 1 suppliers — creating hidden concentration risk that is invisible without multi-tier mapping</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> Tier 2/3 suppliers are always cheaper and should replace Tier 1 suppliers</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Supply chain mapping only needs to cover the final assembly stage</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Tier 2/3 mapping reveals hidden concentration: a raw material supplier or component manufacturer serving multiple Tier 1 suppliers in your supply chain. If that shared Tier 2/3 supplier fails, multiple Tier 1 suppliers fail simultaneously — even if each Tier 1 supplier was individually dual-sourced. COVID-19 semiconductor shortage revealed this: auto, electronics, and appliance companies discovered they shared common wafer and chip manufacturers several tiers deep, creating simultaneous, widespread disruption.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">A Risk Priority Number (RPN) in FMEA is calculated as:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Probability × Impact</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Severity × Occurrence × Detection</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Cost × Probability</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Impact ÷ Response Time</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">FMEA RPN = Severity (1–10: how bad if failure occurs) × Occurrence (1–10: how often does this failure mode happen) × Detection (1–10: how likely is the failure to go undetected — 10 = impossible to detect before causing harm). Highest RPNs get priority mitigation investment. Note: a highly detectable risk (low Detection score) gets a lower RPN — because you'll catch it before it cascades. A hard-to-detect risk gets a higher RPN even at low probability/severity.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A risk register is most valuable when it is:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> A one-time annual document created by the risk management team alone</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> A living, regularly updated document that tracks all identified risks, ownership, mitigation status, and response plans — reviewed and updated as the supply chain and risk environment evolve</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> A legal document signed by all suppliers</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> An automated system that eliminates human risk assessment</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Risk register value = completeness + currency. A one-time annual document becomes stale within weeks as supply chains change (new suppliers added, geopolitical events, new product launches). A living document: updated when new risks emerge, reviewed regularly (quarterly minimum), owned by specific individuals (accountable for mitigation progress), and drives action (not just documentation). Without ownership and regular review, it becomes a filing exercise rather than a risk management tool.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Scenario planning in supply chain risk management helps organizations by:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Predicting exactly when disruptions will occur</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Pre-thinking responses to specific disruption scenarios — enabling faster, better decisions when disruptions actually occur</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Eliminating the need for safety stock</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Replacing the risk register with a simpler tool</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Scenario planning: imagine specific disruption scenarios and work through responses BEFORE the disruption happens. Value: when a real disruption occurs, decision-makers aren't starting from zero — they've already identified options, estimated costs and timelines, and possibly pre-positioned resources. Response speed improves dramatically vs. companies that plan responses ad hoc during a crisis. Examples: 'what if our main Asia supplier fails?' → pre-identified backup supplier, pre-qualified, ready to activate.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">PESTLE analysis is used in supply chain risk management to:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Evaluate individual supplier quality and delivery performance</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Scan the macro-environment for Political, Economic, Social, Technological, Legal, and Environmental factors that could disrupt the supply chain</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Calculate the probability of a specific supplier failure</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Design the optimal supply chain network configuration</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">PESTLE = macro-environment scanning for strategic risks. Supply chains are embedded in a political, economic, and regulatory environment that is constantly changing. A tariff change (Political) can make an entire sourcing strategy uneconomical overnight. A new environmental regulation (Environmental/Legal) can require supply chain redesign. PESTLE ensures the supply chain strategy accounts for these external factors — not just operational/supplier risks. It feeds the risk identification step of the SCRM process.</div></div></div>
+  </div>
+</div>
+<footer>7.1.2: Risk Identification · Module 7 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>6.1.2: Customer Relationship Management</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 6: Supply Chain Relationships</div>
+  <div class="hdr-title">6.1.2 · Customer Relationship Management</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 17% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">CRM Systems and Capabilities</div><div class="block-body"><div class="def-box"><b>Customer Relationship Management (CRM) system</b>: Technology that centralizes customer data — contact information, interaction history, purchase records, service issues, and preferences — enabling sales, marketing, and customer service teams to provide consistent, informed service.</div><div class="key-point">CRM supports supply chain by providing demand signals: order history, contract terms, and customer behavior patterns inform demand forecasting and inventory planning.</div><div class="def-box"><b>Order management system (OMS)</b>: Software that manages the entire order lifecycle — from customer order placement through fulfillment and delivery confirmation. Interfaces with CRM (customer data), WMS (warehouse execution), and TMS (transportation).</div><div class="def-box"><b>Customer portals</b>: Web-based interfaces allowing customers to place orders, track shipments, view invoices, and manage returns — reducing order management cost and improving customer self-service. A form of supply chain collaboration.</div></div></div><div class="block"><div class="block-title">Key Account Management</div><div class="block-body"><div class="def-box"><b>Key Account Management (KAM)</b>: A dedicated approach to managing the most important customer relationships — assigning a dedicated team, providing tailored services, and building deep integration with the customer's operations.</div><div class="key-point">Key account characteristics: high revenue, high strategic importance, high switching cost (deeply embedded in their operations), and high potential for growth. Key accounts often receive customized supply chain services.</div><div class="def-box"><b>Joint planning</b>: Collaborative supply chain planning between a supplier and its key customer — sharing forecasts, inventory data, and capacity information to improve supply chain efficiency for both parties. Reduces the Bullwhip Effect.</div><div class="def-box"><b>Vendor-Managed Inventory (VMI)</b>: The supplier is responsible for monitoring and replenishing the customer's inventory — using shared inventory and sales data. Reduces customer ordering burden, improves supply continuity, and gives the supplier better demand signal visibility.</div></div></div><div class="block"><div class="block-title">Customer Collaboration Models</div><div class="block-body"><div class="def-box"><b>CPFR (Collaborative Planning, Forecasting, and Replenishment)</b>: A collaborative supply chain framework where trading partners jointly develop forecasts and replenishment plans — sharing data and aligning on a single, agreed forecast. Reduces forecast error and inventory while improving service.</div><div class="key-point">CPFR reduces the Bullwhip Effect by replacing independent, redundant forecasting with shared information — one data source flowing through the supply chain rather than each tier adding its own forecast error.</div><div class="def-box"><b>EDI (Electronic Data Interchange)</b>: Computer-to-computer exchange of business documents (purchase orders, invoices, advance ship notices) in a standardized format — enabling automated, paperless transactions between trading partners.</div><div class="key-point">Collaboration maturity ladder: Transactional (buy/sell, no sharing) → Information sharing (share data) → Coordinated (align plans) → Synchronized (joint decision-making, CPFR). Higher maturity = lower total supply chain cost but more investment in relationship and systems.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is VMI (Vendor-Managed Inventory)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Supplier manages the customer's inventory replenishment:
+• Supplier monitors customer inventory levels (via shared data)
+• Supplier decides when and how much to replenish
+• Customer doesn't place orders — supplier ships proactively
+
+Benefits for customer: reduced ordering cost, better in-stock, no stockouts from ordering delays.
+Benefits for supplier: sees real consumption data (not orders distorted by Bullwhip Effect), can plan production better, stronger customer relationship.
+
+Requires: data sharing, trust, agreed inventory targets.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">CPFR — what is it and how does it reduce the Bullwhip Effect?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Collaborative Planning, Forecasting, and Replenishment: trading partners share data and jointly develop a single agreed forecast and replenishment plan.
+
+How it reduces Bullwhip: instead of each supply chain tier making an independent forecast (adding error at each step), partners use ONE shared forecast. Demand signal is not distorted as it passes through the chain.
+
+Result: lower forecast error → lower safety stock → lower total inventory → lower cost, with maintained or improved service levels.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is EDI?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Electronic Data Interchange: computer-to-computer exchange of standard business documents between trading partners.
+
+Common EDI transactions:
+• 850: Purchase Order
+• 856: Advance Ship Notice (ASN)
+• 810: Invoice
+• 940/945: Warehouse shipping orders
+
+Benefits: eliminates manual data entry (cost, errors), speeds order cycle (orders processed automatically), required by many large retailers (Walmart, Target).
+
+Modern alternative: API-based integration (faster, more flexible than EDI, but same principle).</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Key Account Management (KAM) — what makes it different from standard sales?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">KAM: dedicated team managing your most strategically important customers.
+
+Differences from standard sales:
+• Dedicated resources (account manager, supply chain team, technical support)
+• Joint business planning (shared annual plan with customer)
+• Customized supply chain services (dedicated inventory, tailored delivery schedules)
+• Deep operational integration (system connections, joint KPIs)
+• Long-term partnership focus (not transactional)
+
+Why invest in KAM: key accounts generate disproportionate revenue (Pareto 80/20); losing one = major financial impact.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Collaboration maturity stages in supply chain</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Level 1 — Transactional: buy/sell, no information sharing. High Bullwhip Effect.
+Level 2 — Information sharing: share demand data, inventory levels. Reduces some distortion.
+Level 3 — Coordinated: align production/delivery plans. Better synchronization.
+Level 4 — Synchronized (CPFR): joint forecasting and replenishment. Single shared plan. Lowest Bullwhip, lowest total cost.
+
+Higher maturity: requires more trust, data sharing, and system integration — but generates significantly lower total supply chain cost.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How does a CRM system support supply chain operations?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">CRM centralizes customer data → supply chain uses it for:
+
+1. Demand signals: order history → better forecasting
+2. Contract terms: service level commitments → operational targets
+3. Customer segmentation: tier customers by value → differentiated service
+4. Order management integration: CRM feeds orders to WMS/TMS for fulfillment
+5. Issue tracking: service failures → root cause → process improvement
+
+CRM connects the commercial relationship (sales, marketing) to the operational execution (supply chain).</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">Vendor-Managed Inventory (VMI) benefits the supplier primarily by:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> Eliminating the supplier's need to forecast demand</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> Providing direct visibility to actual customer consumption data — a cleaner demand signal that reduces the Bullwhip Effect and enables better production planning</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> Shifting all inventory cost to the customer</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Reducing transportation costs for the supplier</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">VMI: supplier monitors customer inventory and replenishes proactively. For the supplier, the key benefit is demand signal visibility — instead of seeing customer purchase orders (inflated/deflated by ordering behavior), the supplier sees actual consumption. This removes one layer of the Bullwhip Effect, enabling more accurate production planning and lower safety stock. The customer benefits from better in-stock and lower ordering burden.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">CPFR reduces the Bullwhip Effect primarily by:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Allowing each supply chain tier to independently forecast and buffer accordingly</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Replacing independent, redundant forecasting at each tier with a single, shared collaborative forecast — preventing error from compounding up the supply chain</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Increasing safety stock at every level of the supply chain</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Mandating that all orders be placed electronically via EDI</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Bullwhip Effect: each tier's independent forecasting adds error; ordering patterns amplify demand variability up the chain. CPFR solution: partners jointly develop ONE agreed forecast using shared POS data, inventory, and promotion plans. With a single source of truth flowing up the chain, each tier doesn't need to independently forecast and buffer — dramatically reducing forecast error and safety stock at every tier.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">EDI (Electronic Data Interchange) improves supply chain performance by:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Eliminating the need for any business agreements between trading partners</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Automating computer-to-computer exchange of standard documents — removing manual processing cost, reducing errors, and accelerating order cycle time</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Providing real-time GPS tracking of all shipments</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Replacing all supplier relationships with a single automated vendor</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">EDI = standardized, automated document exchange (purchase orders, advance ship notices, invoices). Benefits: eliminates manual data entry (cost, error, delay), enables automatic order processing (order placed at supplier system the moment the buyer sends an 850 PO), enables automatic receiving (856 ASN tells WMS what's arriving before truck arrives). EDI can compress order cycle time from days (manual) to hours (automated).</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">A company assigns a dedicated cross-functional team to manage its relationship with a customer representing 25% of total revenue. This is:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Standard customer service practice applied to all accounts</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Key Account Management — providing dedicated resources and tailored services to strategically important customers</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> A violation of equal treatment principles</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> CRM system implementation</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Key Account Management (KAM): dedicating specialized resources to the most important customer relationships. A customer representing 25% of revenue is clearly a key account — losing them would be a major financial event. KAM investment (dedicated team, joint planning, custom services) is justified by the account's strategic and financial importance. This is how Pareto principle applies to customer management: 20% of customers = 80% of revenue → focus disproportionate resources on those 20%.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">A customer portal in supply chain management primarily serves to:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Replace the supplier's internal ERP system</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Allow customers to self-serve — placing orders, tracking shipments, viewing invoices, and managing returns — reducing supplier order management cost while improving customer convenience</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Provide a marketplace where multiple suppliers compete for orders</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Store all customer data in a centralized CRM database</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Customer portals = B2B self-service. Instead of customers calling/emailing for order status, invoice copies, or return requests, they access a portal directly. Benefits: (1) Reduced inbound contact volume (supplier labor cost); (2) 24/7 availability (customer convenience); (3) Consistent, accurate information (system data, not human-retrieved); (4) Faster resolution (customer finds own answer immediately). Customer portals are a form of supply chain collaboration — sharing information to improve joint efficiency.</div></div></div>
+  </div>
+</div>
+<footer>6.1.2: Customer Relationship Management · Module 6 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>6.2.3: Supplier Performance Management</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 6: Supply Chain Relationships</div>
+  <div class="hdr-title">6.2.3 · Supplier Performance Management</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 17% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Supplier Performance Measurement</div><div class="block-body"><div class="def-box"><b>Supplier performance management (SPM)</b>: A systematic process for measuring, monitoring, and developing supplier performance — using defined metrics, regular reviews, and structured feedback to hold suppliers accountable and drive improvement.</div><div class="key-point">The purpose of SPM is not punishment — it is to identify gaps, drive improvement, and develop the supply base to support business objectives. Measurement without development is punitive; development without measurement is unfocused.</div><div class="def-box"><b>Supplier scorecard</b>: A structured performance evaluation tool measuring suppliers across multiple dimensions — quality, delivery, cost, service, and innovation. Provides an objective, consistent basis for performance conversations, ranking, and business allocation decisions.</div></div></div><div class="block"><div class="block-title">Key Supplier Performance Metrics</div><div class="block-body"><div class="key-point">Common supplier performance dimensions (QCDS framework):</div><ul><li><b>Quality</b>: Defect rate (PPM — parts per million), rejection rate, corrective action response time</li><li><b>Cost</b>: Price competitiveness, cost reduction trend, total cost of ownership</li><li><b>Delivery</b>: On-time delivery %, lead time accuracy, flexibility/responsiveness</li><li><b>Service</b>: Communication responsiveness, corrective action quality, innovation proposals</li></ul><div class="def-box"><b>PPM (Parts Per Million defects)</b>: The number of defective parts per one million units received. Used for high-volume manufacturing supply. Lower PPM = better quality. Six Sigma quality = 3.4 PPM.</div><div class="def-box"><b>Corrective Action Request (CAR)</b>: A formal request to a supplier to investigate a quality problem, identify root cause, and implement corrective actions to prevent recurrence. The supplier's quality management system and CAR response quality are themselves performance metrics.</div></div></div><div class="block"><div class="block-title">Supplier Review Process</div><div class="block-body"><div class="def-box"><b>Business review (QBR — Quarterly Business Review)</b>: A structured meeting between buyer and supplier leadership to review performance against scorecard metrics, discuss market trends, plan improvement initiatives, and align on strategic priorities.</div><div class="key-point">QBR agenda typically includes: performance scorecard review (actuals vs. targets), root cause discussion for misses, improvement action plan status, business outlook (volume forecast, upcoming changes), and strategic discussion (new opportunities, technology roadmap).</div><div class="def-box"><b>Supplier tiering</b>: Classifying suppliers by their strategic importance and performance — determining how much management attention, development investment, and business allocation each receives. Top-tier suppliers receive preferred business; poor performers face risk of reduced business or disqualification.</div><div class="key-point">Supplier rationalization: periodically reducing the total number of suppliers to focus volume and relationship investment on fewer, better-performing suppliers — increasing leverage and reducing complexity. Counter-balanced by risk of over-concentration.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">QCDS supplier performance framework</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Quality: defect rate (PPM), rejection rate, corrective action response time
+Cost: price vs. market, cost reduction trend, TCO
+Delivery: on-time delivery %, lead time consistency, flexibility/responsiveness
+Service: responsiveness, innovation, corrective action quality
+
+Scorecard weights each dimension based on category importance. Combined score drives: preferred/approved/probation/disqualified status and business allocation.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a Corrective Action Request (CAR)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Formal request to supplier after a quality failure:
+1. Contain the problem (stop further defective product from reaching production)
+2. Investigate root cause (5 Whys, fishbone, data analysis)
+3. Implement corrective action (permanent fix)
+4. Verify effectiveness (confirm problem doesn't recur)
+5. Document and submit to buyer
+
+CAR response quality and speed are themselves performance metrics — a supplier who responds slowly or superficially gets a poor service score.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Supplier scorecard — purpose and content</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Purpose: objective, consistent measurement of supplier performance across multiple dimensions — basis for performance discussions, ranking, business allocation.
+
+Typical content:
+• Quality score (PPM, rejection rate)
+• Delivery score (OTD%, lead time accuracy)
+• Cost score (price competitiveness, savings)
+• Service score (responsiveness, CAR quality)
+• Overall weighted score
+• Trend vs. prior period
+• Ranking vs. peer suppliers
+
+Output drives: preferred vs. probation status, next business award decision.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Quarterly Business Review (QBR) — what it is and why it matters</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A structured review meeting between buyer and supplier leadership (both sides, including executives for strategic suppliers).
+
+Typical agenda:
+1. Scorecard performance review (actuals vs. targets)
+2. Root cause discussion for misses
+3. Improvement action plan status
+4. Volume forecast and business outlook
+5. Strategic discussion (technology, innovation, market trends)
+
+Value: converts metrics from a report into a conversation → alignment on priorities, relationship investment, and mutual accountability.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">PPM — what it means and why it's used</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">PPM = Parts Per Million defects
+
+Formula: (Defective units ÷ Total units received) × 1,000,000
+
+Example: 5 defects in 100,000 units = 50 PPM
+
+Why PPM (not %): for high-volume manufacturing, % is too coarse. A 0.01% defect rate sounds tiny — but means 100 defective parts per million. With automotive or electronics assembly running millions of parts, even 100 PPM causes significant production disruption.
+
+Six Sigma target: 3.4 PPM.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Supplier rationalization — benefits and risks</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Benefits of rationalization (fewer suppliers):
+• Higher volume per supplier → better pricing leverage
+• Deeper relationships → better performance
+• Lower management cost (fewer QBRs, scorecards, contracts)
+• Preferred customer status with remaining suppliers
+
+Risks:
+• Less supplier diversity → supply concentration risk
+• Single/sole source risk
+• Less competitive pressure on remaining suppliers
+
+Balance: rationalize to an optimal number — enough competition for accountability, few enough for deep relationships.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A supplier with 150 PPM defect rate is receiving:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,2)"> 150 defects per 100 units</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,2)"> 150 defects per 1,000 units</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,2)"> 150 defects per one million units received</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,2)"> A 15% defect rate</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">PPM = Parts Per Million. 150 PPM = 150 defective parts per one million units received. This sounds small (0.015%), but for a high-volume manufacturer receiving millions of parts, it represents thousands of defects annually. Six Sigma quality = 3.4 PPM. Most industries target 50–500 PPM depending on criticality. Automotive typically requires <10 PPM for critical components.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">The primary purpose of a supplier performance scorecard is:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> To legally document supplier failures for contract termination</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> To provide an objective, consistent multi-dimensional measurement of supplier performance — enabling accountability, improvement discussions, and business allocation decisions</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> To replace all verbal communication with suppliers</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> To satisfy ISO 9001 audit requirements</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Supplier scorecard: structured, objective measurement across Quality, Cost, Delivery, and Service. Purpose: (1) Create shared understanding of performance gaps; (2) Provide objective basis for performance conversations (rather than subjective impressions); (3) Drive improvement by making gaps visible; (4) Inform business allocation (preferred suppliers get more business); (5) Identify suppliers at risk of disqualification. Scorecard without development conversation is just data — the conversation is where value is created.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A Quarterly Business Review (QBR) between a buyer and strategic supplier serves to:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Renegotiate the contract price every quarter</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Provide a structured forum for senior leaders to review scorecard performance, align on improvement priorities, and discuss strategic direction — strengthening the partnership</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Replace the need for a supplier scorecard</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Fulfill a regulatory compliance requirement</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">QBR = structured meeting that converts scorecard data into action. Executives from both companies attend — signaling strategic importance. Agenda: review actuals vs. targets (accountability), root cause and corrective action discussion (problem-solving), business outlook (alignment), and strategic discussion (innovation, market trends). The QBR relationship investment is what separates a strategic partnership from a transactional buy-sell — it builds trust, alignment, and mutual commitment.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Supplier rationalization is beneficial primarily because:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Having one supplier for all categories is always the cheapest option</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Concentrating volume with fewer, better-performing suppliers generates price leverage, deeper relationships, and lower management cost</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Regulatory requirements limit the number of suppliers companies can use</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Fewer suppliers means the company can skip supplier performance management</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Rationalization benefits: more volume per remaining supplier → better pricing and preferred customer status; deeper relationships → better performance and access to supplier innovation; lower management cost (fewer scorecards, QBRs, contracts, quality audits). Risk: concentration. Balance: rationalize to the minimum number that still provides competition, resilience, and market coverage — not to zero or one.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">A Corrective Action Request (CAR) is issued to a supplier when:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> The supplier requests a price increase</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> A quality failure is discovered and the buyer requires the supplier to investigate root cause and implement permanent corrective actions</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> The supplier delivers ahead of schedule</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> A new product is being introduced</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">CAR = formal quality response mechanism. When a quality problem is discovered (incoming inspection failure, production defect, customer complaint traced to supplier component), the buyer issues a CAR requiring: (1) immediate containment (stop defective product from moving forward), (2) root cause investigation (8D, 5 Whys), (3) permanent corrective action implementation, (4) verification of effectiveness. The speed and quality of the supplier's CAR response is itself a service performance metric — it reveals the maturity of their quality management system.</div></div></div>
+  </div>
+</div>
+<footer>6.2.3: Supplier Performance Management · Module 6 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

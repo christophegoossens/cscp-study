@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>4.4.1: Operations, Inventory & Financial Performance</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 4: Internal Operations and Inventory</div>
+  <div class="hdr-title">4.4.1 · Operations, Inventory & Financial Performance</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 19% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Linking Operations to Financial Performance</div><div class="block-body"><div class="def-box"><b>Inventory as a financial asset</b>: Inventory appears on the balance sheet as a current asset — but it ties up working capital and incurs holding costs. The goal: carry enough inventory to service demand, but not so much that it erodes financial performance.</div><div class="key-point">Three ways inventory affects financial performance:</div><ul><li><b>Cost of Goods Sold (COGS)</b>: Inventory consumed in production or sold directly reduces gross profit</li><li><b>Holding costs</b>: Capital, storage, insurance, obsolescence — typically 20–30% of inventory value per year</li><li><b>Cash-to-cash cycle time</b>: Days of inventory outstanding (DIO) is one of three components — reducing it frees cash</li></ul><div class="def-box"><b>Cash-to-cash (C2C) cycle time</b>: DPO (Days Payable Outstanding) − DIO (Days Inventory Outstanding) − DSO (Days Sales Outstanding). A shorter C2C means the business collects cash faster than it pays suppliers — a sign of operational health.</div><div class="formula">C2C = DIO + DSO − DPO</div></div></div><div class="block"><div class="block-title">Key Operational Performance Metrics</div><div class="block-body"><div class="def-box"><b>Inventory turnover</b>: COGS ÷ Average Inventory. Measures how many times inventory is sold and replenished per year. Higher = more efficient use of inventory investment.</div><div class="formula">Inventory Turnover = COGS ÷ Average Inventory</div><div class="def-box"><b>Days of Supply (DOS)</b>: Average Inventory ÷ (COGS ÷ 365). The number of days current inventory can cover demand.</div><div class="formula">Days of Supply = Average Inventory ÷ (COGS ÷ 365)</div><div class="def-box"><b>Fill rate</b>: The percentage of customer orders shipped on time and in full from available stock. A key customer service metric — directly linked to operational performance.</div><div class="def-box"><b>Return on Assets (ROA)</b>: Net Income ÷ Total Assets. Inventory is part of total assets — reducing excess inventory improves ROA.</div><div class="key-point">Operations performance connects to finance: lower inventory → lower assets → higher ROA. Lower DIO → shorter C2C → better cash flow.</div></div></div><div class="block"><div class="block-title">Manufacturing Planning Hierarchy and Financial Impact</div><div class="block-body"><div class="key-point">The manufacturing planning hierarchy (Business Plan → S&OP → MPS → MRP → PAC) exists to align operations with financial targets.</div><div class="def-box"><b>Business plan alignment</b>: The S&OP process translates the business plan's revenue and margin targets into production volumes. If production is misaligned, the result is excess inventory (eroding margins) or shortages (lost revenue).</div><div class="def-box"><b>Standard cost</b>: A predetermined cost for manufacturing a unit — used for budgeting, variance analysis, and financial reporting. Variances between standard and actual cost signal operational inefficiency.</div><div class="key-point">Capacity utilization affects unit cost: underutilized capacity spreads fixed costs over fewer units (higher cost per unit). Overutilized capacity causes overtime, quality issues, and service failures.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Cash-to-cash cycle time formula</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">C2C = DIO + DSO − DPO
+
+DIO: Days Inventory Outstanding (time inventory sits before sold)
+DSO: Days Sales Outstanding (time to collect after sale)
+DPO: Days Payable Outstanding (time before paying suppliers)
+
+Lower C2C = better cash flow. Reducing inventory (DIO) directly shortens C2C.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Inventory turnover formula and meaning</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Inventory Turnover = COGS ÷ Average Inventory
+
+Higher = more efficient. Industry benchmarks vary: grocery (20–30×) vs. aerospace (1–2×). Low turnover = excess inventory tying up capital. High turnover = lean, but risk of stockouts if not managed.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Days of Supply formula</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Days of Supply = Average Inventory ÷ (COGS ÷ 365)
+
+Tells you: at current consumption rate, how many days can inventory last before stockout? Used to set reorder points and evaluate safety stock adequacy.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How does excess inventory hurt financial performance?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Ties up working capital (cash not available for other uses)
+2) Holding costs = 20–30% of inventory value/year (storage, insurance, obsolescence)
+3) Increases Days Inventory Outstanding → lengthens cash-to-cash cycle
+4) Increases total assets → reduces ROA
+5) Risk of obsolescence = direct write-off (loss)</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is fill rate?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Percentage of customer orders shipped on time and in full from available stock.
+
+Fill rate = (Orders shipped complete from stock) ÷ (Total orders) × 100
+
+Key customer service metric. Low fill rate = lost sales and customer dissatisfaction. High fill rate requires adequate inventory — so there's a trade-off with inventory reduction goals.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How does the manufacturing planning hierarchy link to financial performance?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Business Plan sets revenue/margin targets → S&OP translates into production volumes → MPS creates detailed schedule → MRP triggers material procurement → PAC executes.
+
+Misalignment at any level causes either: excess inventory (erodes margins, ties up cash) OR shortages (lost revenue, premium freight costs). Standard cost variances signal where the disconnect occurred.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company has COGS of $10M and average inventory of $2M. Its inventory turnover is:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> 2×</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> 5×</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> 10×</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> 20×</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Inventory Turnover = COGS ÷ Average Inventory = $10M ÷ $2M = 5×. This means inventory is sold and replenished 5 times per year — or about every 73 days.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Reducing Days Inventory Outstanding (DIO) improves the cash-to-cash cycle by:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Increasing the time before the company pays its suppliers</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Shortening the time inventory sits before being sold, freeing working capital sooner</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Increasing the number of days customers take to pay</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Reducing the number of products in the product line</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">C2C = DIO + DSO − DPO. Reducing DIO directly reduces C2C (assuming DSO and DPO unchanged), meaning the company converts its inventory investment back to cash more quickly. This is a key lever for working capital improvement.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A company reduces its excess inventory significantly. This would most likely:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Decrease inventory turnover and increase ROA</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Increase inventory turnover and improve ROA</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Increase Days Inventory Outstanding and decrease cash flow</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Have no impact on financial performance</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Reducing excess inventory: (1) increases inventory turnover (COGS divided by lower inventory = higher ratio), (2) reduces total assets, improving ROA (Net Income / Total Assets), and (3) reduces DIO, improving cash-to-cash cycle and cash flow.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Standard cost variances in manufacturing signal:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,2)"> How many units were produced in a period</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,2)"> The difference between budgeted and actual revenue</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,2)"> Where operational performance deviates from plan — indicating inefficiency or waste</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,2)"> The value of raw material purchases</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Standard cost = predetermined cost per unit. Actual cost vs. standard cost = variance. Variances signal where operations diverge from plan: material price variance (supplier cost), material usage variance (waste), labor efficiency variance (productivity), overhead variance (capacity utilization). Used to identify and correct operational inefficiencies.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">The primary reason inventory is considered a financial liability as well as an asset is:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Inventory is listed as a liability on the balance sheet</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Holding inventory incurs costs (capital, storage, obsolescence) that reduce financial performance</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Inventory cannot be converted to cash</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Inventory is taxed at a higher rate than other assets</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Inventory IS an asset on the balance sheet — but it's a two-edged sword. Holding inventory costs 20–30% of its value per year (capital cost, storage, handling, insurance, obsolescence risk). Too much inventory erodes margins, reduces ROA, and lengthens cash-to-cash cycle. The goal is the optimal level — enough to service demand, not so much that it becomes a drag on financial performance.</div></div></div>
+  </div>
+</div>
+<footer>4.4.1: Operations, Inventory & Financial Performance · Module 4 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>8.1.2: SC Strategic Value & Optimization</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 8: Supply Chain Strategy & Technology</div>
+  <div class="hdr-title">8.1.2 · SC Strategic Value & Optimization</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 8% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Supply Chain as a Strategic Asset</div><div class="block-body"><div class="def-box"><b>Supply chain as competitive advantage</b>: When a supply chain's capabilities — speed, cost, flexibility, reliability — are superior to competitors' and difficult to replicate, the supply chain itself becomes a source of sustained competitive advantage.</div><div class="key-point">Examples of supply chain as competitive advantage: Amazon (logistics speed + network creates delivery expectation competitors struggle to match); Zara (fast fashion supply chain enables 2-week design-to-store cycle); Apple (supply chain integration with TSMC and Foxconn creates manufacturing scale and quality competitors can't easily match).</div><div class="def-box"><b>Supply chain optimization</b>: The use of data, analytics, and technology to find the best possible configuration and operation of the supply chain — minimizing cost while meeting service requirements, or maximizing service within a cost constraint.</div></div></div><div class="block"><div class="block-title">Supply Chain Optimization Methods</div><div class="block-body"><div class="def-box"><b>Network optimization</b>: Using mathematical models to determine the optimal number, location, and capacity of supply chain nodes (plants, warehouses, distribution centers) — minimizing total network cost (production + transportation + inventory) while meeting service level constraints.</div><div class="def-box"><b>Linear programming (LP)</b>: A mathematical optimization method finding the best value of an objective (minimize cost, maximize output) subject to constraints (capacity, demand, service level). Used for transportation planning, production scheduling, and network design.</div><div class="def-box"><b>Total landed cost</b>: The complete cost of a product delivered to the customer — including production, transportation, duties, insurance, carrying costs, and compliance costs. Used for global sourcing decisions to compare true cost of different sourcing options.</div><div class="formula">Total Landed Cost = Production Cost + Transportation + Duties/Tariffs + Insurance + Carrying Cost + Compliance</div><div class="key-point">Supply chain analytics progression: Descriptive (what happened?) → Diagnostic (why did it happen?) → Predictive (what will happen?) → Prescriptive (what should we do?). Prescriptive analytics (using optimization models) represents the highest maturity level.</div></div></div><div class="block"><div class="block-title">Value Creation Metrics</div><div class="block-body"><div class="def-box"><b>Economic Value Added (EVA)</b>: A measure of financial performance: Net Operating Profit After Tax (NOPAT) minus the cost of capital employed. Supply chains add economic value when they generate returns exceeding the cost of the assets (inventory, equipment, warehouses) they employ.</div><div class="formula">EVA = NOPAT − (Capital Employed × Cost of Capital)</div><div class="def-box"><b>Supply chain ROI</b>: The return generated by supply chain investments — quantifying how much value supply chain improvements (inventory reduction, cost savings, service improvement) contribute to the overall business.</div><div class="key-point">Supply chain improvements directly affect EVA: reducing inventory → less capital employed → lower cost of capital charge. Improving margins through efficiency → higher NOPAT. Both pathways increase EVA.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How supply chain creates competitive advantage</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Supply chain becomes a competitive advantage when it:
+1. Delivers value customers can't get from competitors (Amazon: 2-day delivery norm; Zara: trend-to-shelf in 2 weeks)
+2. Is difficult for competitors to replicate (years of investment, proprietary technology, supplier relationships)
+3. Enables better economics than competitors (cost leadership through scale, efficiency)
+
+Key: the supply chain is not just a cost to minimize — it's an asset to develop for competitive differentiation.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Total Landed Cost formula and components</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Total Landed Cost = Production Cost + Transportation + Duties/Tariffs + Insurance + Inventory Carrying Cost + Compliance Costs
+
+Why it matters: comparing a 'cheap' China supplier to a more expensive Mexico supplier.
+China: lower production cost BUT higher transport cost (ocean + inland), longer lead time (more inventory carrying cost), duty exposure, compliance complexity.
+Mexico: higher production cost BUT lower transport, shorter lead time, USMCA zero duty.
+
+Total landed cost may favor Mexico even though production cost favors China.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Supply chain analytics maturity levels</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Descriptive: What happened? (Historical reporting, dashboards)
+
+Diagnostic: Why did it happen? (Root cause analysis, drill-down)
+
+Predictive: What will happen? (Forecasting, ML demand prediction)
+
+Prescriptive: What should we do? (Optimization models, scenario analysis, AI recommendations)
+
+Most supply chains operate at descriptive/diagnostic level. Prescriptive analytics (network optimization, dynamic routing, AI demand response) represents the frontier — highest value but requires data infrastructure and capability.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Economic Value Added (EVA) — formula and SC connection</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">EVA = NOPAT − (Capital Employed × Cost of Capital)
+
+NOPAT = Net Operating Profit After Tax
+Capital Employed = all assets used to generate that profit (including inventory!)
+Cost of Capital = required return on that capital (typically 8–12%)
+
+SC contribution to EVA:
+• Reduce inventory → lower Capital Employed → lower capital charge → higher EVA
+• Improve efficiency → higher NOPAT
+• Improve service → higher revenue → higher NOPAT
+
+Makes supply chain improvements directly linkable to shareholder value.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Network optimization — what decisions it supports</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Mathematical modeling to find optimal supply chain network configuration.
+
+Decisions: how many distribution centers? Where located? What size? Which suppliers serve which DCs? Which DCs serve which customers?
+
+Objective: minimize total network cost (production + transportation + inventory + facility) while meeting service constraints (delivery time, minimum fill rate).
+
+Tool: linear programming and simulation models. Inputs: demand by location, transport costs, facility costs, inventory policies. Output: optimal network design recommendation.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Prescriptive analytics — what it is and examples</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Highest maturity analytics level: not just 'what will happen' (predictive) but 'what should we do' (prescriptive).
+
+Examples:
+• Network optimization: what's the optimal DC network configuration?
+• Dynamic pricing: what price should we set given current demand and inventory?
+• Transportation optimization: which carrier/route/mode minimizes cost for these shipments?
+• Inventory optimization: exactly how much safety stock at each node given service targets?
+• Demand sensing: respond to real-time signals to adjust replenishment in near real-time
+
+Requires: clean data + optimization algorithms + business rules + human judgment.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">Total Landed Cost is used in global sourcing decisions because:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> It only measures the purchase price from each supplier</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> It captures the complete cost of a sourced product including production, transportation, duties, carrying costs, and compliance — enabling true cost comparison across sourcing options</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> It measures only the transportation cost from supplier to customer</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> It is required by customs authorities for all import documentation</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Total Landed Cost: the complete cost of a product delivered to the point of use. A supplier with lower production cost may have higher total landed cost due to: longer ocean transit (more inventory carrying cost + lead time risk), import duties, inland transportation, and compliance costs. TLC enables an apples-to-apples comparison across global sourcing options. Without it, companies make sourcing decisions based on purchase price alone — often arriving at a higher actual cost than a seemingly more expensive alternative.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Economic Value Added (EVA) is reduced when:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> The company improves its production efficiency</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> A company carries excess inventory — increasing the capital employed without proportional increase in operating profit</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Supply chain costs are reduced</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Customer service levels improve</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">EVA = NOPAT − (Capital Employed × Cost of Capital). Inventory is part of Capital Employed. Excess inventory increases Capital Employed → increases the capital charge (Capital Employed × Cost of Capital) → reduces EVA even if NOPAT stays constant. This is why supply chain professionals say 'inventory is capital in disguise' — every dollar of unnecessary inventory has a real cost: the company's required return on that capital, typically 8–12% annually.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Prescriptive analytics in supply chain is characterized by:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,2)"> Historical reporting of past performance metrics</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,2)"> Diagnosing why a specific supply chain failure occurred</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,2)"> Recommending specific actions based on optimization models — 'what should we do?' rather than 'what happened?'</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,2)"> Forecasting future demand based on historical patterns</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Analytics maturity: Descriptive (what happened) → Diagnostic (why) → Predictive (what will happen) → Prescriptive (what should we do). Prescriptive analytics goes beyond prediction to recommendation: optimization models, AI-driven decision support, automated replenishment signals. Examples: network optimization recommending DC closures, dynamic routing optimization selecting lowest-cost carrier in real time, inventory optimization calculating exact safety stock by SKU. This is the frontier of supply chain analytics.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Amazon's supply chain is an example of competitive advantage because:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> It is the cheapest supply chain in the world</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Its speed, reliability, and delivery network are superior to competitors and extremely difficult to replicate — creating a customer service expectation that competitors struggle to match</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Amazon outsources all logistics to eliminate capital investment</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> It uses only domestic suppliers to avoid geopolitical risk</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Amazon's supply chain advantage: massive DC network (within 30 miles of ~90% of US population), proprietary delivery infrastructure (Amazon Logistics), sophisticated robotics (Kiva robots), AI-driven inventory positioning (predictive shipping), and Prime membership lock-in. These capabilities took years and billions to build — competitors can't replicate quickly. The result: Amazon set a delivery speed expectation (free 2-day delivery) that has become a market standard, forcing all e-commerce competitors to invest heavily to keep up.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Network optimization models determine the optimal supply chain network by:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Always minimizing the number of distribution centers to the fewest possible</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Finding the configuration (number, location, capacity of nodes) that minimizes total cost while meeting service constraints — balancing facility, transportation, and inventory costs</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Selecting the cheapest available suppliers in every category</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Mapping all supply chain nodes without making recommendations</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Network optimization: mathematical model minimizes total supply chain cost (facility lease + labor + transportation + inventory) subject to constraints (customer delivery time requirements, minimum service levels, capacity limits). The optimal network balances trade-offs: fewer DCs = less facility cost but more transport cost and slower delivery; more DCs = more facility cost but lower transport cost and faster delivery. The model finds where the sum of all these costs is minimized while meeting service requirements — impossible to determine through intuition alone.</div></div></div>
+  </div>
+</div>
+<footer>8.1.2: SC Strategic Value & Optimization · Module 8 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

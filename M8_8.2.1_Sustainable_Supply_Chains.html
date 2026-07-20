@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>8.2.1: Sustainable Supply Chains</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 8: Supply Chain Strategy & Technology</div>
+  <div class="hdr-title">8.2.1 · Sustainable Supply Chains</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 8% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Sustainability in the Supply Chain</div><div class="block-body"><div class="def-box"><b>Sustainable supply chain management</b>: Integrating environmental, social, and economic (triple bottom line) considerations into supply chain decisions — to meet today's needs without compromising the ability of future generations to meet theirs.</div><div class="def-box"><b>Triple bottom line (TBL)</b>: A framework measuring corporate performance on three dimensions: Profit (economic), People (social responsibility), and Planet (environmental impact). Sustainable supply chains optimize all three, not just profit.</div><div class="key-point">Why sustainability matters for supply chains: regulatory requirements (carbon reporting, EPR, deforestation laws), customer/investor ESG demands, cost reduction opportunities (energy efficiency, waste reduction), risk mitigation (climate risk, regulatory risk), and talent attraction.</div><div class="def-box"><b>ESG (Environmental, Social, Governance)</b>: A framework used by investors and companies to evaluate business sustainability performance. Supply chains are a major focus of ESG assessment — Scope 3 emissions, labor standards in supply chains, and governance of supplier relationships.</div></div></div><div class="block"><div class="block-title">Environmental Sustainability</div><div class="block-body"><div class="def-box"><b>Carbon footprint</b>: The total greenhouse gas emissions caused directly or indirectly by a supply chain — measured in CO2-equivalent (CO2e). Supply chain transportation and production are major emission sources.</div><div class="def-box"><b>Scope 3 emissions</b>: Indirect emissions across the entire value chain — from suppliers (Scope 3 upstream) and from product use and disposal (Scope 3 downstream). Typically 70–90% of a company's total carbon footprint. Reducing Scope 3 requires supply chain collaboration.</div><div class="key-point">Supply chain carbon reduction levers: mode shift (rail/ocean vs. truck/air), load optimization (fuller loads = fewer trips), nearshoring (shorter distances), renewable energy at facilities, supplier emission requirements, product eco-design (lighter, less material).</div><div class="def-box"><b>Science-based targets (SBTs)</b>: Emission reduction targets aligned with climate science — specifically the Paris Agreement goal of limiting global warming to 1.5°C. Companies with SBTs commit to measurable, time-bound reduction in both direct and supply chain (Scope 3) emissions.</div></div></div><div class="block"><div class="block-title">Social Sustainability</div><div class="block-body"><div class="def-box"><b>Supply chain social responsibility</b>: Ensuring that labor standards, human rights, and health and safety requirements are met throughout the supply chain — at direct suppliers and deeper tiers.</div><div class="key-point">Social responsibility risks in supply chains: child labor, forced labor, unsafe working conditions, inadequate wages, discrimination. These risks are most acute in Tier 2/3 suppliers in low-cost countries — beyond where most company audits reach.</div><div class="def-box"><b>Supplier code of conduct</b>: A document specifying the social and environmental standards that suppliers must meet to do business with the company — covering labor practices, human rights, health & safety, environmental management, and anti-corruption.</div><div class="def-box"><b>Supply chain transparency</b>: The ability to see and verify conditions at all levels of the supply chain — including Tier 2/3 and beyond. Increasingly required by regulation (EU Supply Chain Act, US Uyghur Forced Labor Prevention Act) and demanded by consumers.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Triple bottom line (TBL) — 3 dimensions</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Profit (Economic): financial performance, profitability, economic value creation
+People (Social): labor standards, community impact, human rights, diversity
+Planet (Environmental): carbon footprint, resource use, waste, biodiversity
+
+Sustainable supply chain: optimizes all three simultaneously — not maximizing profit at the expense of people or planet.
+
+Why it matters commercially: ESG performance affects investor capital access, customer preference, regulatory compliance, and talent attraction.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Scope 1, 2, 3 emissions — quick reference</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Scope 1: Direct emissions from OWNED operations (own factories, own fleet)
+Scope 2: Indirect from PURCHASED energy (electricity, steam)
+Scope 3: ALL other indirect — supply chain and customer use
+  • Upstream (Scope 3): suppliers, purchased goods, transportation
+  • Downstream (Scope 3): product use, end-of-life disposal
+
+70–90% of corporate carbon footprint is Scope 3 → supply chain decarbonization is essential for meaningful corporate carbon reduction.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Supplier code of conduct — what it covers</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A document specifying standards suppliers must meet:
+
+Labor: no child/forced labor, fair wages, reasonable hours, right to organize
+Health & Safety: safe working conditions, PPE, emergency procedures
+Environmental: waste management, emissions, hazardous substances compliance
+Ethics: anti-bribery, anti-corruption, confidentiality
+Subcontracting: standards cascade to sub-suppliers
+
+Enforcement: supplier self-assessment, third-party audits, corrective action requirements.
+
+Regulatory backing: increasingly supported by law (EU Supply Chain Act, UK Modern Slavery Act, US UFLPA).</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Science-based targets (SBTs) — what they mean</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Emission reduction targets aligned with the Paris Agreement (limit global warming to 1.5°C above pre-industrial levels).
+
+SBTs require companies to commit to:
+• Measurable % reduction in Scope 1+2 emissions by a target year
+• Measurable Scope 3 (supply chain) reduction targets
+• Validated by the Science Based Targets initiative (SBTi)
+
+Why Scope 3 is included: supply chain emissions (70–90% of total footprint) cannot be excluded if targets are to be meaningful. Forces companies to engage suppliers on emissions.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Supply chain transparency — why it's difficult</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Challenges:
+• Most companies audit only Tier 1 — labor violations are concentrated in Tier 2/3
+• Subcontracting: Tier 1 subcontracts to uncertified Tier 2/3 without buyer knowledge
+• Audit fatigue: suppliers overwhelmed with multiple customer audits
+• Remote locations: difficult and expensive to audit
+• Structural causes: root cause often in pricing pressure (too-low prices force subcontracting)
+
+Solutions: mandatory due diligence laws (EU), blockchain for traceability, shared audit platforms, responsible purchasing practices (pay fair prices).</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ESG and supply chain — key connection</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">ESG = Environmental, Social, Governance framework.
+
+Supply chain is central to all three:
+E: Scope 3 emissions (70–90% in supply chain), resource use, packaging waste
+S: Labor standards in supply chain (child/forced labor, safety), community impact
+G: Supplier governance, anti-corruption, conflict minerals
+
+Investors use ESG scores to allocate capital — poor ESG performance → higher cost of capital or exclusion from funds.
+
+Regulation growing: EU CSRD (Corporate Sustainability Reporting Directive) requires large companies to disclose supply chain ESG impacts.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">The 'triple bottom line' framework measures supply chain sustainability performance across:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> Time, quality, and cost</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> Environmental, social, and economic dimensions — Profit, People, and Planet</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> Safety, reliability, and speed</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Efficiency, resilience, and flexibility</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Triple bottom line (TBL): Profit (economic performance), People (social responsibility — labor, community), Planet (environmental impact — emissions, resource use, waste). Sustainable supply chain management: optimize all three dimensions, not just financial performance. Why commercially relevant: ESG performance now affects investor capital access (institutional investors apply ESG screens), customer preference (B2B buyers demand supplier ESG compliance), regulatory compliance (growing mandatory reporting), and employer brand (talent increasingly prioritizes sustainable employers).</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Scope 3 emissions are the most critical for supply chain sustainability because:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Scope 3 only applies to transportation emissions</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Scope 3 represents 70–90% of most companies' total carbon footprint — primarily from supply chain activities. You cannot achieve meaningful carbon reduction without addressing the supply chain.</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Scope 3 is easier to measure than Scope 1 or 2</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Scope 3 emissions have been exempted from regulatory reporting requirements</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Scope 3 = all indirect value chain emissions. Scope 1 (own operations) and Scope 2 (purchased energy) are important but typically represent only 10–30% of total footprint. Scope 3 upstream (purchased goods, supply chain transport) = the vast majority. A manufacturer's Scope 3 includes: the emissions from mining the metals in its components, manufacturing the parts at suppliers, and transporting goods. Without Scope 3 reduction (requiring supplier engagement), corporate carbon targets are largely symbolic.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A supplier code of conduct primarily serves to:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Legally bind the supplier to the buyer's intellectual property rights</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Specify the social, environmental, and ethical standards that suppliers must meet to do business with the company — and cascade these requirements through the supply chain</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Set the price terms for all purchases</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Replace the need for supplier performance scorecards</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Supplier code of conduct: the buyer's baseline requirements for doing business. Covers: labor standards (no child/forced labor, fair wages, safe conditions), environmental practices, ethics (anti-corruption), and subcontracting standards. Increasingly backed by law: EU Corporate Sustainability Due Diligence Directive, UK Modern Slavery Act, US Uyghur Forced Labor Prevention Act require companies to have and enforce supply chain standards. The code is a starting point — enforcement through audits, corrective actions, and ultimately supplier selection/de-selection is what gives it teeth.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Supply chain transparency at Tier 2 and deeper is challenging primarily because:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Companies are legally prohibited from contacting Tier 2 suppliers</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Most audit programs only cover Tier 1, and subcontracting relationships at deeper tiers are often unknown or invisible — hiding where the worst labor and environmental violations actually occur</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Tier 2 suppliers have better standards than Tier 1</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Transparency only matters for consumer goods companies</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Supply chain visibility: most companies know their Tier 1 (direct suppliers). Tier 2/3 are often invisible — especially since Tier 1 may subcontract to Tier 2 without the buyer's knowledge or approval. The most severe labor violations (forced labor, child labor, unsafe factories) are often concentrated in informal Tier 2/3 suppliers in remote locations that no one audits. EU Corporate Sustainability Due Diligence Directive is forcing companies to map and take responsibility for deeper tiers — creating significant compliance complexity.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Science-based targets (SBTs) differ from general carbon reduction commitments in that:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> SBTs only apply to Scope 1 emissions from owned operations</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> SBTs are validated reduction targets specifically aligned with climate science (1.5°C pathway) — requiring measurable commitments on both direct AND supply chain (Scope 3) emissions</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> SBTs are voluntary financial donations to environmental causes</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> SBTs apply only to energy companies</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Science-based targets: reduction targets validated by the SBTi (Science Based Targets initiative) as sufficient to keep global warming to 1.5°C. Key difference from generic pledges: (1) scientifically calibrated — based on remaining global carbon budget; (2) include Scope 3 — can't claim science-based status while ignoring 70–90% of your footprint; (3) independently validated — not self-declared. Companies with SBTs must engage their supply chains on emissions reduction, since Scope 3 targets are impossible to meet without supplier collaboration.</div></div></div>
+  </div>
+</div>
+<footer>8.2.1: Sustainable Supply Chains · Module 8 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

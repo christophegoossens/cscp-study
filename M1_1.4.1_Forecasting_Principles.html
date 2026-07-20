@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.4.1: Forecasting Principles</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 1: Supply Chains, Demand Management & Forecasting</div>
+  <div class="hdr-title">1.4.1 · Forecasting Principles</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">8 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (8)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">What is Forecasting?</div><div class="block-body"><div class="def-box"><b>Forecast (ASCM)</b>: An estimate of future demand. A forecast can be constructed using quantitative methods, qualitative methods, or a combination of methods, and it can be based on extrinsic (external) or intrinsic (internal) factors. Various forecasting techniques attempt to predict one or more of the four types of demand: trend, seasonal, cyclical, and random.</div><div class="key-point">All forecasts are wrong — the goal is to make them as accurate as possible while quantifying the expected error so the supply chain can plan buffers accordingly.</div><p>Forecasting is a core input to Sales and Operations Planning (S&OP), master production scheduling, procurement, and capacity planning.</p></div></div><div class="block"><div class="block-title">Forecasting Principles</div><div class="block-body"><div class="key-point">Six fundamental principles of forecasting:</div><ul><li><b>Forecasts are almost always wrong</b> — but are still necessary for planning. Quantify the expected error.</li><li><b>Forecasts should include a measure of error</b> — safety stock and capacity buffers are sized to the error range, not just the point estimate.</li><li><b>Aggregate forecasts are more accurate</b> — a forecast for a product family is more accurate than individual SKU forecasts (errors cancel out).</li><li><b>Forecasts are more accurate for shorter time horizons</b> — the further out you forecast, the less accurate.</li><li><b>Every forecast should include a planning assumption</b> — what market conditions, promotions, or events are assumed.</li><li><b>The supply chain drives the need for forecasts</b> — forecast horizon should match the longest cumulative lead time in the supply chain.</li></ul><div class="def-box"><b>Forecast horizon</b>: How far into the future the forecast extends. Must be at least as long as the longest cumulative supply chain lead time.</div><div class="def-box"><b>Forecast bucket</b>: The time period for each forecast data point — daily, weekly, monthly, quarterly. Longer buckets are more accurate than shorter ones.</div></div></div><div class="block"><div class="block-title">Intrinsic vs. Extrinsic Forecasting</div><div class="block-body"><div class="def-box"><b>Intrinsic forecasting</b>: Based on internal data — primarily historical sales or shipment data. Assumes the future will look similar to the past. Uses statistical methods (moving average, exponential smoothing, regression).</div><div class="def-box"><b>Extrinsic forecasting</b>: Based on external indicators correlated with demand — GDP growth, housing starts, consumer confidence index, competitor actions, industry trends. Also called 'causal forecasting.'</div><div class="key-point">Extrinsic forecasting is more powerful when your demand is strongly correlated with external factors (e.g., housing materials = housing starts). Intrinsic is simpler but ignores market-level signals.</div><p>In practice, best forecasts combine BOTH — statistical (intrinsic) baseline + market intelligence adjustments (extrinsic).</p></div></div><div class="block"><div class="block-title">Forecasting Process</div><div class="block-body"><p>A structured forecasting process typically follows these steps:</p><ul><li>1. <b>Gather and clean data</b> — remove outliers, adjust for promotions, returns, lost sales.</li><li>2. <b>Select forecasting method</b> — based on data availability, demand pattern type, and required accuracy.</li><li>3. <b>Generate statistical baseline forecast</b> — apply the chosen model to history.</li><li>4. <b>Apply market intelligence adjustments</b> — add planned promotions, new product launches, competitive events.</li><li>5. <b>Review and consensus</b> — S&OP process aligns sales, marketing, and supply chain on one agreed forecast.</li><li>6. <b>Measure accuracy</b> — track forecast error and feed back into model improvement.</li></ul><div class="key-point">The output of this process is the DEMAND PLAN — a forward-looking view used by supply planners to make inventory, production, and procurement decisions.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 8</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:12%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM definition of a Forecast</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">An estimate of future demand. Can use quantitative methods, qualitative methods, or both. Can be based on extrinsic (external) or intrinsic (internal) factors. Predicts trend, seasonal, cyclical, and/or random demand types.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Name the 6 fundamental forecasting principles</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Forecasts are almost always wrong
+2) Include a measure of error
+3) Aggregate forecasts are more accurate
+4) Shorter horizon = more accurate
+5) State planning assumptions
+6) Horizon must cover the longest supply chain lead time</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a forecast horizon?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">How far into the future the forecast extends. Must be at least as long as the longest cumulative lead time in the supply chain — so there is time to act on the forecast before demand arrives.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a forecast bucket?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The time period unit for each forecast data point (daily, weekly, monthly, quarterly). Longer buckets are more accurate because shorter-term fluctuations are averaged out.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Intrinsic vs. extrinsic forecasting</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Intrinsic: based on internal historical data (past sales). Assumes future ≈ past.
+Extrinsic: based on external indicators (GDP, housing starts, consumer confidence). Also called causal forecasting. Best forecasts combine both.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Why are aggregate forecasts more accurate?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Errors at the individual SKU level tend to cancel out when combined. A product family forecast aggregates many SKUs — some will be over, some under, making the total more stable and accurate than any single-item forecast.</div></div></div></div><div class="flashcard" id="fc6" onclick="flipCard(6)"><div class="card-inner" id="ci6"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the forecasting process (6 steps)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Gather/clean data
+2) Select method
+3) Generate statistical baseline
+4) Apply market intelligence adjustments
+5) Review and consensus (S&OP)
+6) Measure accuracy and feed back</div></div></div></div><div class="flashcard" id="fc7" onclick="flipCard(7)"><div class="card-inner" id="ci7"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Why must the forecast horizon match supply chain lead time?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">If the forecast horizon is shorter than the lead time, there is no time to act on the forecast — the material will not arrive in time. The supply chain needs advance notice equal to at least its cumulative lead time.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company forecasts at the individual SKU level and finds high error rates. Switching to forecasting at the product family level would most likely:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> Increase forecast error because more items are aggregated</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> Decrease forecast error because individual errors cancel out</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> Have no effect on forecast accuracy</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Require more data and be less practical</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Aggregate forecasts are more accurate — a core forecasting principle. When multiple SKUs are combined, the over-forecasts and under-forecasts of individual items partially cancel each other out, producing a more accurate total.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">The forecast horizon should be at least as long as:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> The customer order cycle time</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> The longest cumulative lead time in the supply chain</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> The fiscal quarter being planned</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> The production cycle time for the final product</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">The forecast must extend far enough into the future for the supply chain to actually act on it. That means it must cover the longest cumulative lead time — from raw material procurement through production to finished goods delivery.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Which of the following is an example of EXTRINSIC (causal) forecasting?</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,2)"> Using last year's monthly sales to predict this year's monthly sales</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,2)"> Using a three-month moving average of shipments</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,2)"> Using housing starts data to forecast lumber demand</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,2)"> Applying exponential smoothing to historical order data</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Extrinsic (causal) forecasting uses EXTERNAL indicators correlated with demand. Housing starts is an external economic indicator that drives demand for building materials — a classic causal relationship. The other options all use internal historical data = intrinsic forecasting.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Which statement about forecast error is most consistent with ASCM forecasting principles?</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,2)"> A good forecast has zero error</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,2)"> Forecast error should be hidden from supply planners to avoid confusion</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,2)"> All forecasts will have error; the key is to measure and account for it in safety buffers</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,2)"> Forecasts should not be generated if they cannot be made accurate</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">A core principle: all forecasts are wrong, but they are still necessary. The right response is to MEASURE the expected error and USE it to size safety stock and capacity buffers — not to eliminate forecasting or pretend the error doesn't exist.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">A company is launching a major promotion next quarter. Where in the forecasting process should this be accounted for?</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> In the data cleaning step, by removing historical promotional sales</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> In the market intelligence adjustment step, after generating the statistical baseline</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> It should not be included in the forecast — promotions are a supply chain concern</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> It should replace the statistical baseline forecast entirely</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Statistical baseline forecasts extrapolate from history. Planned promotions (which are FUTURE events not in history) should be added as market intelligence adjustments AFTER the baseline is generated. This is the standard 'override' step in structured demand planning.</div></div></div>
+  </div>
+</div>
+<footer>1.4.1: Forecasting Principles · Module 1 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5, 6, 7],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

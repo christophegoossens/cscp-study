@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.5.2: Sales and Operations Planning (S&OP)</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 1: Supply Chains, Demand Management & Forecasting</div>
+  <div class="hdr-title">1.5.2 · Sales and Operations Planning (S&OP)</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">8 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (8)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">What is S&OP?</div><div class="block-body"><div class="def-box"><b>Sales and Operations Planning (S&OP)</b>: A process to develop tactical plans that provide management the ability to strategically direct its businesses to achieve competitive advantage on a continuous basis by integrating customer-focused marketing plans for new and existing products with the management of the supply chain. The process brings together all the plans for the business (sales, marketing, development, manufacturing, sourcing, and financial) into one integrated set of plans.</div><div class="key-point">S&OP is a CROSS-FUNCTIONAL PROCESS — it requires participation from Sales, Marketing, Finance, Operations, and Supply Chain. Its output is a single, agreed, executable plan across the organization.</div><p>S&OP operates at the AGGREGATE level — product families, not individual SKUs. The horizon is typically 3–18 months.</p></div></div><div class="block"><div class="block-title">The S&OP Process Steps</div><div class="block-body"><div class="key-point">The standard S&OP process follows a monthly cycle with 5 key steps:</div><ul><li><b>Step 1 — Data gathering</b>: Collect actuals vs. last month's plan (sales performance, inventory, production). Update the statistical forecast with latest actuals.</li><li><b>Step 2 — Demand review</b>: Sales and marketing review and adjust the statistical forecast. Add intelligence: planned promotions, new customers, lost accounts, market changes. Output: one unconstrained demand plan.</li><li><b>Step 3 — Supply review</b>: Operations reviews capacity against the demand plan. Identifies constraints. Output: constrained supply plan and gap analysis.</li><li><b>Step 4 — Pre-S&OP / reconciliation meeting</b>: Finance and management review demand vs. supply gaps. Options to close gaps are evaluated (increase capacity, reduce demand, accept the gap). Financial implications are quantified.</li><li><b>Step 5 — Executive S&OP</b>: Senior leadership reviews and approves the reconciled plan. Sets the 'one number' that all functions will work to.</li></ul><div class="key-point">The output of S&OP is the MASTER PRODUCTION SCHEDULE (MPS) input — an approved, balanced plan of what will be produced, sourced, and sold over the planning horizon.</div></div></div><div class="block"><div class="block-title">S&OP Benefits and Success Factors</div><div class="block-body"><div class="key-point">Benefits of S&OP: reduced inventory (better alignment), improved service levels, better capacity utilization, one plan across the business (eliminates shadow forecasting), improved financial predictability.</div><ul><li><b>Executive sponsorship</b>: S&OP must be driven from the top — it requires cross-functional decision-making authority</li><li><b>One number discipline</b>: All functions must commit to the agreed plan — no 'private' forecasts</li><li><b>Regular cadence</b>: Monthly cycle with fixed meeting dates and agenda</li><li><b>Data quality</b>: Garbage in, garbage out — S&OP is only as good as the underlying data</li><li><b>Pre-work</b>: Each functional review must be completed before the executive meeting</li></ul></div></div><div class="block"><div class="block-title">S&OP vs. IBP (Integrated Business Planning)</div><div class="block-body"><div class="def-box"><b>Integrated Business Planning (IBP)</b>: An evolution of S&OP that extends the integration to include financial planning, strategic planning, and portfolio management. IBP typically has a longer planning horizon (24–36 months) and involves more senior leadership.</div><div class="key-point">IBP → S&OP → Master Scheduling is the planning hierarchy. IBP sets the strategic direction, S&OP translates it into tactical plans, Master Scheduling makes it operational.</div><p>The ASCM exam uses S&OP as the primary term — IBP is a more advanced evolution of the concept.</p></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 8</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:12%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM definition of Sales and Operations Planning (S&OP)</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A process that integrates customer-focused marketing plans with supply chain management to develop one set of integrated tactical plans — covering sales, marketing, development, manufacturing, sourcing, and finance. Brings together all business plans into one executable plan.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What are the 5 steps of the S&OP process?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Data gathering (actuals vs. plan)
+2) Demand review (adjust forecast with intelligence)
+3) Supply review (capacity vs. demand, gap analysis)
+4) Pre-S&OP / reconciliation (gap options, financial impact)
+5) Executive S&OP (approve the one agreed plan)</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">At what level does S&OP operate?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">AGGREGATE level — product families (not individual SKUs). Planning horizon: typically 3–18 months. The output feeds into Master Production Scheduling, which operates at the individual item level.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the 'one number' principle in S&OP?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">All functions must commit to the same agreed plan — no parallel 'shadow forecasts.' Sales, operations, finance, and supply chain all work from a single number. Eliminates the dysfunction of different departments planning to different numbers.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">S&OP vs. Integrated Business Planning (IBP)</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">S&OP: tactical, 3–18 month horizon, product family level, monthly cycle.
+IBP: extends S&OP to include financial and strategic planning, 24–36 month horizon, senior leadership, includes portfolio management. IBP is the evolved/advanced version.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the output of the S&OP process?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A single, approved, balanced plan for what will be produced, sourced, and sold — used as the primary input to Master Production Scheduling (MPS). Also provides a financial forecast for budget management.</div></div></div></div><div class="flashcard" id="fc6" onclick="flipCard(6)"><div class="card-inner" id="ci6"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What are the 5 key success factors for S&OP?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Executive sponsorship (cross-functional authority)
+2) One number discipline (no shadow forecasts)
+3) Regular monthly cadence (fixed agenda)
+4) Data quality (accurate inputs)
+5) Completed functional pre-work before executive meeting</div></div></div></div><div class="flashcard" id="fc7" onclick="flipCard(7)"><div class="card-inner" id="ci7"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What happens in the Supply Review step of S&OP?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Operations reviews available capacity (labor, machines, materials) against the unconstrained demand plan from the demand review. Identifies capacity gaps and constraints. Output: constrained supply plan + list of gaps to resolve.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">What is the primary OUTPUT of the S&OP process?</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> An individual SKU-level production schedule for next week</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> A single, cross-functionally agreed plan for what will be produced, sourced, and sold — input to master scheduling</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> A supplier negotiation plan</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> A customer service agreement (SLA)</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">S&OP produces ONE agreed plan across all functions — demand, supply, and financial — at the product family/aggregate level. This plan feeds into Master Production Scheduling, which then translates it to the individual item/SKU level.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">During the S&OP process, the supply review identifies a capacity constraint — the company cannot produce enough to meet the demand plan. Who is responsible for resolving this gap?</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> The demand team should reduce the forecast to match supply</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> This is resolved in the pre-S&OP / executive S&OP step — management decides whether to add capacity, reduce demand, or accept the gap</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> The supply chain should automatically add overtime without management approval</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> The gap should be hidden from the executive meeting</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Gaps identified in the supply review are escalated to the pre-S&OP and executive S&OP steps, where senior leadership evaluates options (add capacity, reduce demand via pricing/promotion, accept lower service, etc.) and makes the business decision. S&OP is a decision-making process, not a rubber stamp.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A sales manager continues to use his own private demand forecast rather than the agreed S&OP number when placing orders with the supply chain. This violates which S&OP principle?</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> The monthly cadence principle</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> The one number discipline — all functions must commit to the agreed plan</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> The data quality principle</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> The executive sponsorship principle</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">'One number discipline' — the cornerstone of S&OP effectiveness — means ALL functions commit to the SAME agreed plan. Shadow forecasts create the very demand/supply misalignment S&OP is designed to eliminate.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">S&OP planning typically operates at which level of aggregation?</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Individual SKU level — every item separately</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Product family / aggregate level — groups of related products</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Customer order level — line by line</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Raw material component level</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">S&OP operates at the AGGREGATE / product family level (not individual SKUs). This makes the planning more accurate (aggregation reduces error) and manageable in the meeting format. Individual SKU-level planning happens in Master Scheduling.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">How does Integrated Business Planning (IBP) differ from traditional S&OP?</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> IBP is a shorter-term operational process; S&OP is more strategic</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> IBP extends S&OP with a longer horizon (24-36 months), financial/strategic planning, and portfolio management</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> IBP is only for manufacturing; S&OP applies to all industries</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> IBP eliminates the need for executive participation</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">IBP is an evolution of S&OP that extends the scope to include financial planning, strategic portfolio management, and a longer time horizon (24–36 months). S&OP = tactical (3–18 months). IBP = strategic + tactical, broader business integration.</div></div></div>
+  </div>
+</div>
+<footer>1.5.2: Sales and Operations Planning (S&OP) · Module 1 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5, 6, 7],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

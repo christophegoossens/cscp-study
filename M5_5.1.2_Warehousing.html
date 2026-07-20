@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>5.1.2: Warehousing</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 5: Logistics, Transportation & Distribution</div>
+  <div class="hdr-title">5.1.2 · Warehousing</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 9% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Warehousing Functions</div><div class="block-body"><div class="def-box"><b>Warehousing</b>: The physical storage and handling of goods as they move through the supply chain — providing time utility by making products available when customers need them, even when production timing doesn't match consumption timing.</div><div class="key-point">Primary warehousing functions:</div><ul><li><b>Receiving</b>: Accepting and verifying inbound shipments</li><li><b>Putaway</b>: Moving goods to their designated storage location</li><li><b>Storage</b>: Holding inventory in an organized, accessible manner</li><li><b>Order picking</b>: Selecting items to fulfill customer orders</li><li><b>Packing & shipping</b>: Preparing and dispatching outbound orders</li><li><b>Cross-docking</b>: Direct transfer inbound to outbound without storage</li></ul><div class="def-box"><b>Value-added services (VAS)</b>: Activities performed at the warehouse beyond basic storage — labeling, kitting, assembly, customization, returns processing. VAS allows postponement of product differentiation closer to demand.</div></div></div><div class="block"><div class="block-title">Warehouse Design and Layout</div><div class="block-body"><div class="def-box"><b>Warehouse layout</b>: The arrangement of storage locations, aisles, receiving, shipping, and equipment to minimize travel time and maximize throughput — critical for picking efficiency.</div><div class="key-point">Slotting strategies for warehouse efficiency:</div><ul><li><b>Fast-movers (A items) near shipping</b>: Reduces travel for high-frequency picks</li><li><b>Heavy/bulky items at floor level</b>: Reduces ergonomic risk</li><li><b>Similar items stored together</b>: Reduces multi-location trips for related orders</li><li><b>Seasonal rotation</b>: Move items to best slots based on current demand patterns</li></ul><div class="def-box"><b>Warehouse Management System (WMS)</b>: Software that manages and controls day-to-day warehouse operations — receiving, putaway, picking, packing, shipping, and inventory tracking. Directs workers via pick lists, barcode scanning, and RF devices.</div><div class="def-box"><b>Pick-to-light / voice picking</b>: Technologies that direct pickers to locations using light displays or voice instructions — improving accuracy and speed vs. paper pick lists.</div></div></div><div class="block"><div class="block-title">Types of Warehouses</div><div class="block-body"><div class="key-point">Common warehouse types:</div><ul><li><b>Private warehouse</b>: Owned/operated by the company — full control, high fixed cost</li><li><b>Public warehouse</b>: Third-party facility rented by space/time — flexible, low fixed cost, less control</li><li><b>Contract warehouse</b>: Dedicated 3PL space under a long-term agreement — balance of control and flexibility</li><li><b>Distribution center (DC)</b>: High-throughput facility optimized for rapid product flow rather than long-term storage</li><li><b>Fulfillment center</b>: DC focused on direct-to-consumer e-commerce orders — small, frequent shipments</li></ul><div class="def-box"><b>Cross-docking facility</b>: A warehouse-like facility with little or no storage — goods arrive, are sorted, and immediately dispatched to outbound vehicles. Minimizes dwell time and storage cost.</div><div class="key-point">Economic trade-off: Private warehouse = high fixed cost + high control + scalability risk. Public warehouse = low fixed cost + less control + scalable. Most companies use a mix.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">6 primary warehousing functions</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1. Receiving — verify and accept inbound shipments
+2. Putaway — move goods to storage location
+3. Storage — hold inventory organized and accessible
+4. Order picking — select items for customer orders
+5. Packing & shipping — prepare and dispatch orders
+6. Cross-docking — direct inbound-to-outbound without storage
+
+Order picking is typically 50–60% of total warehouse labor cost — the highest-impact function to optimize.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a WMS?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Warehouse Management System — software that directs and tracks all warehouse operations.
+
+Capabilities: receiving guidance, directed putaway, pick path optimization, wave planning, barcode/RFID integration, labor management, inventory tracking, shipping confirmation.
+
+Benefit: replaces paper-based processes, reduces errors, improves throughput, provides real-time inventory visibility.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Private vs. public vs. contract warehouse</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Private: company owns/operates. High fixed cost, full control, inflexible to volume changes.
+
+Public: rented space from 3PL by time/space. Low fixed cost, flexible, but less control over operations.
+
+Contract: dedicated 3PL space under long-term agreement. More control than public, more flexible than private. Middle ground.
+
+Choice depends on: volume stability, capital availability, control requirements, market served.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What are value-added services (VAS) in warehousing?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Activities beyond basic storage performed at the warehouse:
+• Labeling and price tagging
+• Kitting (assembling components into sets)
+• Light assembly
+• Customization (adding logos, accessories)
+• Returns processing and refurbishment
+• Repacking
+
+VAS enables POSTPONEMENT: standard products are stored and customized only when an order is placed, reducing inventory of finished configurations.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is slotting in a warehouse?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Assigning products to optimal storage locations based on movement frequency, weight, size, and order profiles.
+
+Best practice: Fast movers (A items) near shipping → reduces picker travel
+Heavy/large items at ground level → ergonomics and safety
+Items frequently ordered together → stored near each other
+
+Good slotting can reduce picking labor 10–20% with no capital investment.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Distribution center vs. fulfillment center</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Distribution Center (DC): high-throughput facility serving retail stores or B2B customers. Receives large quantities, ships pallets/cases to stores.
+
+Fulfillment Center: variant of DC optimized for direct-to-consumer (e-commerce). Receives bulk, ships individual units to end customers. Higher complexity: more SKUs, smaller orders, more packaging options, higher return rates.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">Order picking is the most critical warehousing operation to optimize because:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> It is the easiest function to automate</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> It typically accounts for 50–60% of total warehouse labor cost and directly affects order accuracy and speed</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> It requires the most storage space</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> It involves the fewest employees</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Order picking = selecting items from storage to fill customer orders. It's labor-intensive, involves lots of travel in the warehouse, and is prone to errors (wrong item, wrong quantity, wrong location). At 50–60% of total warehouse labor cost, improving picking efficiency (slotting, routing, technology like pick-to-light) has the highest financial return of any warehousing improvement.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">A company that wants flexible warehouse capacity that can grow and shrink with seasonal demand would best use:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> A private warehouse (owned by the company)</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> A public or contract warehouse (rented from a 3PL)</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Cross-docking at a freight terminal</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> A fulfillment center near headquarters</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Public/contract warehouses: company pays for space as needed — scale up in peak season, scale down in off-peak. No long-term capital commitment. Private warehouses have fixed capacity and fixed costs regardless of volume — poor fit for volatile demand. This is a core reason companies use 3PLs: to get flexible, scalable capacity without owning fixed assets.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Value-added services (VAS) in a warehouse support which supply chain strategy?</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Make-to-stock (producing for inventory before orders arrive)</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Postponement (delaying product differentiation until closer to actual demand)</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Cross-docking (immediate transfer without storage)</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Vendor-managed inventory (supplier controls replenishment)</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">VAS (labeling, kitting, customization at the warehouse) enables postponement: keep generic/standard product in inventory and differentiate it (add labels, assemble kits, customize) only when a real order arrives. This reduces the number of finished SKUs that must be forecasted and stocked, lowering forecast error and inventory investment while still delivering a customized product quickly.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">A cross-docking facility differs from a conventional warehouse in that:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> It stores large quantities of safety stock</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Goods flow directly from inbound to outbound with minimal or no storage</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> It is always owned by the company, not a 3PL</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> It processes only returned goods</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Cross-docking: inbound vehicles arrive → goods unloaded, sorted, and immediately loaded onto outbound vehicles → no long-term storage. Reduces: inventory holding costs, product damage (fewer touches), total cycle time. Works best for: fast-moving consumer goods, perishables, and where supplier deliveries can be coordinated to match outbound shipment schedules.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">A WMS (Warehouse Management System) improves warehouse performance primarily by:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Replacing all human workers with robots</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Directing and tracking all warehouse activities in real time — optimizing putaway, pick paths, and inventory accuracy</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Forecasting customer demand for inventory planning</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Negotiating better rates with carriers</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">A WMS manages the operational execution layer of the warehouse: tells workers exactly where to put stock, where to pick from, in what sequence, and confirms all transactions via barcode/RFID scan. Benefits: higher inventory accuracy (real-time tracking), faster picking (optimized routes), fewer errors (system-directed vs. memory-based), better labor visibility (productivity tracking), and faster shipping (wave management).</div></div></div>
+  </div>
+</div>
+<footer>5.1.2: Warehousing · Module 5 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

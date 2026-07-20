@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>2.3.1: Supply Chain Metrics, Reports, and SCOR DS</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 2: Global Supply Chain Networks</div>
+  <div class="hdr-title">2.3.1 · Supply Chain Metrics, Reports, and SCOR DS</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Why Metrics Matter</div><div class="block-body"><div class="key-point">"You get what you measure." Metrics shape behavior — people focus on what is measured. Poorly designed metrics drive wrong behaviors (e.g., measuring units shipped encourages overshipping to hit targets).</div><p>Three basic objectives of any measurement system:</p><ul><li><b>Track performance</b>: Observe and gather data relevant to business objectives</li><li><b>Compare to standards</b>: Identify when performance needs attention or modification</li><li><b>Motivate behavior</b>: Understand what incentives drive people to work toward organizational goals</li></ul><p>Good metrics are: objective, consistent, quantified, and measure at least two parameters — typically an actual result AND a target or standard for comparison.</p><div class="def-box"><b>KPI (Key Performance Indicator)</b>: A metric that tracks the most critical aspects of supply chain performance — tied directly to strategic objectives.</div><div class="key-point">Supply chain metrics should cut ACROSS functions and organizations to promote collaboration — not just measure each silo's local performance.</div></div></div><div class="block"><div class="block-title">SCOR DS (Supply Chain Operations Reference — Diagnostic Standard)</div><div class="block-body"><div class="def-box"><b>SCOR (Supply Chain Operations Reference) model</b>: A standard framework developed by ASCM for describing, evaluating, and benchmarking supply chain performance. Covers six processes: Plan, Source, Make, Deliver, Return, Enable.</div><p>SCOR DS is the diagnostic standard version — a simplified, accessible framework for measuring supply chain performance using standard KPIs aligned to SCOR processes.</p><div class="key-point">SCOR metrics are organized into three levels of reliability:</div><ul><li><b>Level 1 — Strategic</b>: High-level performance metrics (e.g., Perfect Order Fulfillment, Cash-to-Cash Cycle Time)</li><li><b>Level 2 — Tactical</b>: More detailed metrics for specific SCOR processes</li><li><b>Level 3 — Operational</b>: Detailed diagnostic metrics</li></ul><p>The 5 performance attributes of SCOR:</p><ul><li><b>Reliability</b>: Delivering the right product, right place, right time, right condition (Perfect Order Fulfillment)</li><li><b>Responsiveness</b>: Speed of supply chain — Order Fulfillment Cycle Time</li><li><b>Agility</b>: Ability to respond to market changes</li><li><b>Costs</b>: Supply chain management cost as % of revenue</li><li><b>Asset management</b>: How effectively assets (inventory, cash) are being used</li></ul></div></div><div class="block"><div class="block-title">Key SCOR Level 1 Metrics</div><div class="block-body"><div class="def-box"><b>Perfect Order Fulfillment</b>: % of orders delivered: complete, on time, damage-free, and correctly documented. The composite reliability metric.</div><div class="formula">Perfect Order Fulfillment = (Orders meeting ALL criteria / Total orders) × 100%</div><div class="def-box"><b>Order Fulfillment Cycle Time</b>: The average time from customer order receipt to delivery. Measures responsiveness.</div><div class="def-box"><b>Cash-to-Cash Cycle Time</b>: Days inventory outstanding + Days sales outstanding − Days payable outstanding. Measures working capital efficiency.</div><div class="formula">Cash-to-Cash = DIO + DSO − DPO
+DIO = Days Inventory Outstanding
+DSO = Days Sales Outstanding
+DPO = Days Payable Outstanding
+Lower is better — less cash tied up in the operating cycle</div><div class="def-box"><b>Supply chain cost as % of revenue</b>: Total supply chain operating costs divided by net revenue. Measures cost efficiency.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">3 objectives of any measurement system</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Track actual performance (observe/gather relevant data)
+2) Compare to standards (identify when action is needed)
+3) Motivate behavior (align incentives with organizational goals)</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">SCOR model — what does it stand for and what are the 6 processes?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Supply Chain Operations Reference model.
+6 processes: Plan, Source, Make, Deliver, Return, Enable.
+Used for describing, evaluating, and benchmarking supply chain performance.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">5 SCOR performance attributes</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Reliability: right product, right time, right place
+2) Responsiveness: speed of fulfillment
+3) Agility: adaptability to market change
+4) Costs: SC cost efficiency
+5) Asset management: inventory & capital efficiency</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is Perfect Order Fulfillment?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">% of orders that are: complete (all items), on time, damage-free, and correctly documented — ALL four criteria must be met simultaneously. The composite reliability KPI in SCOR.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Cash-to-Cash Cycle Time formula and meaning</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">C2C = DIO + DSO − DPO
+DIO = Days Inventory Outstanding
+DSO = Days Sales Outstanding
+DPO = Days Payable Outstanding
+Measures working capital efficiency. Lower = less cash tied up in operations.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Why should SC metrics cut across functions?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Local/functional metrics encourage silo optimization at the expense of overall SC performance. Cross-functional metrics (e.g., perfect order, C2C) align departments toward shared outcomes and encourage collaboration.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A supply chain manager measures warehouse 'units picked per hour' but ignores order accuracy. Pickers rush to hit the speed target and error rates rise. This illustrates:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> The importance of SCOR metrics</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> The principle that 'you get what you measure' — poorly designed metrics drive wrong behaviors</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> The benefit of functional silo metrics</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> The Bullwhip Effect in reverse</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">'You get what you measure' — people optimize for whatever is measured. Measuring speed without accuracy creates a perverse incentive. Good metrics must capture the right outcome — not just the easiest-to-measure activity.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Perfect Order Fulfillment requires an order to be:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,2)"> On time only</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,2)"> Complete and on time only</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,2)"> Complete, on time, damage-free, AND correctly documented — all four simultaneously</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,2)"> Correct quantity and undamaged only</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Perfect Order Fulfillment is a composite metric — ALL four criteria must be met: complete quantity, on time, damage-free, and correct documentation/invoicing. Missing any one criterion = imperfect order.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A company has DIO = 45 days, DSO = 30 days, DPO = 60 days. What is the Cash-to-Cash Cycle Time?</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,2)"> 135 days</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,2)"> 75 days</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,2)"> 15 days</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,2)"> −15 days</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">C2C = DIO + DSO − DPO = 45 + 30 − 60 = 15 days. This means the company has cash tied up in operations for 15 days between paying suppliers and collecting from customers. Negative C2C (e.g., Amazon) means customers pay before suppliers are paid — highly favorable working capital position.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Which SCOR performance attribute does Order Fulfillment Cycle Time primarily measure?</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Reliability</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Responsiveness</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Agility</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Asset management</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Order Fulfillment Cycle Time = the speed from order to delivery. In SCOR, this is the RESPONSIVENESS attribute — how quickly the supply chain can fulfill customer demand.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Why is it important for KPIs to include both an actual result AND a target/standard?</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> To comply with SCOR certification requirements</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Because a number without a reference point provides no basis for evaluating whether performance is good or bad</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> To make reports longer and more detailed</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Because targets are required by financial accounting standards</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">A metric without a benchmark is meaningless — '95% on-time delivery' sounds good, but is it? Only by comparing to a target (98% goal) or industry benchmark do you know if action is required. Good metrics always pair actuals with standards.</div></div></div>
+  </div>
+</div>
+<footer>2.3.1: Supply Chain Metrics, Reports, and SCOR DS · Module 2 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

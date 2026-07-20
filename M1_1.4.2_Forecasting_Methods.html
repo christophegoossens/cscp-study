@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.4.2: Forecasting Methods</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 1: Supply Chains, Demand Management & Forecasting</div>
+  <div class="hdr-title">1.4.2 · Forecasting Methods</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">8 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (8)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Qualitative vs. Quantitative Methods</div><div class="block-body"><div class="def-box"><b>Qualitative forecasting</b>: Methods based on human judgment, experience, and market knowledge rather than historical data. Used when historical data is unavailable (new products) or when market conditions are changing rapidly.</div><div class="def-box"><b>Quantitative forecasting</b>: Methods based on mathematical analysis of historical data. Most appropriate when a product has a stable demand history and the future is expected to resemble the past.</div><div class="key-point">In practice, best-in-class demand planning uses BOTH: quantitative baseline (statistical) + qualitative override (market intelligence). Pure qualitative is biased; pure quantitative ignores market reality.</div></div></div><div class="block"><div class="block-title">Key Qualitative Methods</div><div class="block-body"><ul><li><b>Delphi method</b>: Structured expert survey process — experts independently provide estimates, a facilitator summarizes, and experts revise until consensus is reached. Eliminates group-think bias.</li><li><b>Market research / surveys</b>: Gathering customer data directly — surveys, focus groups, purchase intent studies. Good for new products.</li><li><b>Sales force composite</b>: Each salesperson estimates demand in their territory; totals are aggregated. Risk: optimism bias from salespeople.</li><li><b>Executive opinion / jury of executive opinion</b>: Senior leaders provide demand estimates based on industry knowledge. Fast but can suffer from authority bias.</li></ul><div class="key-point">Qualitative methods are essential for NEW PRODUCT FORECASTING where no history exists.</div></div></div><div class="block"><div class="block-title">Key Quantitative Methods</div><div class="block-body"><div class="def-box"><b>Naive forecast</b>: The simplest model — this period's forecast = last period's actual. Zero parameters. Good as a benchmark.</div><div class="def-box"><b>Moving average (MA)</b>: Averages the last N periods of demand. Formula: MA = (D₁ + D₂ + ... + Dₙ) / N. All N periods weighted equally. Does NOT respond well to trend or seasonality.</div><div class="def-box"><b>Weighted moving average (WMA)</b>: Like MA but more recent periods get higher weights. More responsive to recent changes.</div><div class="def-box"><b>Exponential smoothing (ES)</b>: A weighted average where weights decrease exponentially for older data. Only requires last period's forecast and last period's actual. Alpha (α) controls responsiveness: high α = more responsive (more weight to recent demand). Formula: Fₜ = α × Aₜ₋₁ + (1 - α) × Fₜ₋₁</div><div class="formula">Exponential Smoothing: Fₜ = α × Aₜ₋₁ + (1 - α) × Fₜ₋₁
+Where: Fₜ = new forecast, α = smoothing constant (0-1), Aₜ₋₁ = last period actual, Fₜ₋₁ = last period forecast</div><div class="def-box"><b>Linear regression / trend analysis</b>: Fits a trend line to historical data using least squares. Good for data with a clear linear trend.</div><div class="def-box"><b>Seasonal index</b>: A ratio that shows how demand in a given period compares to the annual average. Used to adjust a trend forecast for seasonal patterns.</div><div class="key-point">No single quantitative method is best for all situations. Match the method to the demand pattern: MA for stable demand, ES for demand with slow drift, regression for strong trends, seasonal index for seasonal demand.</div></div></div><div class="block"><div class="block-title">Choosing the Right Method</div><div class="block-body"><div class="key-point">Factors for selecting a forecasting method:</div><ul><li>Data availability — how much history exists?</li><li>Demand pattern type — stable, trending, seasonal, or random?</li><li>Forecast horizon — short-term or long-term?</li><li>Required accuracy — how costly is error?</li><li>Complexity vs. simplicity tradeoff — simple models are easier to explain and maintain</li></ul><p>Use error metrics (MAD, MAPE, MSE) to compare models on the same data — the model with lowest error is preferred.</p><p>A/B testing: run multiple models in parallel and select the one with better out-of-sample accuracy.</p></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 8</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:12%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Qualitative vs. quantitative forecasting</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Qualitative: based on human judgment, used when no history exists (new products) or market is changing rapidly.
+Quantitative: based on statistical analysis of historical data, used when history is stable and future resembles past.
+Best practice: combine both.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the Delphi method?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A structured expert forecasting technique: experts independently estimate → facilitator summarizes → experts revise → repeat until consensus. Eliminates group-think and authority bias.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is exponential smoothing and what does alpha (α) control?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A weighted average where older data gets exponentially less weight. Formula: Fₜ = α × Aₜ₋₁ + (1−α) × Fₜ₋₁.
+α (0–1): high α = more weight on recent demand = more responsive. Low α = smoother, less reactive to recent changes.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a moving average (MA) forecast?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Average of the last N periods: MA = (D₁ + D₂ + ... + Dₙ) / N. Each period is weighted equally. Simple but does not adjust for trend or seasonality. Good for stable demand patterns.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a seasonal index?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A ratio comparing demand in a specific period to the annual average. Used to adjust a trend-based forecast for known seasonal patterns. Index > 1 = above average; < 1 = below average.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the naive forecast?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The simplest forecast method: this period's forecast = last period's actual demand. Zero parameters. Used as a benchmark — any more complex model should outperform it to be worth using.</div></div></div></div><div class="flashcard" id="fc6" onclick="flipCard(6)"><div class="card-inner" id="ci6"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Sales force composite vs. Delphi method</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Sales force composite: salespeople estimate their territory demand, aggregated up. Risk: optimism bias.
+Delphi: structured expert panel with anonymous iteration until consensus. Eliminates authority bias. More rigorous but slower.</div></div></div></div><div class="flashcard" id="fc7" onclick="flipCard(7)"><div class="card-inner" id="ci7"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How do you select the best quantitative forecasting method?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Match the method to the demand pattern (stable→MA, trending→regression, seasonal→seasonal index). Use error metrics (MAD, MAPE, MSE) to compare models on historical data. The model with the lowest out-of-sample error wins.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company is launching a brand new product with no sales history. Which forecasting approach is most appropriate?</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,2)"> Exponential smoothing using industry-average data</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,2)"> Moving average of similar products</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,2)"> Qualitative methods such as market research and the Delphi method</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,2)"> Linear regression using the new product's features</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">When NO historical data exists for a specific product, quantitative methods cannot be applied. Qualitative methods — market research, expert opinion (Delphi), customer surveys — are the appropriate starting point for new product forecasting.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">In exponential smoothing, a higher alpha (α) value means:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Less weight is placed on recent demand — the forecast is smoother</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> More weight is placed on recent demand — the forecast is more responsive</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> The forecast automatically adjusts for seasonality</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> The model requires more historical data to run</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Alpha controls the weight on the most recent actual demand. High α = more responsive to recent data = faster to react to demand changes (but also more 'noisy'). Low α = smoother forecast that reacts more slowly to change.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A forecaster compares three statistical models and wants to choose the most accurate one. The best approach is to:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,2)"> Choose the most mathematically complex model</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,2)"> Select the model recommended by the ERP vendor</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,2)"> Calculate a forecast error metric (e.g., MAD or MAPE) for each model and select the one with the lowest error</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,2)"> Use whichever model the sales team prefers</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Model selection should be empirical — calculate error metrics on historical data (or better, on held-out 'test' data) for each candidate model, and choose the model with the lowest error. Complexity and vendor recommendations are not reliable selection criteria.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Which quantitative method is best suited for a product whose demand shows a clear, steady upward trend?</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,2)"> Simple moving average</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,2)"> Naive forecast (last period's actual)</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,2)"> Linear regression / trend analysis</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,2)"> Seasonal index adjustment only</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Linear regression fits a trend line to historical data — ideal for demand with a clear, directional trend. Moving averages and naive forecasts lag behind a trend. Seasonal index alone doesn't address trend direction.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">What is the main RISK of using a sales force composite forecast?</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> It requires too much data from the ERP system</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Salespeople tend to over-estimate to secure more inventory for their customers (optimism bias)</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> It cannot be used for products with seasonal demand</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> It ignores the statistical relationship between variables</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Sales force composite relies on individual salesperson estimates, which are subject to optimism bias — salespeople have incentives to forecast high (to avoid stockouts and please customers). This inflates the aggregate forecast and can lead to excess inventory.</div></div></div>
+  </div>
+</div>
+<footer>1.4.2: Forecasting Methods · Module 1 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5, 6, 7],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

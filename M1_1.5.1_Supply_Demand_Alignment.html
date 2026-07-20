@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.5.1: Supply and Demand Alignment</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 1: Supply Chains, Demand Management & Forecasting</div>
+  <div class="hdr-title">1.5.1 · Supply and Demand Alignment</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">8 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (8)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">The Alignment Challenge</div><div class="block-body"><div class="key-point">The central challenge of supply chain management is aligning supply with demand — having the right product, in the right quantity, in the right place, at the right time.</div><p>Supply and demand mismatches create two types of cost:</p><ul><li><b>Demand > Supply</b>: Stockouts → lost sales, lost customers, emergency production/procurement costs, expediting fees</li><li><b>Supply > Demand</b>: Excess inventory → holding costs (capital tied up), obsolescence risk, storage costs, markdowns</li></ul><div class="def-box"><b>Perfect order fulfillment</b>: Delivering the complete order, on time, undamaged, correctly invoiced — the ideal supply-demand alignment outcome.</div></div></div><div class="block"><div class="block-title">Push vs. Pull Systems</div><div class="block-body"><div class="def-box"><b>Push system</b>: Production or procurement is driven by FORECASTS. Items are made or purchased in advance of demand and pushed through the supply chain. Risk: build-up of inventory if demand doesn't materialize as forecast.</div><div class="def-box"><b>Pull system</b>: Production or procurement is triggered by ACTUAL DEMAND signals (customer orders). No production until a demand signal is received. Risk: lead time may be too long to satisfy customer service expectations.</div><div class="def-box"><b>Push-pull boundary</b>: The point in the supply chain where the strategy switches from push (forecast-driven) to pull (demand-driven). Also called the 'decoupling point.'</div><div class="key-point">The push-pull boundary is typically located at the point of inventory stocking. Items with stable, high-volume demand can be pushed further forward (close to the customer). Highly customized or variable items benefit from a pull closer to the raw material level.</div><p>Examples: Build-to-stock (BTS) = fully push. Assemble-to-order (ATO) = push components, pull assembly. Make-to-order (MTO) = mostly pull. Engineer-to-order (ETO) = fully pull.</p></div></div><div class="block"><div class="block-title">Decoupling Inventory and Postponement</div><div class="block-body"><div class="def-box"><b>Decoupling inventory (buffer stock)</b>: Inventory held at the push-pull boundary to absorb the mismatch between the push supply chain and the pull demand signal. Acts as a buffer between forecast-driven supply and actual demand.</div><div class="def-box"><b>Postponement</b>: Delaying final product differentiation (customization) until an actual customer order is received. Keeps inventory in a generic form as long as possible.</div><div class="key-point">Postponement reduces forecast risk by allowing one undifferentiated SKU to serve multiple final product variants. Example: a printer sold in different languages — final language manual and power adapter added only when the order is placed.</div><p>Two types of postponement:</p><ul><li><b>Manufacturing postponement</b>: Delay final assembly/configuration until order receipt</li><li><b>Logistics postponement</b>: Hold centralized inventory and delay shipment to specific locations until demand is confirmed</li></ul></div></div><div class="block"><div class="block-title">Demand Sensing</div><div class="block-body"><div class="def-box"><b>Demand sensing</b>: Using real-time demand signals (point-of-sale data, customer orders, web analytics) to update the near-term forecast and enable faster supply response.</div><div class="def-box"><b>Demand-driven supply chain</b>: A supply chain architecture where real demand signals (not forecasts) pull material through the supply chain. Enabled by technologies like IoT, POS integration, and advanced analytics.</div><div class="key-point">The more a supply chain can sense and respond to actual demand (vs. relying purely on forecasts), the lower the safety stock requirements and the better the service levels.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 8</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:12%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What are the two types of supply-demand mismatches and their costs?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Demand > Supply: stockouts → lost sales, emergency costs, expediting fees.
+Supply > Demand: excess inventory → holding costs, capital tied up, obsolescence, storage, markdowns.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Push vs. pull supply chain system</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Push: production driven by FORECASTS — make in advance. Risk: inventory buildup if demand misses.
+Pull: production triggered by ACTUAL DEMAND — make after order. Risk: lead time may be too long for customers.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the push-pull boundary (decoupling point)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The point in the supply chain where strategy shifts from forecast-driven (push) to demand-driven (pull). Location determines the manufacturing strategy: BTS (fully push) → ATO → MTO → ETO (fully pull).</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Postponement definition and benefit</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Delaying final product differentiation until an actual customer order is received. Benefit: reduces forecast risk by pooling demand across variants — one generic SKU serves many final configurations, reducing safety stock.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is decoupling inventory?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Buffer inventory held at the push-pull boundary to absorb the mismatch between forecast-driven supply and actual customer demand. Acts as a shock absorber between push and pull portions of the supply chain.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Manufacturing vs. logistics postponement</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Manufacturing postponement: delay final assembly/configuration until order.
+Logistics postponement: centralize inventory and delay shipment to specific locations until demand is confirmed (e.g., central DC ships to regional DCs after orders are placed).</div></div></div></div><div class="flashcard" id="fc6" onclick="flipCard(6)"><div class="card-inner" id="ci6"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is demand sensing?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Using real-time demand signals (POS data, customer orders, web analytics) to update the near-term forecast and enable faster supply response. Reduces reliance on statistical forecasting for short-term decisions.</div></div></div></div><div class="flashcard" id="fc7" onclick="flipCard(7)"><div class="card-inner" id="ci7"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is perfect order fulfillment?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Delivering the complete order, on time, undamaged, and correctly invoiced. The ideal alignment outcome. Measured as a % of orders meeting ALL four criteria simultaneously.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company makes a decision to not start production until it receives a confirmed customer order. This is an example of:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> A push system</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> A pull system</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> A demand sensing initiative</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Postponement through decoupling inventory</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Waiting for an actual customer order before starting production = PULL system. The demand signal (order) pulls production. No speculative inventory is built ahead of demand.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">A cosmetics company produces a standardized base product globally and adds country-specific packaging (language, regulatory labels) only after receiving a customer order. This is an example of:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,2)"> Push-based manufacturing</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,2)"> Demand sensing</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,2)"> Postponement — delaying final differentiation until demand is confirmed</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,2)"> Vertical integration</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Postponement = delay final customization (country-specific packaging) until actual demand is known. This reduces forecast risk by pooling demand across markets in the generic base product, then differentiating at the last possible moment.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Where is the push-pull boundary most likely to be located for a build-to-stock (BTS) product?</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> At raw material procurement — everything after is pull</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> After final assembly — the finished product is the decoupling inventory</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> At the customer delivery point</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Before any production begins</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Build-to-stock = the most push-forward strategy. Production happens ahead of demand based on forecasts, with finished goods inventory as the decoupling point. The boundary is at finished goods — downstream (to customer) is pull/order management.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">A retailer installs point-of-sale scanners that send real-time sales data to its suppliers, enabling suppliers to adjust production within 24 hours of demand shifts. This is an example of:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Sales force composite forecasting</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Demand sensing and a demand-driven supply chain</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Push-based replenishment</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> S&OP integration</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Real-time POS data flowing to suppliers = demand sensing. This enables a demand-driven supply chain where actual demand signals (not forecasts alone) trigger supply responses, reducing inventory needs and improving responsiveness.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Excess inventory held at the push-pull boundary to absorb mismatches between forecast-driven supply and actual demand is called:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,2)"> Safety stock only</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,2)"> Cycle stock</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,2)"> Decoupling inventory (buffer stock)</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,2)"> Pipeline inventory</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Decoupling inventory (also called buffer stock) specifically refers to inventory at the push-pull boundary that absorbs the uncertainty between the forecast-driven supply plan and the actual customer demand signal. It 'decouples' the upstream supply from downstream demand.</div></div></div>
+  </div>
+</div>
+<footer>1.5.1: Supply and Demand Alignment · Module 1 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5, 6, 7],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

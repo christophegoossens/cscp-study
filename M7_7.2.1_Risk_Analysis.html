@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>7.2.1: Risk Analysis</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 7: Risk Management</div>
+  <div class="hdr-title">7.2.1 · Risk Analysis</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Qualitative Risk Analysis</div><div class="block-body"><div class="def-box"><b>Risk assessment</b>: Evaluating identified risks to determine their probability of occurrence and the magnitude of their potential impact — enabling prioritization of mitigation effort.</div><div class="def-box"><b>Qualitative risk analysis</b>: Rating risks on descriptive scales (Low/Medium/High or 1–5) for probability and impact — then plotting on a risk matrix to prioritize. Fast and easy; less precise than quantitative methods.</div><div class="def-box"><b>Risk matrix (heat map)</b>: A 2D grid with probability on one axis and impact on the other — each risk is plotted as a dot, creating a visual 'heat map' of the risk portfolio. High probability + high impact = red (priority risks). Low probability + low impact = green (acceptable).</div><div class="key-point">Risk matrix quadrants: (1) High probability, high impact = CRITICAL — mitigate urgently; (2) Low probability, high impact = MONITOR — develop contingency plans; (3) High probability, low impact = REDUCE — process improvement; (4) Low probability, low impact = ACCEPT — monitor, no action needed.</div></div></div><div class="block"><div class="block-title">Quantitative Risk Analysis</div><div class="block-body"><div class="def-box"><b>Quantitative risk analysis</b>: Using numerical methods to estimate risk probability and financial impact — converting risk assessments into dollar values and probabilities.</div><div class="def-box"><b>Expected value (EV)</b>: The probability-weighted outcome of a risk event. EV = Probability × Impact (in dollars). Enables ranking risks by expected financial impact for investment prioritization.</div><div class="formula">Expected Value = Probability × Financial Impact</div><div class="def-box"><b>Monte Carlo simulation</b>: A computational technique that runs thousands of simulated scenarios using probability distributions — producing a probability distribution of possible outcomes rather than a single point estimate. Used for complex supply chain risk modeling.</div><div class="def-box"><b>Value at Risk (VaR)</b>: A statistical measure of the maximum expected loss at a given confidence level over a specified time period. Used in financial supply chain risk (currency, commodity price).</div></div></div><div class="block"><div class="block-title">Risk Prioritization</div><div class="block-body"><div class="key-point">Not all risks deserve equal attention — risk analysis enables prioritization of the finite mitigation budget and management attention on the highest-impact, highest-likelihood risks.</div><div class="def-box"><b>Inherent risk</b>: The risk level before any mitigation measures are applied — the 'raw' exposure. Assessing inherent risk establishes the baseline and shows where mitigation investment is needed most.</div><div class="def-box"><b>Residual risk</b>: The risk remaining after mitigation measures are applied — the 'net' exposure. Risk management objective: reduce residual risk to within the organization's risk appetite through cost-effective mitigation strategies.</div><div class="key-point">Residual risk vs. risk appetite: If residual risk > risk appetite → additional mitigation required. If residual risk ≤ risk appetite → mitigation is sufficient, risk is accepted. This comparison drives the risk treatment decision.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Risk matrix — 4 quadrants and appropriate responses</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">HIGH probability + HIGH impact = CRITICAL: prioritize immediate mitigation
+LOW probability + HIGH impact = MONITOR: develop contingency plans; accept risk but prepare response
+HIGH probability + LOW impact = REDUCE: process improvement to reduce frequency
+LOW probability + LOW impact = ACCEPT: monitor periodically; no significant action needed
+
+Risk matrix: visual prioritization tool — plots all identified risks to show which need urgent action vs. monitoring.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Expected Value (EV) — formula and use</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">EV = Probability × Financial Impact
+
+Example: 20% probability of a supply disruption causing $500,000 in lost sales and emergency costs.
+EV = 0.20 × $500,000 = $100,000
+
+Use: compare risk EVs to prioritize mitigation investment. A risk with EV of $100K is more urgent than one with EV of $10K.
+
+Also use to evaluate mitigation options: if a $30K investment reduces EV by $80K → worth doing.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Inherent risk vs. residual risk</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Inherent risk: risk level BEFORE any mitigation. The 'raw' exposure if nothing is done.
+
+Residual risk: risk remaining AFTER mitigation measures are applied.
+
+Target: Residual risk ≤ Risk appetite
+
+If residual risk > risk appetite → need more mitigation.
+If residual risk ≤ risk appetite → acceptable; accept and monitor.
+
+Process: Identify inherent risk → Apply mitigations → Assess residual risk → Compare to appetite → Decide if sufficient.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Monte Carlo simulation — what it is and why it's useful</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Runs THOUSANDS of simulated scenarios, each time randomly sampling from probability distributions for each risk variable → produces a range of possible outcomes with probabilities.
+
+Instead of: 'lead time will be 3 weeks' (point estimate)
+Monte Carlo gives: '10% chance lead time < 2 weeks; 60% chance 2–4 weeks; 30% chance > 4 weeks'
+
+Value for supply chain: models complex interactions between multiple uncertain variables → quantifies probability of stockout, cost overrun, or service failure → enables better risk-informed decisions.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Qualitative vs. quantitative risk analysis</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Qualitative:
+• Descriptive scales (Low/Medium/High)
+• Fast, easy, accessible to non-analysts
+• Risk matrix / heat map
+• Less precise — subjective ratings
+• Good for initial prioritization
+
+Quantitative:
+• Numerical probabilities and dollar impacts
+• Expected Value, Monte Carlo, VaR
+• More accurate but requires data and expertise
+• Better for major investment decisions and financial risk
+
+In practice: start qualitative to prioritize, then quantitative for top risks.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How to evaluate whether a risk mitigation investment is worthwhile</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Mitigation ROI analysis:
+
+Without mitigation: EV = Probability × Impact = $100K
+Mitigation cost: $25K one-time
+With mitigation: reduces probability 50% → new EV = $50K
+
+Net benefit of mitigation: $100K − $50K = $50K reduction in expected loss
+Mitigation cost: $25K
+ROI: $50K benefit ÷ $25K cost = 2:1 → worthwhile
+
+Principle: invest in mitigation up to the point where mitigation cost = reduction in expected loss.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A risk with high probability and high impact should be treated with:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,2)"> Accept — low priority since it's a known risk</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,2)"> Monitor — develop contingency plans only</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,2)"> Immediate mitigation — this is a critical risk requiring urgent action to reduce probability and/or impact</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,2)"> Transfer — always insure high-impact risks</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">High probability + high impact = critical risk. It's likely to occur AND it will cause significant harm when it does. This quadrant demands immediate mitigation investment — either to reduce the probability (prevent the event), reduce the impact (limit the damage when it occurs), or both. These are the risks most likely to threaten business continuity and should be at the top of the risk management action list.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">The Expected Value (EV) of a risk with a 15% probability of causing $400,000 damage is:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> $415,000</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> $60,000</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> $4,000</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> $400,000</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">EV = Probability × Financial Impact = 0.15 × $400,000 = $60,000. Expected value converts risk into a comparable financial basis — enabling prioritization of mitigation investment across different risks. Any mitigation investment costing less than $60,000 that eliminates this risk entirely would have a positive ROI. EV doesn't tell you the risk WILL cost $60K — it tells you, on average across many repetitions of this situation, you'd expect this cost.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Residual risk represents:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> The total financial impact if all risks materialize simultaneously</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> The risk remaining after mitigation measures are applied — compared to risk appetite to determine if additional mitigation is needed</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> The original risk score before any mitigation is considered</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Risks that have been fully transferred to insurance</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Inherent risk (before mitigation) → apply mitigations → Residual risk (after mitigation). The residual risk is what the organization is actually living with. If residual risk > risk appetite → more mitigation needed. If residual risk ≤ risk appetite → acceptable and can be monitored. Risk management objective: reduce residual risk to within risk appetite through cost-effective mitigations.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Monte Carlo simulation is valuable for supply chain risk analysis because:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> It guarantees the exact future outcome of a supply chain scenario</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> It models thousands of scenarios using probability distributions — quantifying the range and likelihood of possible outcomes rather than relying on a single point estimate</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> It eliminates the need for a risk register</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> It only applies to financial risks like currency fluctuation</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Real supply chains have MULTIPLE uncertain variables simultaneously (lead time, demand, yield, carrier reliability) — each with a range of possible outcomes. Monte Carlo: randomly samples from each variable's probability distribution → runs thousands of simulations → produces a probability distribution of combined outcomes (stockout probability, total cost range). Far more realistic than single-point estimates, which give a false sense of precision and miss the tails of the distribution where bad outcomes live.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">A qualitative risk matrix (heat map) is most useful for:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Precise financial quantification of individual risk events</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Visual prioritization of the risk portfolio — quickly identifying which risks are critical (high probability AND high impact) vs. acceptable</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Regulatory compliance reporting</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Automated risk monitoring and alert generation</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Risk matrix: plots all identified risks by probability (Y-axis) × impact (X-axis) → creates a visual 'heat map.' Upper right (high prob, high impact) = red/critical. Lower left (low prob, low impact) = green/acceptable. Instantly communicates the risk portfolio to leadership: which risks need urgent attention vs. monitoring vs. acceptance. Not precise (qualitative scales are subjective) — but fast, accessible, and communicates priorities clearly to non-specialists.</div></div></div>
+  </div>
+</div>
+<footer>7.2.1: Risk Analysis · Module 7 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CSCP Topic-Level Study Plan — 20 Jul to 1 Aug 2026</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#f0f2f5;color:#1a1a2e;line-height:1.5}
+.header{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:28px 40px}
+.header h1{font-size:1.6em;font-weight:700}
+.header p{opacity:.75;margin-top:6px}
+.stats{display:flex;gap:20px;margin-top:16px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.12);border-radius:10px;padding:10px 18px;text-align:center}
+.stat .val{font-size:1.4em;font-weight:700}
+.stat .lbl{font-size:.75em;opacity:.8;margin-top:2px}
+.section{max-width:1100px;margin:30px auto;padding:0 20px}
+.section-title{font-size:1.1em;font-weight:700;color:#1a1a2e;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e0e0e0}
+.weight-row{display:flex;align-items:center;gap:12px;margin:8px 0;font-size:.88em}
+.weight-label{width:320px;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.weight-bar-wrap{flex:1;background:#e0e0e0;border-radius:4px;height:14px}
+.weight-bar{height:14px;border-radius:4px;transition:width .3s}
+.weight-pct{width:36px;font-weight:700;text-align:right}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+.day-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.day-limited{opacity:.9;border:2px solid #ff9f1c}
+.day-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:#f8f9fa;border-bottom:1px solid #e0e0e0}
+.day-num{font-size:1.1em;font-weight:700;margin-right:8px}
+.day-date{color:#666;font-size:.88em}
+.day-badge{font-size:.72em;padding:3px 10px;border-radius:10px;font-weight:600}
+.day-badge.full{background:#d4edda;color:#155724}
+.day-badge.limited{background:#fff3cd;color:#856404}
+.day-theme{padding:8px 16px;font-size:.82em;font-weight:600;color:#555;background:#f0f4ff;border-bottom:1px solid #e8ecf8}
+.topic-list{padding:10px 16px;display:flex;flex-direction:column;gap:6px}
+.topic-row{display:flex;align-items:center;gap:8px;font-size:.83em}
+.mod-badge{font-size:.7em;font-weight:700;color:#fff;padding:2px 7px;border-radius:8px;flex-shrink:0;min-width:28px;text-align:center}
+.topic-link{color:#1a1a2e;text-decoration:none;border-bottom:1px dotted #aaa}
+.topic-link:hover{color:#e94560;border-bottom-color:#e94560}
+.topic-review{color:#888;font-style:italic}
+.tips{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.tip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:12px}
+.tip-card{background:#f8f9fa;border-radius:8px;padding:14px;font-size:.85em;border-left:4px solid #3a86ff}
+.tip-card h4{font-size:.9em;margin-bottom:6px;color:#1a1a2e}
+.exam-box{background:linear-gradient(135deg,#e94560,#c13153);color:#fff;border-radius:12px;padding:20px;margin-bottom:20px}
+.exam-box h3{margin-bottom:10px}
+.exam-facts{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px}
+.exam-fact{background:rgba(255,255,255,.2);border-radius:8px;padding:8px 14px;font-size:.85em}
+
+/* ---- Status tracking ---- */
+.topic-row { position: relative; padding-right: 68px; }
+.status-btns { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; gap: 4px; }
+.status-btn {
+  border: none; cursor: pointer; border-radius: 5px; font-size: .72em; font-weight: 700;
+  padding: 2px 7px; opacity: .55; transition: opacity .15s, background .15s;
+  line-height: 1.6;
+}
+.status-btn:hover { opacity: 1; }
+.btn-done  { background: #d4edda; color: #155724; }
+.btn-flag  { background: #fff3cd; color: #856404; }
+.topic-row.is-done .btn-done  { opacity: 1; background: #28a745; color: #fff; }
+.topic-row.is-done .topic-link { text-decoration: line-through; color: #888; }
+.topic-row.is-done { background: #f0fff4; border-radius: 6px; }
+.topic-row.is-flag .btn-flag  { opacity: 1; background: #ff9f1c; color: #fff; }
+.topic-row.is-flag { background: #fff8ee; border-radius: 6px; }
+/* Progress bar in header */
+.progress-wrap { margin-top: 14px; }
+.progress-label { font-size:.8em; opacity:.8; margin-bottom:5px; }
+.progress-bar-outer { background:rgba(255,255,255,.2); border-radius:8px; height:10px; }
+.progress-bar-inner { height:10px; border-radius:8px; background:#06d6a0; transition:width .4s; }
+/* Toast */
+#toast {
+  position: fixed; bottom: 24px; right: 24px; background: #28a745; color: #fff;
+  padding: 10px 20px; border-radius: 8px; font-size:.85em; font-weight:600;
+  opacity:0; pointer-events:none; transition:opacity .3s; z-index:9999;
+}
+#toast.show { opacity:1; }
+/* Reset button */
+.reset-btn {
+  margin-top: 10px; background: rgba(255,255,255,.15); color:#fff; border:none;
+  border-radius:8px; padding:6px 16px; font-size:.8em; cursor:pointer; opacity:.8;
+}
+.reset-btn:hover { opacity:1; background:rgba(255,255,255,.25); }
+
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>📅 CSCP Topic-Level Study Plan</h1>
+  <p>20 July – 1 August 2026 · 66 topics across 8 modules · Weighted by exam importance</p>
+  <div class="stats">
+    <div class="stat"><div class="val">13</div><div class="lbl">Study Days</div></div>
+    <div class="stat"><div class="val">94h</div><div class="lbl">Total Study Time</div></div>
+    <div class="stat"><div class="val">66</div><div class="lbl">Topics</div></div>
+    <div class="stat"><div class="val">8</div><div class="lbl">Modules</div></div>
+    <div class="stat"><div class="val">~85min</div><div class="lbl">Per Topic (avg)</div></div>
+
+    <div class="stat stat-done"><div class="val">0</div><div class="lbl">Topics Done</div></div>
+    <div class="stat stat-flag"><div class="val">0</div><div class="lbl">Flagged</div></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label">0 of 66 topics done (0%)  ·  0 flagged for review</div>
+    <div class="progress-bar-outer"><div class="progress-bar-inner" style="width:0%"></div></div>
+  </div>
+  <button class="reset-btn">🔄 Reset all progress</button>
+</div>
+
+<div class="section">
+  <div class="exam-box">
+    <h3>🎯 Exam Overview</h3>
+    <div class="exam-facts">
+      <div class="exam-fact">150 questions (130 scored + 20 unscored)</div>
+      <div class="exam-fact">3.5 hours at Pearson VUE</div>
+      <div class="exam-fact">Passing score: 300/350 (scaled)</div>
+      <div class="exam-fact">Multiple choice + scenario-based</div>
+    </div>
+  </div>
+
+  <div class="section-title">📊 Module Weights — Where to Focus</div>
+  
+    <div class="weight-row">
+      <div class="weight-label"><span class="dot" style="background:#3a86ff"></span>M1: Supply Chains, Demand Management & Forecasting</div>
+      <div class="weight-bar-wrap"><div class="weight-bar" style="width:40%;background:#3a86ff"></div></div>
+      <div class="weight-pct">10%</div>
+    </div>
+    <div class="weight-row">
+      <div class="weight-label"><span class="dot" style="background:#8338ec"></span>M2: Global Supply Chain Networks</div>
+      <div class="weight-bar-wrap"><div class="weight-bar" style="width:40%;background:#8338ec"></div></div>
+      <div class="weight-pct">10%</div>
+    </div>
+    <div class="weight-row">
+      <div class="weight-label"><span class="dot" style="background:#ff9f1c"></span>M3: Sourcing Products & Services</div>
+      <div class="weight-bar-wrap"><div class="weight-bar" style="width:68%;background:#ff9f1c"></div></div>
+      <div class="weight-pct">17%</div>
+    </div>
+    <div class="weight-row">
+      <div class="weight-label"><span class="dot" style="background:#e94560"></span>M4: Internal Operations & Inventory</div>
+      <div class="weight-bar-wrap"><div class="weight-bar" style="width:76%;background:#e94560"></div></div>
+      <div class="weight-pct">19%</div>
+    </div>
+    <div class="weight-row">
+      <div class="weight-label"><span class="dot" style="background:#06d6a0"></span>M5: Forward & Reverse Logistics</div>
+      <div class="weight-bar-wrap"><div class="weight-bar" style="width:36%;background:#06d6a0"></div></div>
+      <div class="weight-pct">9%</div>
+    </div>
+    <div class="weight-row">
+      <div class="weight-label"><span class="dot" style="background:#ef476f"></span>M6: Supply Chain Relationships</div>
+      <div class="weight-bar-wrap"><div class="weight-bar" style="width:68%;background:#ef476f"></div></div>
+      <div class="weight-pct">17%</div>
+    </div>
+    <div class="weight-row">
+      <div class="weight-label"><span class="dot" style="background:#073b4c"></span>M7: Supply Chain Risk</div>
+      <div class="weight-bar-wrap"><div class="weight-bar" style="width:40%;background:#073b4c"></div></div>
+      <div class="weight-pct">10%</div>
+    </div>
+    <div class="weight-row">
+      <div class="weight-label"><span class="dot" style="background:#118ab2"></span>M8: Optimization, Sustainability & Technology</div>
+      <div class="weight-bar-wrap"><div class="weight-bar" style="width:32%;background:#118ab2"></div></div>
+      <div class="weight-pct">8%</div>
+    </div>
+</div>
+
+<div class="section">
+  <div class="section-title">📆 Daily Schedule — Click any topic to open its study file</div>
+  <div class="grid">
+    <div class="day-card ">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 1</span>
+          <span class="day-date">Mon 20 Jul</span>
+        </div>
+        <span class="day-badge full">📚 FULL DAY (8h)</span>
+      </div>
+      <div class="day-theme">Module 1 — Supply Chains & Demand</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#3a86ff">M1</span><a href="M1_1.1.1_Supply_Chain_Models.html" class="topic-link">1.1.1 — Supply Chain Models</a></div><div class="topic-row"><span class="mod-badge" style="background:#3a86ff">M1</span><a href="M1_1.1.2_SC_Maturity.html" class="topic-link">1.1.2 — SC Maturity & Complexity</a></div><div class="topic-row"><span class="mod-badge" style="background:#3a86ff">M1</span><a href="M1_1.2.1_Demand_Analysis.html" class="topic-link">1.2.1 — Demand Analysis</a></div><div class="topic-row"><span class="mod-badge" style="background:#3a86ff">M1</span><a href="M1_1.2.2_Demand_Patterns.html" class="topic-link">1.2.2 — Demand Patterns</a></div><div class="topic-row"><span class="mod-badge" style="background:#3a86ff">M1</span><a href="M1_1.3.1_Demand_Management.html" class="topic-link">1.3.1 — Demand Management</a></div><div class="topic-row"><span class="mod-badge" style="background:#3a86ff">M1</span><a href="M1_1.3.2_Influencing_Demand.html" class="topic-link">1.3.2 — Influencing Demand</a></div></div>
+    </div>
+    <div class="day-card ">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 2</span>
+          <span class="day-date">Tue 21 Jul</span>
+        </div>
+        <span class="day-badge full">📚 FULL DAY (8h)</span>
+      </div>
+      <div class="day-theme">Module 1 — Forecasting + Module 2 Start</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#3a86ff">M1</span><a href="M1_1.4.1_Forecasting_Principles.html" class="topic-link">1.4.1 — Forecasting Principles</a></div><div class="topic-row"><span class="mod-badge" style="background:#3a86ff">M1</span><a href="M1_1.4.2_Forecasting_Methods.html" class="topic-link">1.4.2 — Forecasting Methods</a></div><div class="topic-row"><span class="mod-badge" style="background:#3a86ff">M1</span><a href="M1_1.4.3_Forecast_Error.html" class="topic-link">1.4.3 — Measures of Forecast Error</a></div><div class="topic-row"><span class="mod-badge" style="background:#3a86ff">M1</span><a href="M1_1.5.1_Supply_Demand_Alignment.html" class="topic-link">1.5.1 — Supply & Demand Alignment</a></div><div class="topic-row"><span class="mod-badge" style="background:#3a86ff">M1</span><a href="M1_1.5.2_SOP.html" class="topic-link">1.5.2 — Sales & Operations Planning</a></div><div class="topic-row"><span class="mod-badge" style="background:#8338ec">M2</span><a href="M2_2.1.1_SC_Design.html" class="topic-link">2.1.1 — SC Design & Management</a></div></div>
+    </div>
+    <div class="day-card ">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 3</span>
+          <span class="day-date">Wed 22 Jul</span>
+        </div>
+        <span class="day-badge full">📚 FULL DAY (8h)</span>
+      </div>
+      <div class="day-theme">Module 2 — Global SC Networks</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#8338ec">M2</span><a href="M2_2.1.2_Business_IT_Requirements.html" class="topic-link">2.1.2 — Business & IT Requirements</a></div><div class="topic-row"><span class="mod-badge" style="background:#8338ec">M2</span><a href="M2_2.1.3_Tech_Analysis_Optimization.html" class="topic-link">2.1.3 — Technology Analysis & Optimization</a></div><div class="topic-row"><span class="mod-badge" style="background:#8338ec">M2</span><a href="M2_2.2.1_SC_Technology_Applications.html" class="topic-link">2.2.1 — SC Technology Applications</a></div><div class="topic-row"><span class="mod-badge" style="background:#8338ec">M2</span><a href="M2_2.2.2_Connectivity_Visibility.html" class="topic-link">2.2.2 — Connectivity & Visibility</a></div><div class="topic-row"><span class="mod-badge" style="background:#8338ec">M2</span><a href="M2_2.2.3_Master_Data.html" class="topic-link">2.2.3 — Supply Chain Master Data</a></div><div class="topic-row"><span class="mod-badge" style="background:#8338ec">M2</span><a href="M2_2.3.1_Metrics_SCOR.html" class="topic-link">2.3.1 — Metrics, Reports & SCOR</a></div><div class="topic-row"><span class="mod-badge" style="background:#8338ec">M2</span><a href="M2_2.3.2_Financial_Operational_Metrics.html" class="topic-link">2.3.2 — Financial & Operational Metrics</a></div></div>
+    </div>
+    <div class="day-card ">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 4</span>
+          <span class="day-date">Thu 23 Jul</span>
+        </div>
+        <span class="day-badge full">📚 FULL DAY (8h)</span>
+      </div>
+      <div class="day-theme">Module 3 — Sourcing (Part 1)</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#ff9f1c">M3</span><a href="M3_3.1.1_Make_vs_Buy.html" class="topic-link">3.1.1 — Make-vs-Buy, Outsourcing & Offshoring</a></div><div class="topic-row"><span class="mod-badge" style="background:#ff9f1c">M3</span><a href="M3_3.1.2_Sourcing_Requirements.html" class="topic-link">3.1.2 — Sourcing Requirements & Total Costs</a></div><div class="topic-row"><span class="mod-badge" style="background:#ff9f1c">M3</span><a href="M3_3.2.1_Supply_Plans.html" class="topic-link">3.2.1 — Supply Plans, Categories & Segmentation</a></div><div class="topic-row"><span class="mod-badge" style="background:#ff9f1c">M3</span><a href="M3_3.2.2_Supply_Base.html" class="topic-link">3.2.2 — Supply Base Analysis & Right-Sizing</a></div><div class="topic-row"><span class="mod-badge" style="background:#ff9f1c">M3</span><a href="M3_3.3.1_Product_Design.html" class="topic-link">3.3.1 — Product Design</a></div></div>
+    </div>
+    <div class="day-card ">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 5</span>
+          <span class="day-date">Fri 24 Jul</span>
+        </div>
+        <span class="day-badge full">📚 FULL DAY (8h)</span>
+      </div>
+      <div class="day-theme">Module 3 — Sourcing (Part 2) + Module 4 Start</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#ff9f1c">M3</span><a href="M3_3.3.2_Quality_Customization.html" class="topic-link">3.3.2 — Quality, Customization & Sustainability</a></div><div class="topic-row"><span class="mod-badge" style="background:#ff9f1c">M3</span><a href="M3_3.4.1_Supplier_Selection.html" class="topic-link">3.4.1 — Supplier Evaluation & Selection</a></div><div class="topic-row"><span class="mod-badge" style="background:#ff9f1c">M3</span><a href="M3_3.4.2_Contracts.html" class="topic-link">3.4.2 — Contracts</a></div><div class="topic-row"><span class="mod-badge" style="background:#ff9f1c">M3</span><a href="M3_3.4.3_Purchase_Orders.html" class="topic-link">3.4.3 — Purchase Orders</a></div><div class="topic-row"><span class="mod-badge" style="background:#e94560">M4</span><a href="M4_4.1.1_Planning_Operations.html" class="topic-link">4.1.1 — Planning Operations</a></div><div class="topic-row"><span class="mod-badge" style="background:#e94560">M4</span><a href="M4_4.1.2_Materials_Inventory.html" class="topic-link">4.1.2 — Materials & Inventory</a></div></div>
+    </div>
+    <div class="day-card day-limited">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 6</span>
+          <span class="day-date">Sat 25 Jul</span>
+        </div>
+        <span class="day-badge limited">🏖 LIMITED (3h)</span>
+      </div>
+      <div class="day-theme">Weekend Review — Modules 1 & 2</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#6c757d">📋</span><span class="topic-review">Flashcard review: Module 1 all topics</span></div><div class="topic-row"><span class="mod-badge" style="background:#6c757d">📋</span><span class="topic-review">Flashcard review: Module 2 all topics</span></div><div class="topic-row"><span class="mod-badge" style="background:#6c757d">📋</span><span class="topic-review">Quiz practice: M1 + M2 self-test</span></div></div>
+    </div>
+    <div class="day-card day-limited">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 7</span>
+          <span class="day-date">Sun 26 Jul</span>
+        </div>
+        <span class="day-badge limited">🏖 LIMITED (3h)</span>
+      </div>
+      <div class="day-theme">Weekend Review — Module 3 + Module 4 Preview</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#6c757d">📋</span><span class="topic-review">Flashcard review: Module 3 all topics</span></div><div class="topic-row"><span class="mod-badge" style="background:#e94560">M4</span><a href="M4_4.2.1_Capacity.html" class="topic-link">4.2.1 — Capacity</a></div><div class="topic-row"><span class="mod-badge" style="background:#e94560">M4</span><a href="M4_4.2.2_PAC.html" class="topic-link">4.2.2 — Production Activity Control</a></div></div>
+    </div>
+    <div class="day-card ">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 8</span>
+          <span class="day-date">Mon 27 Jul</span>
+        </div>
+        <span class="day-badge full">📚 FULL DAY (8h)</span>
+      </div>
+      <div class="day-theme">Module 4 — Internal Operations (Part 1)</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#e94560">M4</span><a href="M4_4.3.1_Inventory.html" class="topic-link">4.3.1 — Inventory</a></div><div class="topic-row"><span class="mod-badge" style="background:#e94560">M4</span><a href="M4_4.3.2_Replenishment.html" class="topic-link">4.3.2 — Replenishment Strategies</a></div><div class="topic-row"><span class="mod-badge" style="background:#e94560">M4</span><a href="M4_4.3.3_Traceability.html" class="topic-link">4.3.3 — Traceability, Accuracy & Disposition</a></div><div class="topic-row"><span class="mod-badge" style="background:#e94560">M4</span><a href="M4_4.4.1_Performance.html" class="topic-link">4.4.1 — Operations & Financial Performance</a></div><div class="topic-row"><span class="mod-badge" style="background:#e94560">M4</span><a href="M4_4.4.2_Continuous_Improvement.html" class="topic-link">4.4.2 — Continuous Improvement</a></div></div>
+    </div>
+    <div class="day-card ">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 9</span>
+          <span class="day-date">Tue 28 Jul</span>
+        </div>
+        <span class="day-badge full">📚 FULL DAY (8h)</span>
+      </div>
+      <div class="day-theme">Module 4 — Operations (Part 2) + Module 5 Start</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#e94560">M4</span><a href="M4_4.4.3_Quality_Tools.html" class="topic-link">4.4.3 — Quality Tools</a></div><div class="topic-row"><span class="mod-badge" style="background:#e94560">M4</span><a href="M4_4.4.4_CI_Methods.html" class="topic-link">4.4.4 — Continuous Improvement Methods</a></div><div class="topic-row"><span class="mod-badge" style="background:#06d6a0">M5</span><a href="M5_5.1.1_Logistics.html" class="topic-link">5.1.1 — Logistics</a></div><div class="topic-row"><span class="mod-badge" style="background:#06d6a0">M5</span><a href="M5_5.1.2_Warehousing.html" class="topic-link">5.1.2 — Warehousing & Materials-Handling</a></div><div class="topic-row"><span class="mod-badge" style="background:#06d6a0">M5</span><a href="M5_5.1.3_Transportation_Strategy.html" class="topic-link">5.1.3 — Transportation Strategy</a></div><div class="topic-row"><span class="mod-badge" style="background:#06d6a0">M5</span><a href="M5_5.2.1_Distribution_Services.html" class="topic-link">5.2.1 — Distribution Services & Delivery</a></div></div>
+    </div>
+    <div class="day-card ">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 10</span>
+          <span class="day-date">Wed 29 Jul</span>
+        </div>
+        <span class="day-badge full">📚 FULL DAY (8h)</span>
+      </div>
+      <div class="day-theme">Module 5 — Logistics (Part 2)</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#06d6a0">M5</span><a href="M5_5.2.2_Carrier_Selection.html" class="topic-link">5.2.2 — Transport Mode & Carrier Selection</a></div><div class="topic-row"><span class="mod-badge" style="background:#06d6a0">M5</span><a href="M5_5.3.1_Legal_Security.html" class="topic-link">5.3.1 — Legal, Security & Regulatory</a></div><div class="topic-row"><span class="mod-badge" style="background:#06d6a0">M5</span><a href="M5_5.3.2_Import_Export.html" class="topic-link">5.3.2 — Import/Export Regulations</a></div><div class="topic-row"><span class="mod-badge" style="background:#06d6a0">M5</span><a href="M5_5.3.3_Trade_Zones.html" class="topic-link">5.3.3 — Trade Zones & Blocs</a></div><div class="topic-row"><span class="mod-badge" style="background:#06d6a0">M5</span><a href="M5_5.4.1_Reverse_Logistics.html" class="topic-link">5.4.1 — Reverse Logistics</a></div><div class="topic-row"><span class="mod-badge" style="background:#06d6a0">M5</span><a href="M5_5.4.2_Waste.html" class="topic-link">5.4.2 — Waste</a></div></div>
+    </div>
+    <div class="day-card ">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 11</span>
+          <span class="day-date">Thu 30 Jul</span>
+        </div>
+        <span class="day-badge full">📚 FULL DAY (8h)</span>
+      </div>
+      <div class="day-theme">Module 6 — SC Relationships (Part 1)</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#ef476f">M6</span><a href="M6_6.1.1_Customer_Relationships.html" class="topic-link">6.1.1 — Customer Relationships & Segmentation</a></div><div class="topic-row"><span class="mod-badge" style="background:#ef476f">M6</span><a href="M6_6.1.2_CRM.html" class="topic-link">6.1.2 — Customer Relationship Management</a></div><div class="topic-row"><span class="mod-badge" style="background:#ef476f">M6</span><a href="M6_6.1.3_Customer_Service_Metrics.html" class="topic-link">6.1.3 — Customer Service Metrics</a></div><div class="topic-row"><span class="mod-badge" style="background:#ef476f">M6</span><a href="M6_6.2.1_Supplier_Relationships.html" class="topic-link">6.2.1 — Supplier Relationships & Segmentation</a></div></div>
+    </div>
+    <div class="day-card ">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 12</span>
+          <span class="day-date">Fri 31 Jul</span>
+        </div>
+        <span class="day-badge full">📚 FULL DAY (8h)</span>
+      </div>
+      <div class="day-theme">Module 6 (Part 2) + Module 7 — Risk</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#ef476f">M6</span><a href="M6_6.2.2_Strategic_Sourcing.html" class="topic-link">6.2.2 — Strategic Sourcing & Alliances</a></div><div class="topic-row"><span class="mod-badge" style="background:#ef476f">M6</span><a href="M6_6.2.3_Supplier_Performance.html" class="topic-link">6.2.3 — Supplier Performance</a></div><div class="topic-row"><span class="mod-badge" style="background:#ef476f">M6</span><a href="M6_6.2.4_SC_Relationship_Mgmt.html" class="topic-link">6.2.4 — SC Relationship Management</a></div><div class="topic-row"><span class="mod-badge" style="background:#073b4c">M7</span><a href="M7_7.1.1_Risk_Management.html" class="topic-link">7.1.1 — Risk Management</a></div><div class="topic-row"><span class="mod-badge" style="background:#073b4c">M7</span><a href="M7_7.1.2_Risk_Identification.html" class="topic-link">7.1.2 — Risk Identification & SC Risks</a></div><div class="topic-row"><span class="mod-badge" style="background:#073b4c">M7</span><a href="M7_7.2.1_Risk_Analysis.html" class="topic-link">7.2.1 — Risk Analysis</a></div><div class="topic-row"><span class="mod-badge" style="background:#073b4c">M7</span><a href="M7_7.2.2_Risk_Responses.html" class="topic-link">7.2.2 — Risk Responses & Business Continuity</a></div></div>
+    </div>
+    <div class="day-card ">
+      <div class="day-header">
+        <div>
+          <span class="day-num">Day 13</span>
+          <span class="day-date">Sat 1 Aug</span>
+        </div>
+        <span class="day-badge full">📚 FULL DAY (8h)</span>
+      </div>
+      <div class="day-theme">Module 8 — Optimization + Final Review</div>
+      <div class="topic-list"><div class="topic-row"><span class="mod-badge" style="background:#118ab2">M8</span><a href="M8_8.1.1_Business_SC_Strategy.html" class="topic-link">8.1.1 — Business & SC Strategy</a></div><div class="topic-row"><span class="mod-badge" style="background:#118ab2">M8</span><a href="M8_8.1.2_SC_Optimization.html" class="topic-link">8.1.2 — SC Strategic Value & Optimization</a></div><div class="topic-row"><span class="mod-badge" style="background:#118ab2">M8</span><a href="M8_8.2.1_Sustainable_SC.html" class="topic-link">8.2.1 — Sustainable Supply Chains</a></div><div class="topic-row"><span class="mod-badge" style="background:#118ab2">M8</span><a href="M8_8.2.2_Sustainability_Standards.html" class="topic-link">8.2.2 — Sustainability Guidelines & Standards</a></div><div class="topic-row"><span class="mod-badge" style="background:#118ab2">M8</span><a href="M8_8.3.1_Tech_Trends.html" class="topic-link">8.3.1 — Emerging Technology Trends</a></div><div class="topic-row"><span class="mod-badge" style="background:#118ab2">M8</span><a href="M8_8.3.2_Tech_Assessment.html" class="topic-link">8.3.2 — Technology Assessment & Implementation</a></div><div class="topic-row"><span class="mod-badge" style="background:#6c757d">📋</span><span class="topic-review">Full review: highest-weight modules (M3, M4, M6)</span></div></div>
+    </div></div>
+</div>
+
+<div class="section">
+  <div class="tips">
+    <div class="section-title">💡 Study Tips & Daily Routine</div>
+    <div class="tip-grid">
+      <div class="tip-card"><h4>⏱ Per Topic (~85 min)</h4>Read summary (20 min) → Flashcards until confident (30 min) → Take quiz (15 min) → Review wrong answers (20 min)</div>
+      <div class="tip-card"><h4>🏖 Weekend Days (3h)</h4>Don't learn new material. Use the time to review completed topics with flashcards and self-quiz. Consolidate rather than push forward.</div>
+      <div class="tip-card"><h4>🔑 Highest Priority</h4>Module 4 (19%) + Module 3 (17%) + Module 6 (17%) = 53% of the exam. Make sure you know these cold before moving to lower-weight modules.</div>
+      <div class="tip-card"><h4>🃏 Flashcard Strategy</h4>Go through all cards once. Mark ones you get wrong. Repeat the marked ones. Don't move on until you can flip through the full deck without errors.</div>
+      <div class="tip-card"><h4>📝 Quiz Strategy</h4>The CSCP uses scenario-based questions. After each quiz, don't just check the score — read every explanation, even for correct answers.</div>
+      <div class="tip-card"><h4>🔄 Day 13 (Aug 1)</h4>Finish Module 8. Then do a final pass on the highest-weight modules (M4, M3, M6). Focus on definitions and ASCM-specific terminology.</div>
+    </div>
+  </div>
+</div>
+
+<div id="toast">✓ Progress saved</div>
+<script>
+(function(){
+  var STORE_KEY = 'cscp_plan_status';
+
+  // ── Load saved state ──────────────────────────────────────────────
+  function load(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)||'{}'); }catch(e){ return {}; } }
+  function save(state){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); showToast(); }
+  var state = load();
+
+  function showToast(){
+    var t = document.getElementById('toast');
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function(){ t.classList.remove('show'); }, 1800);
+  }
+
+  // ── Add buttons to every topic-row that has a link ───────────────
+  var rows = document.querySelectorAll('.topic-row');
+  rows.forEach(function(row){
+    var link = row.querySelector('a.topic-link');
+    if (!link) return; // skip review rows
+    var id = link.getAttribute('href');  // unique per topic
+
+    // Apply saved state
+    if (state[id] === 'done') row.classList.add('is-done');
+    if (state[id] === 'flag') row.classList.add('is-flag');
+
+    // Create buttons
+    var wrap = document.createElement('span');
+    wrap.className = 'status-btns';
+
+    var btnDone = document.createElement('button');
+    btnDone.className = 'status-btn btn-done';
+    btnDone.title = 'Mark as done';
+    btnDone.textContent = '✓ Done';
+
+    var btnFlag = document.createElement('button');
+    btnFlag.className = 'status-btn btn-flag';
+    btnFlag.title = 'Needs attention / revisit';
+    btnFlag.textContent = '⚠ Review';
+
+    btnDone.addEventListener('click', function(e){
+      e.preventDefault();
+      var isDone = row.classList.contains('is-done');
+      row.classList.remove('is-done','is-flag');
+      if (!isDone){ row.classList.add('is-done'); state[id]='done'; }
+      else { delete state[id]; }
+      save(state); updateProgress();
+    });
+
+    btnFlag.addEventListener('click', function(e){
+      e.preventDefault();
+      var isFlag = row.classList.contains('is-flag');
+      row.classList.remove('is-done','is-flag');
+      if (!isFlag){ row.classList.add('is-flag'); state[id]='flag'; }
+      else { delete state[id]; }
+      save(state); updateProgress();
+    });
+
+    wrap.appendChild(btnDone);
+    wrap.appendChild(btnFlag);
+    row.appendChild(wrap);
+  });
+
+  // ── Progress bar ─────────────────────────────────────────────────
+  var allLinks = document.querySelectorAll('.topic-link');
+  var total = allLinks.length;
+
+  var progWrap = document.querySelector('.progress-wrap');
+  var progBar  = document.querySelector('.progress-bar-inner');
+  var progLabel = document.querySelector('.progress-label');
+  var statDone = document.querySelector('.stat-done .val');
+  var statFlag = document.querySelector('.stat-flag .val');
+
+  function updateProgress(){
+    var doneCount = 0, flagCount = 0;
+    allLinks.forEach(function(a){
+      var id = a.getAttribute('href');
+      if(state[id]==='done') doneCount++;
+      if(state[id]==='flag') flagCount++;
+    });
+    var pct = total > 0 ? Math.round(doneCount/total*100) : 0;
+    if(progBar)  progBar.style.width = pct+'%';
+    if(progLabel) progLabel.textContent = doneCount+' of '+total+' topics done ('+pct+'%)  ·  '+flagCount+' flagged for review';
+    if(statDone) statDone.textContent = doneCount;
+    if(statFlag) statFlag.textContent = flagCount;
+  }
+  updateProgress();
+
+  // ── Reset button ─────────────────────────────────────────────────
+  document.querySelector('.reset-btn').addEventListener('click', function(){
+    if(!confirm('Clear all progress?')) return;
+    state = {};
+    localStorage.removeItem(STORE_KEY);
+    document.querySelectorAll('.topic-row').forEach(function(r){ r.classList.remove('is-done','is-flag'); });
+    updateProgress();
+    showToast();
+  });
+})();
+</script>
+
+</body>
+</html>

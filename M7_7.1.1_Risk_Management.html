@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>7.1.1: Risk Management Overview</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 7: Risk Management</div>
+  <div class="hdr-title">7.1.1 · Risk Management Overview</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Supply Chain Risk Management Framework</div><div class="block-body"><div class="def-box"><b>Supply chain risk</b>: The probability and consequence of a disruption to the normal flow of goods, services, information, or finances in the supply chain — from any cause (supplier failure, natural disaster, demand shock, cyber attack, geopolitical event).</div><div class="def-box"><b>Supply Chain Risk Management (SCRM)</b>: A systematic process of identifying, assessing, and responding to supply chain risks — to protect service levels, minimize financial impact, and build supply chain resilience.</div><div class="key-point">The risk management process: Identify → Assess → Treat/Respond → Monitor → Review. This cycle runs continuously — risk profiles change as supply chains, markets, and geopolitics evolve.</div><div class="def-box"><b>Risk appetite</b>: The level of risk an organization is willing to accept in pursuit of its objectives. Different companies in different industries have different risk appetites — a high-risk appetite means accepting more exposure; a low risk appetite requires more mitigation investment.</div></div></div><div class="block"><div class="block-title">Types of Supply Chain Risk</div><div class="block-body"><div class="key-point">Supply chain risk categories:</div><ul><li><b>Supply risk</b>: Supplier failure, quality problems, capacity constraints, single-source dependency</li><li><b>Demand risk</b>: Demand volatility, forecast error, new competitors, product substitution</li><li><b>Process/operational risk</b>: Equipment failure, labor disruption, IT system outage, quality failure</li><li><b>Environmental risk</b>: Natural disasters (earthquakes, floods, hurricanes), climate change impacts</li><li><b>Geopolitical risk</b>: Trade wars, tariffs, political instability, export controls, sanctions</li><li><b>Financial risk</b>: Currency fluctuation, supplier financial distress, commodity price volatility</li><li><b>Cyber/information risk</b>: Ransomware, data breach, system infiltration disrupting operations</li></ul><div class="def-box"><b>Black swan event</b>: A highly improbable event with extreme consequences that is difficult to predict — such as COVID-19, the 2011 Tohoku earthquake/tsunami, or major geopolitical disruptions. Traditional risk models underestimate black swan frequency.</div></div></div><div class="block"><div class="block-title">Resilience vs. Efficiency</div><div class="block-body"><div class="def-box"><b>Supply chain resilience</b>: The ability of a supply chain to anticipate, adapt to, and recover from disruptions — returning to normal operations quickly while maintaining customer service.</div><div class="key-point">The efficiency-resilience trade-off: lean, efficient supply chains (low inventory, single-source, JIT) are vulnerable to disruptions. Resilient supply chains build in redundancy (dual sourcing, safety stock, geographic diversification) — at a cost. The optimal balance depends on the risk exposure and consequence of disruption.</div><div class="def-box"><b>Redundancy</b>: Maintaining backup capacity, suppliers, or inventory above what efficiency would dictate — as insurance against disruption. Redundancy costs money in normal times but prevents catastrophic failure during disruptions.</div><div class="key-point">COVID-19 revealed the limits of pure efficiency — highly optimized JIT supply chains (single-source, no buffer stock) collapsed when disruptions hit simultaneously across multiple nodes. The lesson: strategic redundancy is not waste, it is risk management.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Supply chain risk management — 5-step process</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1. IDENTIFY: catalog all potential supply chain risks
+2. ASSESS: evaluate probability × consequence for each risk
+3. TREAT/RESPOND: select and implement risk response strategies
+4. MONITOR: track risk indicators and mitigation effectiveness
+5. REVIEW: update risk register as supply chain and environment changes
+
+This cycle is CONTINUOUS — not a one-time annual exercise.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">7 supply chain risk categories</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Supply risk: supplier failure, quality, single-source
+Demand risk: volatility, forecast error, competition
+Process/operational: equipment failure, labor, IT outage
+Environmental: natural disasters, climate change
+Geopolitical: trade wars, tariffs, sanctions, instability
+Financial: currency, commodity prices, supplier insolvency
+Cyber/information: ransomware, data breach, system attack
+
+Mnemonic: SDPEGFC (Supply, Demand, Process, Environmental, Geopolitical, Financial, Cyber)</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Efficiency vs. resilience trade-off</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Efficient supply chain: lean, just-in-time, single-source, no buffer inventory → lowest cost in normal operations → FRAGILE when disruptions hit.
+
+Resilient supply chain: dual sourcing, safety stock, geographic diversification, redundant capacity → higher cost in normal times → ROBUST when disruptions hit.
+
+Balance depends on: likelihood of disruption × consequence of service failure.
+
+COVID-19 lesson: strategic redundancy is NOT waste — it is insurance against disruption.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a black swan event?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A highly improbable event with extreme consequences — difficult to predict with normal risk models.
+
+Characteristics: rare, high-impact, often rationalized in retrospect as 'predictable' — but wasn't.
+
+Examples: COVID-19 pandemic, 2011 Tohoku earthquake/Fukushima, 9/11, 2008 financial crisis.
+
+Implication: traditional risk models (probability × impact) underestimate black swan frequency and impact. Supply chains need resilience capabilities that work EVEN FOR unexpected events — not just known, modeled risks.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Supply chain resilience — what it means operationally</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Resilience = ability to anticipate, adapt, and recover from disruptions while maintaining customer service.
+
+Operational enablers:
+• Visibility: see disruptions early → more response time
+• Redundancy: backup suppliers, inventory buffers, dual routing
+• Flexibility: ability to quickly switch suppliers, modes, or plants
+• Collaboration: partners alert each other early (information sharing)
+• Recovery plans: pre-planned responses to known disruption scenarios
+
+Goal: minimize the 'performance impact × duration' of any disruption.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Risk appetite — definition and examples</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Risk appetite = the level of risk an organization is willing to accept.
+
+High risk appetite: startup, e-commerce — accept supply disruption risk to keep costs low (minimal safety stock, single source, JIT).
+
+Low risk appetite: nuclear power plant, pharmaceutical, automotive — invest heavily in redundancy, backup suppliers, safety stock because the consequence of disruption is catastrophic.
+
+Determines: how much to invest in mitigation vs. accept the risk. Not a fixed number — set by leadership based on business model and consequence analysis.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">Supply chain resilience is best defined as:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> The ability to eliminate all supply chain disruptions through careful planning</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> The ability to anticipate, adapt to, and recover from disruptions — returning to normal operations while maintaining customer service</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> Having the lowest total supply chain cost</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Maintaining 100% inventory availability at all times</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Resilience is about RECOVERY speed and service maintenance during disruption — not preventing all disruptions (impossible). A resilient supply chain: sees disruptions early (visibility), has backup options ready (redundancy and flexibility), responds quickly (pre-planned response playbooks), and returns to normal operations faster than a fragile one. The goal is to minimize the 'performance impact × disruption duration' — not zero disruptions.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">The efficiency-resilience trade-off means that:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Efficient supply chains are always more resilient</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Optimizing for efficiency (low inventory, single source, JIT) creates vulnerability — resilience requires strategic redundancy that costs more in normal times but prevents catastrophic failure during disruptions</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Resilient supply chains are always more profitable</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> There is no trade-off — efficiency and resilience can always be achieved simultaneously</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Efficiency: minimize cost by eliminating buffers, consolidating to single suppliers, reducing inventory. This works perfectly in stable conditions but creates fragility. Any disruption (supplier failure, port congestion, natural disaster) hits a lean supply chain with no buffer capacity or alternative sourcing. COVID-19 exposed this: highly optimized supply chains failed spectacularly when multiple disruptions hit simultaneously. Strategic redundancy (dual sourcing, safety stock, geographic diversification) adds cost but provides insurance.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A 'black swan' supply chain event is characterized by:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,2)"> High probability and low impact</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,2)"> Low probability and low impact but very frequent</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,2)"> Very low probability but extreme consequences — difficult to predict with normal risk models</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,2)"> Medium probability and medium impact</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Black swans: rare, high-impact events that normal probability-based models don't adequately account for. COVID-19 is the recent paradigm example: the probability of a global pandemic shutting down supply chains simultaneously seemed negligibly small — but the consequence was catastrophic. Traditional risk management (probability × impact matrix) misses black swans because they're outside the probability range companies typically model. Implication: build resilience capabilities that work even for unmodeled events.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">An organization with a low risk appetite for supply chain disruption would most likely:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,2)"> Eliminate all safety stock to reduce working capital</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,2)"> Single-source all critical components to maximize volume leverage</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,2)"> Invest in dual sourcing, buffer inventory, and geographic diversification — accepting higher cost for lower disruption risk</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,2)"> Adopt JIT manufacturing with no backup suppliers</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Low risk appetite = willing to spend more to reduce the probability/consequence of disruption. Industries with catastrophic disruption consequences (pharmaceuticals — patient safety, nuclear — safety, automotive — assembly line shutdown) invest heavily in: dual/multi-sourcing (never sole source critical components), safety stock (buffer against supply variability), geographic diversification (not all production in one region/country), and detailed contingency plans. The cost of the mitigation is justified by the consequence of failure.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Which category of supply chain risk does 'a key supplier's financial insolvency' fall under?</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,2)"> Environmental risk</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,2)"> Demand risk</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,2)"> Financial risk</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,2)"> Process risk</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Supplier financial insolvency = a company runs out of money, can't pay its suppliers, and potentially shuts down. This is a financial risk — though it manifests as a supply risk (supply stops when the supplier closes). Companies monitor supplier financial health (credit ratings, Dun & Bradstreet scores, public financial statements) to identify distress early and begin contingency sourcing before supply actually fails.</div></div></div>
+  </div>
+</div>
+<footer>7.1.1: Risk Management Overview · Module 7 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

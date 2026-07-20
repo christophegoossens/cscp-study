@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>7.2.2: Risk Responses & Business Continuity</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 7: Risk Management</div>
+  <div class="hdr-title">7.2.2 · Risk Responses & Business Continuity</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Risk Response Strategies</div><div class="block-body"><div class="key-point">Four primary risk response strategies (the 4 T's of risk treatment):</div><ul><li><b>Tolerate/Accept</b>: Do nothing — accept the risk as the cost of doing business. Appropriate when risk is below risk appetite or mitigation cost exceeds expected loss.</li><li><b>Treat/Reduce</b>: Implement measures to reduce the probability or impact of the risk. Dual sourcing, safety stock, quality improvement, supplier development.</li><li><b>Transfer</b>: Shift the financial consequences to another party — insurance, hedging, contracts that assign risk to suppliers or customers.</li><li><b>Terminate/Avoid</b>: Stop the activity that creates the risk — exit a risky market, drop a sole-source supplier, don't enter a high-risk geography.</li></ul><div class="def-box"><b>Dual sourcing</b>: Qualifying and maintaining two or more suppliers for a critical component — so if one fails, the other can supply. Primary tool for reducing supply concentration risk. Cost: requires managing two relationships and may sacrifice some volume leverage.</div></div></div><div class="block"><div class="block-title">Specific Risk Mitigation Tools</div><div class="block-body"><div class="def-box"><b>Safety stock</b>: Inventory held above the expected demand level to buffer against supply variability and demand uncertainty. A form of risk mitigation through redundancy — costs working capital but protects against stockouts from supply disruptions.</div><div class="def-box"><b>Insurance</b>: Transferring financial risk to an insurer in exchange for a premium. Types relevant to supply chain: cargo insurance (loss/damage in transit), business interruption insurance (lost profit from supply chain disruption), product liability insurance.</div><div class="def-box"><b>Hedging</b>: Using financial instruments (futures, options, swaps) to lock in commodity or currency prices — protecting against price volatility. Example: an airline buying jet fuel futures contracts to hedge against oil price increases.</div><div class="def-box"><b>Force majeure clause</b>: A contract term excusing a party from performance obligations when an extraordinary event beyond their control (natural disaster, war, pandemic) makes performance impossible — a risk transfer tool for unforeseeable events.</div><div class="key-point">Risk mitigation portfolio: no single tool addresses all risks. Effective SCRM uses a portfolio of tools: dual sourcing (supply risk), safety stock (demand/supply variability), insurance (financial impact), hedging (commodity/currency), and contingency plans (response to realized risks).</div></div></div><div class="block"><div class="block-title">Business Continuity Planning (BCP)</div><div class="block-body"><div class="def-box"><b>Business Continuity Plan (BCP)</b>: A pre-documented plan for how an organization will continue operating critical functions during and after a significant disruption — maintaining minimum service levels until full recovery.</div><div class="def-box"><b>Recovery Time Objective (RTO)</b>: The maximum acceptable time to restore a business function after disruption. Drives the design of recovery capabilities — systems and processes must be recoverable within the RTO or the business impact exceeds what's acceptable.</div><div class="def-box"><b>Recovery Point Objective (RPO)</b>: The maximum acceptable amount of data loss (measured in time). For supply chain: how much transaction data can be lost if a system goes down? RPO drives backup frequency and data redundancy design.</div><div class="key-point">BCP in supply chain: identify critical supply chain functions, determine RTOs, build recovery playbooks (alternate suppliers, manual processes, emergency freight), test the plan regularly, and assign clear ownership for activation decisions.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">4 T's of risk response</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Tolerate/Accept: accept the risk — cost of mitigation > expected loss, or risk is within risk appetite. Monitor only.
+
+Treat/Reduce: implement mitigations to lower probability or impact (dual sourcing, safety stock, quality improvement).
+
+Transfer: shift financial consequence to another party (insurance, hedging, contract risk allocation).
+
+Terminate/Avoid: stop the risky activity entirely (exit a risky market, remove sole-source dependency).</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Dual sourcing — how it works and its trade-offs</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Qualify and maintain 2+ suppliers for the same critical component.
+
+How it works: split volume between suppliers (e.g., 70/30 or 60/40). If primary fails, secondary can ramp up.
+
+Benefits: eliminates single point of failure; competitive pressure keeps suppliers performing.
+
+Costs: smaller volume per supplier (less leverage/discount); managing two relationships; possible quality differences; supplier may not invest if not primary.
+
+When to use: for critical, high-value components with long qualification lead times where a stockout is very costly.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Business Continuity Plan (BCP) — key elements</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A pre-documented plan for maintaining critical operations during disruption.
+
+Key elements:
+• Identify critical supply chain functions (what MUST continue?)
+• Recovery Time Objectives (RTO): how fast must each be restored?
+• Recovery Point Objectives (RPO): how much data loss is acceptable?
+• Recovery procedures: alternate suppliers, manual processes, emergency freight, priority customers
+• Activation decision authority: who declares a BCP event?
+• Communication plan: internal and external stakeholders
+• Test schedule: practice before crisis occurs
+
+Key: written and tested BEFORE the disruption, not created during it.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">RTO vs. RPO</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">RTO (Recovery Time Objective): maximum acceptable time to restore a function after disruption.
+Example: 'Order management system must be restored within 4 hours'
+
+RPO (Recovery Point Objective): maximum acceptable data loss (measured in time).
+Example: 'Can lose no more than 1 hour of transaction data'
+
+RTO drives: redundant systems, failover capability, manual backup procedures
+RPO drives: backup frequency, data replication architecture
+
+Lower RTO and RPO = more resilient but more expensive investment in recovery infrastructure.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Insurance as a risk transfer tool</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Shifts FINANCIAL consequence of a risk event to an insurer in exchange for a premium.
+
+Types relevant to supply chain:
+• Cargo insurance: loss or damage of goods in transit
+• Business interruption insurance: covers lost profit when supply chain disruption stops operations
+• Product liability: covers claims from customers harmed by defective products
+• Marine insurance: specifically for ocean freight
+
+Limitations: insurance pays AFTER the event — doesn't prevent disruption or restore customer relationships. Also: premiums may be large; some risks (catastrophic) may be uninsurable.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Hedging — how it protects against commodity/currency risk</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Using financial instruments to lock in a price, reducing exposure to market price volatility.
+
+Example — commodity hedge: airline buys jet fuel futures contract at today's price. If fuel prices rise, futures profit offsets higher fuel cost. If fuel prices fall, futures loss offset by lower fuel cost.
+
+Example — currency hedge: US company selling in Euros buys currency forward contracts to lock in the EUR/USD exchange rate → protects against EUR weakening.
+
+Cost: premium for option, or opportunity cost of forward contract (can't benefit from favorable price moves).</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company qualifies a second supplier for a critical component, giving the primary supplier 80% of the volume and the secondary 20%. This is an example of:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,2)"> Risk avoidance — eliminating the supply risk entirely</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,2)"> Risk transfer — shifting the supply risk to the suppliers</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,2)"> Risk treatment/reduction — dual sourcing to reduce the impact of a single supplier failure</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,2)"> Risk acceptance — doing nothing about the supplier concentration risk</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Dual sourcing = risk treatment/reduction. The company still has supply risk, but reduced it by: (1) eliminating the single point of failure — if primary fails, secondary can ramp up; (2) maintaining competitive pressure on the primary. The 80/20 split gives primary sufficient volume to stay committed while keeping secondary qualified. Risk is not eliminated (the 20% backup may not be enough if primary fails completely and secondary needs time to ramp), but it's significantly reduced.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">A Business Continuity Plan (BCP) is most valuable when:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Created reactively during an active supply chain disruption</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Written and tested before a disruption — so response procedures, decision authorities, and alternatives are pre-established and ready to activate</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Focused exclusively on IT system recovery</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Reviewed and updated every five years</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">BCP value = being prepared BEFORE the disruption. When a crisis hits, there's no time to design a response — you execute the pre-planned one. Benefits of pre-planning: faster response (know exactly what to do), better decisions (made when calm, not in crisis), clear ownership (who activates, who communicates), and tested procedures (known to actually work). BCPs created during disruptions are slow, inconsistent, and often miss critical elements.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Recovery Time Objective (RTO) determines:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> The minimum number of backup suppliers required</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> The maximum acceptable time to restore a critical supply chain function after a disruption — driving the design of recovery capabilities</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> The financial value of inventory held as safety stock</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> The time allowed for a supplier to respond to a corrective action request</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">RTO: maximum acceptable downtime for a critical function. Example: 'Our order management system must be restored within 4 hours.' This RTO drives: redundant system design (failover must happen in <4 hours), investment in backup processing capability, and decision to maintain a manual backup process for the gap period. Shorter RTO = more expensive recovery infrastructure. RTO is set based on business impact analysis: how much does it cost the business per hour of this function being down?</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Hedging is classified as which type of risk response?</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Risk avoidance — stops the commodity price risk from occurring</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Risk transfer — shifts the financial consequence of price volatility to a counterparty through financial instruments</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Risk reduction — reduces the probability of commodity price increases</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Risk acceptance — accepts the price volatility as unavoidable</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Hedging = risk transfer. Financial instruments (futures, forwards, options) transfer the financial consequence of price movements to a counterparty. The company doesn't prevent commodity price changes (risk still occurs) — but has transferred the financial impact to the derivative counterparty. If fuel prices rise, the futures counterparty pays the airline; if they fall, the airline pays the counterparty. The financial exposure is 'locked in' — transferred to the market through the instrument.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">The appropriate risk response for a risk with very low probability but catastrophic potential impact is:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,2)"> Accept — probability is too low to justify mitigation cost</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,2)"> Terminate — always avoid catastrophic risks</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,2)"> Monitor and develop contingency plans — prepare a response in case it occurs even though probability is low</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,2)"> Transfer via insurance only</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Low probability + catastrophic impact: the right response is to PREPARE (develop contingency plans, pre-position response capabilities) even if you don't invest heavily in prevention. Why: if this risk materializes and you have no plan, the catastrophic impact will demand an improvised, expensive, slow response. Pre-planning costs relatively little and dramatically speeds response if the event occurs. Insurance transfer may also be appropriate for the financial impact. Avoidance may not be possible — you can't always exit the activity that creates the risk.</div></div></div>
+  </div>
+</div>
+<footer>7.2.2: Risk Responses & Business Continuity · Module 7 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

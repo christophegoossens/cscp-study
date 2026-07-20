@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3.1.2: Sourcing Requirements and Total Costs</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="hdr-top">Module 3: Sourcing Products and Services</div>
+  <div class="hdr-title">3.1.2 · Sourcing Requirements and Total Costs</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 17% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Sourcing Requirements</div><div class="block-body"><p>Sourcing requirements define what the organization needs from a supplier — beyond just the product price. Requirements differ widely across product types (commodities vs. engineered parts vs. services).</p><div class="key-point">Key sourcing requirements to evaluate for any supplier:</div><ul><li><b>Cost</b>: Total cost to the organization (not just price) and target consumer price</li><li><b>Quality</b>: Quality culture, product/service quality standards, defect rates</li><li><b>Delivery performance</b>: On-time delivery rate, delivery window adherence, scheduling flexibility</li><li><b>Lead time</b>: From order to delivery — longer lead time = more inventory needed</li><li><b>Capacity</b>: Current capacity and ability to scale (up or down) with demand</li><li><b>Design expertise</b>: Can the supplier collaborate on product development?</li><li><b>Time to market</b>: How fast can the supplier support new product launches?</li></ul><div class="def-box"><b>Request for Information (RFI)</b>: A document sent to potential suppliers to gather general capability and qualification information. Used early in the sourcing process to build a qualified supplier list.</div><div class="def-box"><b>Request for Proposal (RFP)</b>: A more detailed document sent to qualified suppliers soliciting specific proposals — price, technical approach, delivery terms, quality certifications.</div><div class="def-box"><b>Request for Quotation (RFQ)</b>: A document requesting a specific price for a defined specification. Used when the requirement is well-defined and price is the primary differentiating factor.</div></div></div><div class="block"><div class="block-title">Total Cost of Ownership (TCO)</div><div class="block-body"><div class="def-box"><b>Total Cost of Ownership (TCO)</b>: A calculation methodology that assigns values to all costs associated with a product, service, or capital equipment purchase. Goes beyond purchase price to include all lifecycle costs.</div><div class="key-point">TCO components include:</div><ul><li><b>Acquisition costs</b>: Purchase price, tooling, setup, samples, qualification testing</li><li><b>Possession costs</b>: Inventory carrying cost (holding, insurance, obsolescence), receiving and inspection</li><li><b>Usage costs</b>: Quality failure (scrap, rework, warranty), lead time buffer inventory</li><li><b>End-of-life costs</b>: Disposal, decommissioning, switching to a new supplier</li></ul><p>TCO example: A supplier in Brazil offers copper tubing at $5/unit vs. a US supplier at $7/unit. After adding freight ($1.50), duty (10%), inventory carrying cost (longer lead time), and quality inspection costs — the US supplier's TCO may be lower.</p><div class="key-point">TCO is the correct framework for make-vs-buy, supplier selection, and insource-vs-outsource decisions. It reveals hidden costs that purchase price comparisons miss.</div><div class="def-box"><b>Cost of goods sold (COGS)</b>: An accounting classification for direct material, direct labor, and manufacturing overhead in the cost of products sold. A key input to TCO analysis.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">RFI vs. RFP vs. RFQ — what is each used for?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">RFI (Request for Information): gather supplier capability info early — build qualified list.
+RFP (Request for Proposal): solicits full proposal (technical + price) from qualified suppliers.
+RFQ (Request for Quotation): requests specific price for a defined spec — price is the key differentiator.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM definition: Total Cost of Ownership (TCO)</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A calculation methodology that assigns values to ALL costs associated with a product, service, or capital equipment — not just purchase price. Includes acquisition, possession, usage, and end-of-life costs.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">4 TCO cost categories</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Acquisition: price, tooling, qualification
+2) Possession: holding cost, inspection, receiving
+3) Usage: quality failures, scrap, rework, warranty, buffer inventory
+4) End-of-life: disposal, switching costs, decommissioning</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">7 key sourcing requirements to evaluate in a supplier</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Cost (TCO)
+2) Quality (culture + defect rates)
+3) Delivery performance (OTD, scheduling)
+4) Lead time
+5) Capacity (current + scalability)
+6) Design expertise / collaboration
+7) Time to market</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Why does TCO often favor closer suppliers over cheaper distant ones?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Distant suppliers have lower unit prices but add: freight, duties/tariffs, longer lead time (more safety stock), harder quality management, currency risk, and higher switching costs. TCO captures all these — often making the apparent price advantage disappear.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the difference between an RFP and an RFQ?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">RFP: open-ended — asks supplier to propose their technical approach, methodology, AND price. Used when the solution is not fully defined.
+RFQ: closed-ended — you define the exact spec and just ask for a price. Used when the requirement is fully specified and you're comparing on price.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company receives quotes from four suppliers. Supplier A has the lowest unit price. Using TCO, which additional factors should be evaluated before selecting Supplier A?</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,2)"> Only shipping cost</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,2)"> Only quality certification</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,2)"> Freight, duties, inventory carrying cost (lead time), quality failure costs, and switching costs</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,2)"> Only the payment terms</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">TCO = unit price + ALL associated costs. Long lead time means more safety stock (inventory carrying cost). Distant supplier = freight + duties. Unknown quality = potential scrap/rework costs. All must be included for a valid TCO comparison.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">A purchasing team sends a document to 10 potential suppliers asking about their manufacturing capacity, quality certifications, and financial stability — with no pricing requested yet. This is:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,2)"> A Request for Quotation (RFQ)</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,2)"> A Request for Proposal (RFP)</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,2)"> A Request for Information (RFI)</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,2)"> A purchase order</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">RFI = gathering capability and qualification information from potential suppliers — no pricing yet. It narrows the field to qualified suppliers before issuing an RFP or RFQ.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Which of the following is a POSSESSION cost in a Total Cost of Ownership analysis?</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,2)"> The purchase price of the component</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,2)"> The tooling cost charged by the supplier</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,2)"> Inventory carrying cost (capital tied up, storage, insurance, obsolescence)</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,2)"> The cost of reworking defective incoming parts</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Possession costs = costs incurred while the company HOLDS the purchased item: inventory carrying cost (capital cost, storage, insurance, obsolescence risk). Rework is a usage cost. Purchase price and tooling are acquisition costs.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">A commodity product has well-defined specifications and the company simply wants the lowest price from qualified suppliers. The most appropriate sourcing document is:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,2)"> RFI — to gather information</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,2)"> RFP — to get full proposals</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,2)"> RFQ — to request specific price quotes</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,2)"> A blanket PO — to lock in pricing</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">When specifications are fully defined and price is the key decision variable, an RFQ is most efficient — it asks qualified suppliers for a specific price for a specific specification. RFP is used when the solution or approach is not fully defined.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">A clothing company sources a basic t-shirt from a Chinese supplier. Requirements include low cost, adequate durability, and standard sizing. Which sourcing requirement is LEAST critical for this product?</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,2)"> Cost</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,2)"> Quality (minimum durability standard)</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,2)"> Design expertise and time to market</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,2)"> Delivery performance</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">For a commodity/staple product (basic t-shirt), design expertise and rapid time-to-market are not differentiating factors — the design is standardized. Cost, adequate quality, and reliable delivery are the key requirements for a commodity sourcing decision.</div></div></div>
+  </div>
+</div>
+<footer>3.1.2: Sourcing Requirements and Total Costs · Module 3 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>
