@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>8.1.1: Business & Supply Chain Strategy</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 8: Supply Chain Strategy & Technology</div>
+  <div class="hdr-title">8.1.1 · Business & Supply Chain Strategy</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 8% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Linking Business Strategy to Supply Chain</div><div class="block-body"><div class="def-box"><b>Business strategy</b>: A company's plan for how it will achieve its goals — which markets to compete in, how to create value for customers, and how to sustain competitive advantage. Supply chain strategy must align with and enable the business strategy.</div><div class="key-point">Two primary competitive strategies (Porter's generic strategies):</div><ul><li><b>Cost leadership</b>: Compete by being the lowest-cost producer — requires an efficient, high-volume, standardized supply chain focused on waste elimination and economies of scale (Walmart, IKEA, Amazon logistics)</li><li><b>Differentiation</b>: Compete by offering unique value that customers will pay a premium for — requires a responsive, flexible, customer-centric supply chain that can handle variety and customization (Apple, Zara, luxury brands)</li></ul><div class="def-box"><b>Supply chain strategy alignment</b>: Ensuring that the supply chain's design, capabilities, and priorities (cost vs. responsiveness, efficiency vs. flexibility) match what the business strategy requires to serve its chosen markets.</div></div></div><div class="block"><div class="block-title">Efficient vs. Responsive Supply Chains</div><div class="block-body"><div class="def-box"><b>Efficient supply chain</b>: Optimized for lowest total cost — high asset utilization, low inventory, standardized products, long production runs, lowest-cost sourcing. Best fit for predictable demand, commodity products, price-sensitive customers.</div><div class="def-box"><b>Responsive (agile) supply chain</b>: Optimized for speed and flexibility — ability to respond quickly to demand changes, customize, and meet tight delivery windows. Higher cost but better service. Best fit for volatile demand, short product life cycles, fashion, high-value products.</div><div class="def-box"><b>Fisher's model</b>: Framework matching supply chain type to product type: Functional products (stable demand, long life cycle) → Efficient supply chain. Innovative products (uncertain demand, short life cycle) → Responsive supply chain. Mismatch between product type and supply chain type is a root cause of supply chain problems.</div><div class="key-point">The 'zone of strategic fit': the alignment region where supply chain capabilities match the uncertainty and requirements of the served market. Operating outside this zone creates either excess cost (over-responsive for stable demand) or service failures (too efficient for volatile demand).</div></div></div><div class="block"><div class="block-title">Strategic Supply Chain Decisions</div><div class="block-body"><div class="key-point">Major strategic supply chain decisions:</div><ul><li><b>Network design</b>: Number/location of plants, DCs, and suppliers — long-term, capital-intensive</li><li><b>Make vs. buy</b>: Which capabilities to own vs. outsource</li><li><b>Global vs. regional vs. local sourcing</b>: Geographic footprint trade-offs</li><li><b>Push vs. pull</b>: Where in the supply chain to decouple make-to-stock from make-to-order</li><li><b>Integration level</b>: How much to integrate with suppliers and customers</li></ul><div class="def-box"><b>Decoupling point</b>: The point in the supply chain where the production/fulfillment strategy switches from push (make-to-forecast) to pull (make/assemble-to-order). Positioning the decoupling point determines customer lead time and inventory investment.</div><div class="key-point">Moving the decoupling point downstream (closer to customer) requires more finished goods inventory but shorter customer lead time. Moving it upstream enables lower inventory but longer lead time. Postponement: delay the decoupling point as far downstream as possible.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Cost leadership vs. differentiation supply chain</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Cost leadership: compete on lowest price.
+Supply chain focus: efficiency — low cost, high volume, standardized, minimal waste, lowest-cost sourcing. Long production runs.
+Examples: Walmart (logistics efficiency), IKEA (flat-pack design + customer assembly), Amazon (scale + automation).
+
+Differentiation: compete on unique value (quality, speed, customization).
+Supply chain focus: responsiveness — flexible, fast, customizable, higher service level.
+Examples: Zara (fast fashion, 2-week design-to-shelf), Apple (premium, controlled supply chain).</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Fisher's model — functional vs. innovative products</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Functional products: stable, predictable demand; long product life cycle; commodity-like.
+→ Need: EFFICIENT supply chain (low cost, high utilization, low inventory)
+
+Innovative products: uncertain demand; short life cycle; high variety; fashion/tech.
+→ Need: RESPONSIVE supply chain (speed, flexibility, ability to handle demand volatility)
+
+Mismatch = supply chain problems:
+• Responsive SC for functional product = too expensive
+• Efficient SC for innovative product = stockouts + markdowns</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Decoupling point — definition and strategic importance</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The point in the supply chain where production switches from PUSH (make-to-forecast/stock) to PULL (make/assemble/configure-to-order).
+
+Upstream decoupling: make/buy components to forecast (push), assemble/customize only on order (pull).
+
+Strategic trade-off:
+• Decoupling point close to customer: more finished inventory, shorter lead time
+• Decoupling point far from customer: less finished inventory, longer lead time
+
+Postponement: push the decoupling point as far downstream as possible → carry generic/semi-finished inventory → customize on order.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Efficient vs. responsive supply chain — key characteristics</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">EFFICIENT:
+• Primary goal: lowest total cost
+• Inventory strategy: low; minimize buffers
+• Lead time focus: reduce cost, not necessarily speed
+• Supplier selection: lowest cost
+• Manufacturing: high utilization, long runs
+• Best for: functional products, stable demand
+
+RESPONSIVE:
+• Primary goal: speed and flexibility
+• Inventory strategy: buffer to meet demand variability
+• Lead time: minimize for customer advantage
+• Supplier selection: fast, flexible, reliable
+• Manufacturing: flexible, fast changeovers
+• Best for: innovative products, volatile demand</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Zone of strategic fit</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Fisher's framework: match the supply chain type to the market's demand uncertainty.
+
+Zone of strategic fit = alignment between supply chain capabilities (implied supply uncertainty) and market demands (implied demand uncertainty).
+
+Operating in the zone: supply chain capability matches market need → good performance.
+
+Outside the zone:
+• Responsive SC for predictable product → wasteful, expensive
+• Efficient SC for unpredictable product → stockouts, lost sales, markdowns
+
+Achieving strategic fit is the central task of supply chain strategy.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Push vs. pull in supply chain</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">PUSH (make-to-forecast/make-to-stock):
+• Production driven by demand forecast
+• Goods manufactured before orders received
+• Risk: overstock if forecast wrong, stockout if under-forecast
+• Best for: stable, predictable demand; long production lead times
+
+PULL (make/assemble-to-order):
+• Production triggered by actual customer orders
+• No finished goods inventory until order placed
+• Risk: longer customer lead time
+• Best for: high variety, unpredictable demand; short production lead time
+
+Most supply chains combine both — push upstream, pull downstream of the decoupling point.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company competing on price leadership requires a supply chain that prioritizes:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,2)"> Maximum product variety and rapid customization</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,2)"> Highest possible customer service levels regardless of cost</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,2)"> Efficiency — lowest total cost through standardization, high utilization, and waste elimination</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,2)"> Speed-to-market for new product introductions</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Cost leadership = compete by being the lowest-cost producer. Supply chain alignment: minimize total logistics and operations cost through standardization (fewer SKUs), high asset utilization (full trucks, high warehouse density), long production runs (economies of scale), lowest-cost sourcing, and waste elimination (Lean). Adding responsiveness capability (customization, fast response, buffers for variety) adds cost that the cost-leadership model can't absorb without losing the price advantage.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">According to Fisher's model, a fashion clothing company should use:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> An efficient supply chain — because clothing is a basic product</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> A responsive supply chain — because fashion has short life cycles, uncertain demand, and requires speed and flexibility</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> A push supply chain where all production is made to forecast months in advance</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> A global sourcing strategy to minimize unit cost</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Fisher's model: Innovative products (short life cycles, uncertain demand, high variety) → Responsive supply chain. Fashion is the quintessential innovative product: trends change every season, demand is hard to predict, wrong inventory = markdowns, too little = lost sales. Responsive SC: fast suppliers, flexible manufacturing (Zara makes in Portugal and Spain, not just Asia), buffer inventory, quick design-to-shelf cycles. Efficient SC (optimized for lowest cost with long lead times) is wrong for fashion — you need speed over cost.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">The decoupling point in a supply chain determines:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Where the supply chain switches ownership from supplier to buyer</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> The point at which production switches from push (make-to-forecast) to pull (make-to-order) — determining the trade-off between customer lead time and inventory investment</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> The location of the central distribution center</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> The point at which risk transfers from carrier to consignee</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Decoupling point: push production upstream (build components to forecast), pull/configure downstream (only finish/customize on actual order). Positioning determines: customer lead time (everything downstream of decoupling point is in the order fulfillment cycle) AND inventory form (finished goods vs. semi-finished/components). Postponement strategy moves decoupling point downstream: carry fewer finished configurations, customize later. Dell's original model: push components, pull final PC assembly to customer order.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Operating an efficient supply chain for products with volatile, unpredictable demand results in:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Optimal cost performance with acceptable service levels</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Stockouts when demand exceeds forecast and markdowns when demand falls short — the efficient SC lacks the flexibility to match volatile demand</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Perfect alignment between supply chain capabilities and market needs</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Higher profit margins due to lower operating costs</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Efficient SC for volatile demand: the SC is built around a demand forecast (low inventory, high utilization, long lead times). When volatile demand deviates from forecast — as it will — the efficient SC has no flexibility buffer: demand spike → stockout (can't respond quickly with low inventory and long supplier lead times); demand drop → excess inventory that must be marked down. Fisher's model: innovative/volatile products REQUIRE responsive supply chains. Applying an efficient SC here is a fundamental strategic misalignment.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">A company that makes products to a forecast and then customizes them to specific customer orders only when orders are received is using:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,2)"> A fully push supply chain</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,2)"> A fully pull supply chain</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,2)"> A push-pull strategy with a downstream decoupling point — combining make-to-stock for components with make/configure-to-order for customization</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,2)"> An outsourced supply chain model</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Push-pull: push standard components/semi-finished goods to forecast (economical, large batches); pull final customization/assembly only when order arrives (responsive, no finished goods overstock). The decoupling point is between the generic semi-finished and the customized finished product. Classic example: Dell (components pushed, PCs pulled/assembled to order). Or Benetton (garments produced undyed/generic, dyed to specific colors only when orders reveal demand). Combines efficiency (long-run component production) with responsiveness (customization on order).</div></div></div>
+  </div>
+</div>
+<footer>8.1.1: Business & Supply Chain Strategy · Module 8 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>
