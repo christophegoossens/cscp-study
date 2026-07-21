@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>2.2.1: Supply Chain Technology Applications</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 2: Global Supply Chain Networks</div>
+  <div class="hdr-title">2.2.1 · Supply Chain Technology Applications</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Overview of SC Technology Systems</div><div class="block-body"><p>Supply chain technology applications range from broad enterprise-wide systems to specialized point solutions. Key categories:</p><ul><li><b>ERP (Enterprise Resource Planning)</b>: Broad, organization-wide system integrating finance, HR, procurement, manufacturing, and logistics in a single database. The backbone of most large supply chains.</li><li><b>WMS (Warehouse Management System)</b>: Manages warehouse operations — receiving, putaway, picking, packing, shipping, inventory tracking.</li><li><b>TMS (Transportation Management System)</b>: Manages transportation planning, carrier selection, load optimization, freight audit, and tracking.</li><li><b>APS (Advanced Planning System)</b>: Constraint-based planning — demand planning, supply planning, production scheduling across the supply chain.</li><li><b>CRM (Customer Relationship Management)</b>: Manages customer data, sales pipeline, service history.</li><li><b>SRM (Supplier Relationship Management)</b>: Manages supplier performance, contracts, and collaboration.</li></ul><div class="key-point">No single system does everything. Best-in-class supply chains use an integrated architecture of complementary systems — not just one monolithic platform.</div></div></div><div class="block"><div class="block-title">Three Supply Chain Perspectives</div><div class="block-body"><p>A comprehensive supply chain system can be viewed from three perspectives:</p><ul><li><b>Process value supply chain</b>: Translates demand channel information into products or services — the operational supply chain (make, source, deliver).</li><li><b>Value delivery supply chain</b>: Configured to deliver the service component of a product-service offering — how value is delivered to the customer.</li><li><b>Demand channel</b>: Collects, analyzes, and disseminates market intelligence — the information flow from market to supply chain planners.</li></ul><div class="def-box"><b>Modular architecture</b>: A system design where related tasks are grouped in self-contained packages (modules) that communicate with each other. Allows best-of-breed selection — choosing the best WMS, TMS, APS individually and integrating them.</div><div class="key-point">Technology has allowed supply chains to continually reinvent themselves — cloud platforms, APIs, and modular architecture enable faster adoption of new capabilities without replacing the entire system.</div></div></div><div class="block"><div class="block-title">EDI and System Integration</div><div class="block-body"><div class="def-box"><b>EDI (Electronic Data Interchange)</b>: The structured electronic exchange of business documents (purchase orders, invoices, advance ship notices) between trading partners in a standardized format (e.g., ANSI X12, EDIFACT).</div><div class="key-point">EDI was the original B2B integration technology. Modern alternatives include APIs and cloud-based integration platforms — faster and more flexible than traditional EDI but EDI remains dominant in many industries (retail, automotive, healthcare).</div><div class="def-box"><b>API (Application Programming Interface)</b>: A software interface that enables two systems to exchange data in real time. Increasingly used for supply chain integration alongside or instead of EDI.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ERP vs. WMS vs. TMS — what does each manage?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">ERP: enterprise-wide (finance, HR, procurement, manufacturing, logistics) — the backbone.
+WMS: warehouse operations (receiving, putaway, pick/pack/ship, inventory).
+TMS: transportation (carrier selection, load optimization, freight audit, tracking).</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is an APS (Advanced Planning System)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Constraint-based planning system that handles demand planning, supply planning, and production scheduling simultaneously — accounting for real capacity constraints. More sophisticated than basic ERP planning modules.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is EDI and why is it important in supply chain?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Electronic Data Interchange: structured electronic exchange of business documents (POs, invoices, ASNs) between trading partners in a standardized format. Eliminates paper/manual processes and enables automated B2B transactions.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is modular (best-of-breed) system architecture?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A design where independent software modules handle specific functions and communicate via APIs. Allows selecting the best WMS, TMS, APS individually rather than being constrained to one vendor's full suite.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">The 3 supply chain technology perspectives</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Process value SC: operational chain — make/source/deliver
+2) Value delivery SC: how value/service is delivered to customer
+3) Demand channel: captures and disseminates market intelligence to supply chain planners</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">CRM vs. SRM — what does each manage?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">CRM (Customer Relationship Management): manages customer data, sales pipelines, and service history — the customer-facing side.
+SRM (Supplier Relationship Management): manages supplier performance, contracts, and collaboration — the supplier-facing side.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company wants to optimize truck loads, select the best carrier for each shipment, and track all outbound freight in real time. Which system is designed for this?</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,2)"> ERP</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,2)"> WMS</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,2)"> TMS</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,2)"> APS</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">TMS (Transportation Management System) handles transportation planning — carrier selection, load optimization, route planning, freight audit, and shipment tracking. This is its core purpose.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">A retailer sends its purchase orders electronically to 200 suppliers using a standardized business document format, which suppliers' systems process automatically. This is an example of:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> API integration</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> EDI (Electronic Data Interchange)</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> ERP-to-ERP integration</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> CRM automation</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">EDI = structured electronic exchange of standard business documents (POs, invoices, ASNs) between trading partners. Standardized formats (ANSI X12, EDIFACT) allow automated processing without manual re-entry.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A supply chain manager selects the best-in-class WMS from one vendor, the best TMS from another, and the best APS from a third — integrating all three. This approach is called:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Single-suite ERP implementation</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Best-of-breed / modular architecture</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Vertical integration</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Cloud-only supply chain design</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Best-of-breed (modular) architecture = selecting the best system for each function and integrating them. The advantage: best functionality. The challenge: integration complexity and data consistency across systems.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">The 'demand channel' component of a comprehensive supply chain technology system is responsible for:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Managing warehouse operations and inventory</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Collecting, analyzing, and disseminating market intelligence to supply chain planners</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Scheduling production to meet capacity constraints</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Processing supplier invoices and payments</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">The demand channel is the information-gathering function — collecting demand signals (POS data, orders, forecasts) from the market and feeding them to supply chain planners to drive production and procurement decisions.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Why do best-in-class supply chains typically use multiple integrated systems rather than a single ERP?</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> ERPs are too expensive for large companies</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> No single system provides best-in-class functionality for all supply chain functions — integration of specialized tools delivers superior performance</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Government regulations require multiple systems</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Single ERPs cannot handle financial transactions</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">ERP systems are broad but not always deep. Specialized systems (WMS, TMS, APS) offer superior functionality for their specific domain. Best-in-class supply chains integrate the best tools for each function via modular/API architecture.</div></div></div>
+  </div>
+</div>
+<footer>2.2.1: Supply Chain Technology Applications · Module 2 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>2.2.3: Supply Chain Master Data</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 2: Global Supply Chain Networks</div>
+  <div class="hdr-title">2.2.3 · Supply Chain Master Data</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">What is Master Data?</div><div class="block-body"><div class="def-box"><b>Master data</b>: Core, relatively static data that defines the key business entities in a supply chain — customers, suppliers, products, locations, and units of measure. Unlike transactional data (which changes with every order), master data changes infrequently.</div><p>Types of data in supply chain systems:</p><ul><li><b>Master data</b>: Static reference data (customer master, product master, supplier master, location master)</li><li><b>Transactional data</b>: Dynamic event data (orders, shipments, invoices, receipts)</li><li><b>Unstructured data</b>: Documents, emails, images — not in a structured database format</li><li><b>Metadata</b>: Data about data — describes the attributes of other data</li><li><b>Hierarchical data</b>: Data organized in parent-child relationships (e.g., product family → subfamily → SKU)</li></ul><div class="key-point">Master data is the foundation of every supply chain transaction — if master data is wrong (wrong unit of measure, wrong price, wrong supplier address), every transaction using it will also be wrong.</div></div></div><div class="block"><div class="block-title">Master Data Management (MDM)</div><div class="block-body"><div class="def-box"><b>Master Data Management (MDM)</b>: A discipline that coordinates the creating, updating, and archiving of master data — ensuring it is accurate, consistent, and available across all systems and business functions.</div><p>The master data life cycle:</p><ul><li><b>Plan</b>: Determine what master data is needed, how it will be created, and who owns it</li><li><b>Create</b>: Enter or load master data into systems — with validation and approval workflows</li><li><b>Use</b>: Master data is used to support transactions, analysis, and reporting</li><li><b>Maintain</b>: Ongoing cleansing, correction, deduplication, and security</li><li><b>Archive/Delete</b>: Data no longer needed is archived (for compliance/history) or purged (to keep systems clean)</li></ul><div class="key-point">The expected USE of data should drive what data is collected — not the other way around. Over-collecting unused data creates maintenance burden and compliance risk.</div></div></div><div class="block"><div class="block-title">Key Types of Master Data for Supply Chain</div><div class="block-body"><div class="key-point">Critical master data files in supply chain:</div><ul><li><b>Customer master</b>: Customer name, address, payment terms, credit limit, shipping instructions, contact</li><li><b>Supplier/vendor master</b>: Supplier name, address, payment terms, lead time, certifications, contacts</li><li><b>Item/product master</b>: Product description, unit of measure, weight, dimensions, price, lead time, classification</li><li><b>Location master</b>: Warehouse addresses, storage zone assignments, dock doors</li><li><b>Bill of Materials (BOM)</b>: Product structure — components and quantities needed to make each finished product</li></ul><div class="def-box"><b>Item master (ASCM)</b>: A computerized file that contains descriptive and inventory data for each item — the foundation for ordering, planning, and reporting.</div><p>Poor master data quality is a leading cause of supply chain failures: incorrect BOMs cause production errors; wrong lead times cause missed deliveries; duplicate supplier records cause payment errors.</p></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Master data vs. transactional data</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Master data: static reference data defining key entities (customer, product, supplier, location). Changes infrequently.
+Transactional data: dynamic event data (orders, shipments, invoices). Changes with every business transaction.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM definition: Master Data Management (MDM)</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A discipline that coordinates the creating, updating, and archiving of master data — ensuring accuracy, consistency, and availability across all systems and business functions.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">5 stages of the master data life cycle</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Plan: determine data needed and ownership
+2) Create: enter/load with validation
+3) Use: support transactions and reporting
+4) Maintain: cleanse, correct, deduplicate
+5) Archive/Delete: archive for compliance or purge to clean systems</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">5 critical master data files in supply chain</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Customer master (address, terms, instructions)
+2) Supplier/vendor master (lead time, certifications)
+3) Item/product master (UOM, dimensions, price)
+4) Location master (addresses, zones)
+5) Bill of Materials — BOM (components and quantities)</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the item master?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A computerized file containing descriptive and inventory data for each item — the foundation for ordering, planning, and reporting. Includes: description, unit of measure, weight, dimensions, price, lead time, and classification.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Why is master data quality so critical?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Every supply chain transaction uses master data. If master data is wrong (incorrect UOM, wrong lead time, duplicate supplier), every transaction using it produces wrong results — causing ordering errors, missed deliveries, payment failures, and planning mistakes.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A purchase order is sent to a supplier with the wrong unit of measure (cases instead of pallets). The most likely root cause is:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> A transactional data entry error in the purchasing system</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> Incorrect master data in the item master (wrong UOM)</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> A transportation management system failure</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> An S&OP planning error</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Unit of measure is a master data field in the item master. If the item master has the wrong UOM, every PO generated for that item will use the wrong UOM — a systemic error affecting all transactions until the master data is corrected.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Master Data Management (MDM) is responsible for:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Managing daily transaction processing (orders, invoices, shipments)</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Coordinating the creating, updating, and archiving of core reference data across all systems</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Building the IT network infrastructure</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Selecting the best ERP system</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">MDM governs master data throughout its life cycle — ensuring it is accurate, consistent, and available across all systems. It is a data governance discipline, not a transactional or infrastructure function.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Which of the following is an example of MASTER data (not transactional data)?</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,2)"> A customer's purchase order for 500 units</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,2)"> A warehouse receipt for a supplier shipment</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,2)"> A product's weight, dimensions, and unit of measure in the item master</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,2)"> An invoice from a freight carrier</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Product weight, dimensions, and UOM in the item master are static reference data — they describe the item and rarely change. POs, receipts, and invoices are transactional data — they capture events that change constantly.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">The master data life cycle stage where duplicate records are identified and merged, and incorrect data is corrected, is:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,2)"> Plan</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,2)"> Create</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,2)"> Maintain</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,2)"> Archive</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Maintain = ongoing data stewardship activities: cleansing (removing errors), deduplication (merging duplicate records), validation (checking data quality), and security. Without maintenance, master data quality degrades over time.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">A Bill of Materials (BOM) is a type of master data that specifies:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> The delivery schedule for customer orders</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> The components and quantities required to produce each finished product</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> The financial terms of a supplier contract</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> The storage locations within a warehouse</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">A BOM is the product structure master — it lists every component and the quantity needed to make one unit of a finished product. Incorrect BOMs directly cause production errors and material shortages.</div></div></div>
+  </div>
+</div>
+<footer>2.2.3: Supply Chain Master Data · Module 2 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

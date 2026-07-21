@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>2.3.2: Financial and Operational Metrics and Reports</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 2: Global Supply Chain Networks</div>
+  <div class="hdr-title">2.3.2 · Financial and Operational Metrics and Reports</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Cost Accounting for Supply Chain Managers</div><div class="block-body"><div class="def-box"><b>Cost accounting (ASCM)</b>: The branch of accounting concerned with recording and reporting business operating costs. Includes reporting of manufacturing, selling, and administrative costs.</div><div class="def-box"><b>Standard costs (ASCM)</b>: The target costs of an operation, process, or product — including direct material, direct labor, and overhead charges. What the product SHOULD cost under expected conditions.</div><div class="def-box"><b>Standard costing system (ASCM)</b>: A cost accounting system that uses predetermined cost units to estimate the cost of an order or product before production. Variances between standard and actual costs are analyzed.</div><div class="key-point">Supply chain managers must understand cost accounting to evaluate sourcing decisions, make-vs-buy decisions, and measure the financial impact of supply chain improvements.</div><div class="def-box"><b>COGS (Cost of Goods Sold)</b>: The direct costs of producing goods sold — direct materials + direct labor + manufacturing overhead. Used in profit margin calculations.</div></div></div><div class="block"><div class="block-title">Key Financial Metrics for Supply Chain</div><div class="block-body"><div class="def-box"><b>Inventory turnover (turns)</b>: COGS / Average inventory value. How many times inventory is sold and replaced in a period. Higher = more efficient use of inventory investment.</div><div class="formula">Inventory Turns = COGS / Average Inventory Value
+Higher turns = less capital tied up in inventory, lower holding costs</div><div class="def-box"><b>Days of Supply (DOS)</b>: Average inventory on hand / Average daily demand. How many days of demand current inventory can cover.</div><div class="formula">Days of Supply = Average Inventory / Average Daily Demand
+Or: 365 / Inventory Turns</div><div class="def-box"><b>Gross margin</b>: (Revenue − COGS) / Revenue × 100%. Measures profitability of the product after direct production costs.</div><div class="def-box"><b>Return on Assets (ROA)</b>: Net income / Total assets. Supply chain improvements that reduce inventory (an asset) improve ROA.</div><div class="key-point">Supply chain improvements have direct P&L and balance sheet impact: lower inventory → lower assets → better ROA; faster cycle times → less WIP → lower COGS; fewer errors → lower returns → higher margin.</div></div></div><div class="block"><div class="block-title">Operational Reports</div><div class="block-body"><div class="key-point">Key operational reports supply chain managers use:</div><ul><li><b>Inventory report</b>: Current stock levels by location, item, and age (days on hand)</li><li><b>On-time delivery report</b>: % of orders/shipments delivered on or before requested date</li><li><b>Fill rate report</b>: % of demand fulfilled from available stock (without backorder or stockout)</li><li><b>Supplier scorecard</b>: Supplier performance on quality, delivery, lead time, and cost</li><li><b>Aging report</b>: Inventory past its expiry date or slow-moving inventory at risk of obsolescence</li></ul><div class="def-box"><b>Fill rate (ASCM)</b>: A measurement of customer service. The percentage of orders filled on the first shipment — without back orders or lost sales.</div><p>Reports should enable exception management — flagging items/suppliers/orders that need attention rather than requiring managers to review everything manually.</p></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM definition: Standard costs</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The target costs of an operation, process, or product — including direct material, direct labor, and overhead. What the product SHOULD cost under normal/expected operating conditions.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Inventory turns formula and meaning</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Inventory Turns = COGS / Average Inventory Value
+Measures how often inventory is sold and replenished. Higher turns = less capital tied up in inventory, lower holding costs, better working capital efficiency.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Days of Supply (DOS) formula</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">DOS = Average Inventory / Average Daily Demand
+(Or: 365 / Inventory Turns)
+How many days of demand current inventory can cover. Lower = leaner. Too low = stockout risk.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM definition: Fill rate</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The percentage of customer orders filled completely on the first shipment — without backorders or lost sales. A key customer service metric.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">COGS and why it matters for supply chain</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Cost of Goods Sold = direct materials + direct labor + manufacturing overhead. Used in: gross margin calculation, inventory turns, and measuring the financial impact of supply chain cost reduction initiatives.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How do supply chain improvements affect ROA?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">ROA = Net Income / Total Assets.
+Lower inventory → lower assets → higher ROA.
+Lower COGS (fewer errors, better sourcing) → higher net income → higher ROA.
+Supply chain efficiency directly improves the balance sheet and P&L.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company has COGS of €10M and average inventory of €2M. What is the inventory turn rate?</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> 2 turns</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> 5 turns</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> 10 turns</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> 20 turns</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Inventory Turns = COGS / Average Inventory = 10M / 2M = 5 turns. This means the company sells and replaces its inventory 5 times per year — or holds about 73 days of inventory (365/5).</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Standard costs are used to:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Record actual transaction costs in real time</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Set target/expected costs for products before production — and then measure variance from actual</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Calculate customer invoice prices</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Determine the market price of commodities</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Standard costing sets predetermined cost targets. After production, actual costs are compared to standard — variances are analyzed to identify inefficiency, material waste, or labor overruns. This drives continuous cost improvement.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A retailer achieves a 98% fill rate. This means:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> 98% of products are in stock at all times</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> 98% of customer orders are fulfilled completely on the first shipment without backorders</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> 98% of suppliers deliver on time</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> 2% of orders are returned by customers</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Fill rate = % of orders filled completely on first shipment without backorders. A 98% fill rate means 2% of orders have at least one item backordered or unfilled at first shipment.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">A supply chain improvement reduces average inventory from €5M to €3M with no change in sales or net income. The financial impact is:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> No financial impact — inventory is just moved around</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Improved ROA (lower assets) and improved Cash-to-Cash Cycle Time (less cash tied up in inventory)</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Reduced gross margin due to lower inventory</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Increased COGS due to higher replenishment frequency</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Lower inventory = lower total assets → higher ROA (same net income, smaller asset base). Also improves C2C cycle time (less cash tied up in DIO). This is why supply chain efficiency has direct balance sheet impact.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">An aging inventory report showing 30% of stock is over 180 days old is most useful for identifying:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Supplier delivery performance issues</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Slow-moving or obsolete inventory at risk of write-down</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Transportation carrier performance</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Forecast accuracy by product family</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">An aging report highlights inventory that has been sitting for a long time — a sign of slow-moving or obsolete stock that may need to be discounted, written down, or disposed. Proactive action reduces the financial hit of inventory write-offs.</div></div></div>
+  </div>
+</div>
+<footer>2.3.2: Financial and Operational Metrics and Reports · Module 2 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>
