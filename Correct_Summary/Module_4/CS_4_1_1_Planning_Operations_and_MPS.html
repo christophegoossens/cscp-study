@@ -15,36 +15,31 @@
 <button onclick="showTab('quiz',this)">✅ Quiz (4 Q)</button>
 </nav>
 <div class="container">
-<div class="tab active" id="summary"><div class="block"><div class="block-title">Overview</div><div class="block-body"><ul><li>From a supply side, supply chain managers are most concerned with the sales and operations planning (S&amp;OP) process, because it is how they ensure that supply and demand are balanced so supply chain processes can be consistent.</li><li>However, it is important to place this process into its overall context, so this is presented first.</li><li>After that, a master scheduling tool called the master scheduling grid is presented, including a discussion of time fences.</li><li>The process can also be used for allocation of supply because a projected available balance and an available-to-promise amount can be determined.</li></ul>
-<h4>Planning Operations Road Map</h4>
-<p>The manufacturing planning and control process is used to plan operations. A high-level view of the process is shown in Exhibit 4-1.</p>
-<ul><li>The collaborative process of sales and operations planning is used to generate the production plan at the level of aggregate supply and demand.</li><li>It determines production volumes for product families rather than individual products.</li><li>This process reconciles the needs of demand (activities on the left side of the exhibit) with the needs of supply (the various levels of capacity checks on the right).</li></ul>
-<p>Master scheduling (MS) is then used to create a master production schedule (MPS) that will commit the company to produce specific products on particular dates. The master scheduling process, therefore, has to disaggregate the product family data into numbers of individual products based on inventory levels, forecasts, demand plans, order backlogs, orders from distribution centers (DCs) as part of distribution requirements planning (DRP), and other considerations used to decide what you need to produce and how much of each item to produce.</p>
-<p>Capacity issues can result in efforts to increase capacity to the degree feasible or in the master scheduler revising the plan if the load exceeds available capacity.</p>
-<p>The master scheduling process is typically facilitated by IT such as an enterprise resources planning (ERP) system, which creates a master scheduling grid for calculating production based on these data.</p>
-<h4>Master Scheduling</h4>
-<p>After the collaborative process of sales and operations planning creates a unified forecast, after input from partners using CPFR® or an equivalent, and after input from DRP and other actual demand sources such as direct customer orders, master scheduling (MS) creates a master production schedule that will commit the company to produce specific products on particular dates.</p>
+<div class="tab active" id="summary"><div class="block"><div class="block-title">Overview</div><div class="block-body">
+<p>The manufacturing planning hierarchy flows S&amp;OP → MPS → MRP, with a capacity check at each level. The MPS is the central link committing the company to specific production quantities by period.</p>
+<ul>
+<li>S&amp;OP: collaborative aggregate planning for product families; produces monthly production volumes</li>
+<li>MPS: disaggregates S&amp;OP product families into specific end-item quantities by week</li>
+<li>MPS = contract between sales and operations; sales gets delivery assurance, ops gets firm demand</li>
+<li>RCCP: validates MPS feasibility against critical resources before detailed CRP runs</li>
+<li>Time fences: protect schedule stability; late changes incur rescheduling, expediting, and overtime costs</li>
+<li>DRP: translates DC demand into factory MPS using time-phased netting (hybrid push-pull)</li>
+<li>MRP: uses MPS + BOM + inventory status to calculate component requirements</li>
+</ul>
 <div class="def-box">The ASCM Supply Chain Dictionary defines the master schedule as</div>
-<p>a format that includes time periods (dates), the forecast, customer orders, projected available balance, available-to-promise, and the master production schedule. It takes into account the forecast; the production plan; and other important considerations such as backlog, availability of material, availability of capacity, and management policies and goals.</p>
-<ul><li>While the planning so far has worked only with aggregate supply and demand for product families, the master scheduling process disaggregates the product family data into specific units of individual products.</li><li>Master scheduling considers current inventory levels, forecasts, demand plans, and order backlogs to decide how much of each item to produce.</li><li>Master scheduling also determines weekly production dates based on the monthly projections in the production plan.</li></ul>
 <div class="def-box">The ASCM Supply Chain Dictionary defines a master schedule item as</div>
-<p>a part number selected to be planned by the master scheduler. The item is deemed critical in its impact on lower-level components or resources such as skilled labor, key machines, or dollars. Therefore, the master scheduler, not the computer, maintains the plan for these items. A master schedule item may be an end-item, a component, a pseudo number, or a planning bill of material.</p>
-<p><em>Exhibit 4-2: Master Scheduling Grid</em></p>
-<h4>Purposes of the MPS</h4>
-<p><strong>By providing firm production dates and numbers, the MPS serves as a contract between sales and operations. Putting numbers to the mutual obligations implied by the MPS “contract” offers benefits to both sides:</strong></p>
-<ul><li>For the sales force, the MPS provides assurance that they may make delivery commitments to customers based on the amount of product that will be available week by week.</li><li>Besides disaggregating the product families, master scheduling also determines weekly production dates based on the monthly projections in the production plan. Exhibit 4-4 shows what might happen to monthly S&amp;OP numbers for a family of laser printers when the master scheduler disaggregates the projections into weekly production numbers for specific models.</li></ul>
-<p><em>Exhibit 4-4: Disaggregation of Operations Plan Numbers into Weekly MPS</em></p>
-<ul><li>Time fences can help balance the need for a production system to maintain schedules and control costs against the need for it to be flexible.</li><li>Costs for changes dramatically increase when nearing the final deadline of a time horizon.</li><li>Rescheduling, additional setups, rerouting, expediting, overtime, and disrupted schedules for other items can all be direct costs of late changes, not to mention the toll it takes on the perceived reliability of the master production schedule and on customer service.</li></ul>
-<p>a set of techniques that uses bill of material data, inventory data, and the master production schedule (MPS) to calculate requirements for materials.</p>
-<p>MRP plans all the orders that will get those materials to the right work centers or suppliers at the right times to get those blue jeans put together on the dates specified in the MPS.</p>
-<p>As you can see from Exhibit 4-6, inputs to MRP include the master production schedule, inventory status, planning factors, and bills of material.</p>
+<ul>
+<li>MPS inputs: forecasts, order backlogs, inventory levels, DRP planned orders, demand plans</li>
+<li>MPS outputs: projected available balance (PAB) and available-to-promise (ATP)</li>
+<li>MTO: customer backlog drives MPS; MTS: forecast drives MPS</li>
+<li>Typical MPS horizon: 3–6 months; can be revised as often as daily</li>
+</ul>
 <div class="def-box">The master production schedule lists planned or scheduled orders for end items—tables, computers, automobiles, finished clothing, etc. The ASCM Supply Chain Dictionary defines the following terms related to item orders.</div>
-<ul><li>Good supply chain planning contains numerous feedback loops so that one level of planning can test the assumptions of the previous level and ask for changes if the plan seems impracticable.</li><li>Regular S&amp;OP meetings are one place where feedback can be received and processed almost continuously.</li><li>The MRP is also subject to change when events such as changes in design or the master production schedule make alterations seem necessary.</li><li>The plan may be revised as often as daily to keep current with changing data.</li></ul>
-<p>Time fences in the master schedule are one way to ease the system nervousness. They designate cutoff when automatic rescheduling is not allowed even if changes are made to the MRP—unless an exception order receives specific authorization.</p>
-<p>It integrates long-term planning (business planning and methodologies that evolved into S&amp;OP) with operational planning.</p>
-<p>DRP system logic translates DC demand into forecasts for use in factory master scheduling. DRP logic typically uses time-phased netting of requirements (net requirements per period or bucket) rather than a decentralized order point (pull) system.</p>
-<p>Exhibit 4-12 illustrates DRP logic using distribution centers A and B, a central supply location, and a master schedule grid for a factory.</p>
-<ul><li>Planned order releases from DCs A and B are released to central supply according to each DC’s demand requirements and lead times.</li><li>In the exhibit, DC A and DC B release planned orders in week 6 for 400 and 500 units respectively.</li><li>Central supply has a three-week lead time, a projected available balance of 500 units, and a lot size (order quantity) of 600 units.</li><li>Therefore, to fill the planned order releases of 900 units, central supply releases a planned order for 600 units in week 3 (to account for the three-week lead time and lot size), which will leave a projected available balance of 200 units (equal to its safety stock requirement).</li><li>Central supply’s planned order release of 600 units becomes a gross requirement in the master schedule grid.</li><li>This allows the distribution centers’ time-phased requirements to be factored into the factory’s master production schedule.</li></ul></div></div></div>
+<ul>
+<li>S&amp;OP feedback loops: regular meetings allow near-continuous plan revision</li>
+<li>DRP: DC planned orders (time-phased) feed directly into the factory master schedule as gross requirements</li>
+</ul>
+</div></div></div>
 <div class="tab" id="flashcards">
 <div class="fc-bar"><button class="btn-prev" onclick="prevCard()">← Prev</button><button class="btn-next" onclick="nextCard()">Next →</button><button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button><span class="fc-counter" id="fcc">1 / 6</span></div>
 <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>

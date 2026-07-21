@@ -15,8 +15,18 @@
 <button onclick="showTab('quiz',this)">✅ Quiz (4 Q)</button>
 </nav>
 <div class="container">
-<div class="tab active" id="summary"><div class="block"><div class="block-title">Overview</div><div class="block-body"><ul><li>A scatter chart—also known as a cross plot, scatter diagram, or scatterplot—is a tool for showing the relationship of two variables in terms of whether they are interdependent and to what extent.</li><li>The diagram has a horizontal x axis and vertical y axis that represent the two variables being tested.</li><li>The y axis is typically for the dependent variable, that is, the one that changes in relation to variable x, which is called the independent variable.</li><li>The direction of the scattered points and their closeness to each other and an overall trend line indicate the type and strength of the correlation.</li></ul>
-<h4>Changeovers, Lead Time, and Lot Sizes</h4></div></div></div>
+<div class="tab active" id="summary"><div class="block"><div class="block-title">Overview</div><div class="block-body">
+<p>This section covers operational controls including scatter chart analysis and the relationship between changeovers, lead time, and lot sizing.</p>
+<ul>
+<li>Scatter chart (scatter diagram / cross plot): shows relationship between two variables</li>
+<li>X axis = independent variable; Y axis = dependent variable (changes in relation to x)</li>
+<li>Direction and closeness of plotted points indicate correlation type and strength</li>
+<li>Positive correlation: points trend upper-right; negative: upper-left; no correlation: scattered randomly</li>
+<li>Changeover time reduction directly enables smaller lot sizes</li>
+<li>Smaller lot sizes reduce WIP, shorten queues, and enable cellular manufacturing layouts</li>
+<li>Traceability: ability to track inventory by lot, batch, or serial number through the supply chain</li>
+</ul>
+</div></div></div>
 <div class="tab" id="flashcards">
 <div class="fc-bar"><button class="btn-prev" onclick="prevCard()">← Prev</button><button class="btn-next" onclick="nextCard()">Next →</button><button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button><span class="fc-counter" id="fcc">1 / 4</span></div>
 <div class="prog"><div class="prog-fill" id="prg" style="width:25%"></div></div>

@@ -15,13 +15,18 @@
 <button onclick="showTab('quiz',this)">✅ Quiz (4 Q)</button>
 </nav>
 <div class="container">
-<div class="tab active" id="summary"><div class="block"><div class="block-title">Overview</div><div class="block-body"><div class="def-box">Note that when a family of related items is released as if it were one item, it is considered a joint replenishment system. According to the ASCM Supply Chain Dictionary,joint replenishment is a process of</div>
-<ul><li>Lot-for-Lot or Fixed Order Quantity Replenishment</li></ul>
-<p>This very common replenishment strategy can increase centralized control by moving the point of push to pull down the chain or increase decentralized control by moving the point up the chain.</p>
-<ul><li>One way to carry out process mapping is to schedule it as a brainstorming session for the improvement team.</li><li>Using Post-it® Notes, each team member individually lists every task he or she can identify in the process, one per note.</li><li>After a half hour (or other appropriate time), team members stick the notes with the task listings on the chalkboard, one person at a time, while others continue thinking and writing.</li><li>When all tasks have been posted, individuals or teams attempt to group the tasks by themes and put the groups in the order of performance.</li><li>Next the group selects names for the themes, and a volunteer writes a final list of tasks, by theme, on a flip chart.</li><li>At the end of the session, the entire process should be mapped, with all essential tasks in order and associated with the names of performers and the time each takes.</li><li>What’s important to remember is that if you have used a tool that did not result in actionable information, you may need to try another for the same task.</li><li>However, if you think of your tools in these three categories it will be easier to determine which is the most appropriate.</li><li>It may be appropriate to use a few tools on the same issue to drill down to the details needed.</li></ul>
-<p>A Just-in-Time system functions properly when all of the parts that are made and supplied meet predetermined quality standards. Jidoka supports this through the detection of errors or defects during production.</p>
-<p>Eliminate adjustments. Documenting the proper adjustments for different materials helps eliminate wasteful trial and error, as adjustments are repeated until the machine produces an “in spec” product.</p>
-<h4>Drum/Buffer/Rope</h4></div></div></div>
+<div class="tab active" id="summary"><div class="block"><div class="block-title">Overview</div><div class="block-body">
+<p>Inventory replenishment strategies balance order frequency, lot sizing, and cost. Key methods include joint replenishment, lot-for-lot, and push-pull hybrids.</p>
+<div class="def-box">Note that when a family of related items is released as if it were one item, it is considered a joint replenishment system. According to the ASCM Supply Chain Dictionary,joint replenishment is a process of</div>
+<ul>
+<li>Joint replenishment: treat related item family as one order; lower ordering, setup, shipping, and discount costs</li>
+<li>Lot-for-lot: order exactly what is needed; default for dependent demand; no excess buffer</li>
+<li>FOQ (fixed order quantity): use when batch sizes are fixed (e.g., vat size); not flexible like lot-for-lot</li>
+<li>Push-pull hybrid: move point of push-to-pull up or down chain to adjust centralized vs. decentralized control</li>
+<li>Jidoka: production stops automatically on defect detection; prevents propagation of defective output</li>
+<li>Drum/Buffer/Rope (DBR): TOC scheduling method; drum = constraint rate; buffer = time buffer before constraint; rope = release timing signal</li>
+</ul>
+</div></div></div>
 <div class="tab" id="flashcards">
 <div class="fc-bar"><button class="btn-prev" onclick="prevCard()">← Prev</button><button class="btn-next" onclick="nextCard()">Next →</button><button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button><span class="fc-counter" id="fcc">1 / 4</span></div>
 <div class="prog"><div class="prog-fill" id="prg" style="width:25%"></div></div>
