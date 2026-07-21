@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 3 Quiz — Module 2: Global SC Networks</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f4f7fb;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;min-height:100vh}
+header{background:var(--blue);color:#fff;padding:22px 36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+header h1{font-size:1.4rem}
+header p{font-size:.85rem;opacity:.75;margin-top:3px}
+.badge{background:rgba(255,255,255,.18);padding:6px 16px;border-radius:20px;font-size:.9rem;font-weight:700;white-space:nowrap}
+.container{max-width:860px;margin:0 auto;padding:28px 18px}
+.quiz-meta{display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.meta-pill{background:var(--card);border-radius:8px;padding:10px 18px;font-size:.85rem;box-shadow:0 2px 6px rgba(0,0,0,.08);display:flex;align-items:center;gap:8px}
+.meta-pill strong{color:var(--accent)}
+.progress-wrap{background:var(--card);border-radius:10px;padding:16px 20px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07)}
+.progress-label{display:flex;justify-content:space-between;font-size:.83rem;color:#666;margin-bottom:8px}
+.progress-bar{height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:.4s}
+.score-summary{background:var(--card);border-radius:10px;padding:18px 22px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.score-num{font-size:1.6rem;font-weight:700;color:var(--accent)}
+.score-label{font-size:.85rem;color:#555}
+.btn-reset{background:#fee2e2;color:#991b1b;border:none;padding:9px 18px;border-radius:7px;font-size:.88rem;font-weight:600;cursor:pointer}
+.btn-reset:hover{background:#fecaca}
+.q-block{background:var(--card);border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:.2s}
+.q-block.answered{opacity:.92}
+.q-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.q-num-badge{background:var(--blue);color:#fff;border-radius:8px;padding:4px 10px;font-size:.8rem;font-weight:700;white-space:nowrap;margin-top:1px}
+.q-topic{font-size:.75rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.q-text{font-size:.94rem;font-weight:600;line-height:1.55;color:#1a1a2e}
+.q-scenario{background:#f0f7ff;border-left:4px solid var(--accent);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:14px;font-size:.87rem;line-height:1.5;color:#1e3a5f;font-style:italic}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.88rem;line-height:1.45;transition:.15s;user-select:none}
+.opt:hover:not(.correct):not(.wrong):not(.disabled){background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46;font-weight:500}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.opt.disabled{cursor:default}
+.opt-letter{background:#f3f4f6;color:#374151;border-radius:5px;padding:2px 7px;font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.opt.correct .opt-letter{background:#059669;color:#fff}
+.opt.wrong .opt-letter{background:#dc2626;color:#fff}
+.feedback{margin-top:14px;border-radius:8px;overflow:hidden;display:none}
+.fb-result{padding:8px 14px;font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:7px}
+.fb-correct{background:#d1fae5;color:#065f46}
+.fb-wrong{background:#fee2e2;color:#991b1b}
+.fb-exp{padding:10px 14px;font-size:.85rem;line-height:1.55;background:#f9fafb;border-top:1px solid #f0f0f0;color:#374151}
+.fb-exp strong{color:var(--blue)}
+.section-header{font-size:1rem;font-weight:700;color:var(--blue);margin:28px 0 12px;padding-left:12px;border-left:4px solid var(--orange)}
+footer{text-align:center;padding:30px;color:#9ca3af;font-size:.8rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../Topics/00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div>
+    <p>Day 3 End-of-Day Quiz · CSCP Exam Prep</p>
+    <h1>Module 2: Global Supply Chain Networks — IT, Technology &amp; Metrics</h1>
+  </div>
+  <div class="badge">25 Questions</div>
+</header>
+
+<div class="container">
+
+  <div class="quiz-meta">
+    <div class="meta-pill">📅 Day 3 — Wednesday 22 July 2026</div>
+    <div class="meta-pill">📖 Module 2 coverage: <strong>100%</strong></div>
+    <div class="meta-pill">🎯 Target score: <strong>80%+ (20/25)</strong></div>
+    <div class="meta-pill">⏱ Estimated: <strong>30–35 min</strong></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress</span><span id="prog-text">0 of 25 answered</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="score-summary">
+    <div><div class="score-num" id="score-num">0 / 25</div><div class="score-label">Current Score</div></div>
+    <button class="btn-reset" onclick="resetQuiz()">🔄 Reset Quiz</button>
+  </div>
+
+  <!-- SECTION 1: SC Strategy & IT Requirements -->
+  <div class="section-header">Section 1 · SC Strategy &amp; IT Requirements (Q1–Q6)</div>
+
+  <!-- Q1 -->
+  <div class="q-block" id="qb0">
+    <div class="q-header">
+      <span class="q-num-badge">Q1</span>
+      <div>
+        <div class="q-topic">Efficient vs. Responsive SC</div>
+        <div class="q-text">A furniture company sells a standard product catalogue with very stable, predictable demand and competes primarily on price. Which supply chain strategy is MOST appropriate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o0_0" onclick="pick(0,0,1)"><span class="opt-letter">A</span> Responsive supply chain — maintain high buffer inventory for fast replenishment</label>
+      <label class="opt" id="o0_1" onclick="pick(0,1,1)"><span class="opt-letter">B</span> Efficient supply chain — optimize for lowest total cost with lean inventory</label>
+      <label class="opt" id="o0_2" onclick="pick(0,2,1)"><span class="opt-letter">C</span> Resilient supply chain — invest in redundant suppliers and safety buffers</label>
+      <label class="opt" id="o0_3" onclick="pick(0,3,1)"><span class="opt-letter">D</span> Agile supply chain — use daily replenishment cycles and flexible capacity</label>
+    </div>
+    <div class="feedback" id="fb0">
+      <div class="fb-result" id="fbr0"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Stable, predictable demand + price competition = <em>Efficient supply chain</em>. Efficiency is achieved through high capacity utilization, lean inventory, minimal overhead, and standardized processes. Responsive SCs are for volatile demand. Resilient SCs protect against disruptions — but add cost that is not justified here.</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block" id="qb1">
+    <div class="q-header">
+      <span class="q-num-badge">Q2</span>
+      <div>
+        <div class="q-topic">Efficient vs. Responsive SC</div>
+        <div class="q-text">According to ASCM, the two key variables that differentiate an efficient supply chain from a responsive one are:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o1_0" onclick="pick(1,0,3)"><span class="opt-letter">A</span> Lead time and production capacity utilization</label>
+      <label class="opt" id="o1_1" onclick="pick(1,1,3)"><span class="opt-letter">B</span> Number of suppliers and number of warehouse locations</label>
+      <label class="opt" id="o1_2" onclick="pick(1,2,3)"><span class="opt-letter">C</span> Order frequency and batch size</label>
+      <label class="opt" id="o1_3" onclick="pick(1,3,3)"><span class="opt-letter">D</span> Inventory volume and demand uncertainty</label>
+    </div>
+    <div class="feedback" id="fb1">
+      <div class="fb-result" id="fbr1"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The two differentiating variables are: (1) <em>Inventory volume</em> — how much buffer is needed, and (2) <em>Demand uncertainty</em> — how predictable is demand? High certainty + low inventory needed → efficient. High uncertainty + high inventory buffer needed → responsive. Companies cannot maximize both simultaneously because the required design choices conflict.</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block" id="qb2">
+    <div class="q-header">
+      <span class="q-num-badge">Q3</span>
+      <div>
+        <div class="q-topic">SC Resilience</div>
+        <div class="q-text">A pharmaceutical company qualifies a second supplier for its most critical active ingredient and maintains a dedicated 90-day safety stock buffer at a separate warehouse to protect against disruptions. This investment is PRIMARILY in:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o2_0" onclick="pick(2,0,2)"><span class="opt-letter">A</span> Supply chain efficiency</label>
+      <label class="opt" id="o2_1" onclick="pick(2,1,2)"><span class="opt-letter">B</span> Supply chain responsiveness</label>
+      <label class="opt" id="o2_2" onclick="pick(2,2,2)"><span class="opt-letter">C</span> Supply chain resilience</label>
+      <label class="opt" id="o2_3" onclick="pick(2,3,2)"><span class="opt-letter">D</span> Lean supply chain design</label>
+    </div>
+    <div class="feedback" id="fb2">
+      <div class="fb-result" id="fbr2"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Resilience</em> is the third strategic dimension — the ability to withstand and recover from supply chain disruptions. It requires redundant capacity, diversified sourcing, and safety buffers. These add cost but reduce risk from disruptions (supplier failure, natural disasters, geopolitical events). Efficiency minimizes cost; responsiveness maximizes speed; resilience minimizes disruption risk.</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block" id="qb3">
+    <div class="q-header">
+      <span class="q-num-badge">Q4</span>
+      <div>
+        <div class="q-topic">Technology Analysis — BCA</div>
+        <div class="q-text">A company's benefit-cost analysis for a new Warehouse Management System (WMS) estimates total benefits of $800,000 and total costs (implementation, licensing, training, 3-year maintenance) of $1,000,000, yielding a Net Present Value of −$200,000. What should the company do?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o3_0" onclick="pick(3,0,0)"><span class="opt-letter">A</span> Reject or redesign the investment — a negative NPV means costs exceed benefits and value is destroyed</label>
+      <label class="opt" id="o3_1" onclick="pick(3,1,0)"><span class="opt-letter">B</span> Proceed immediately — intangible benefits not captured in the analysis will compensate</label>
+      <label class="opt" id="o3_2" onclick="pick(3,2,0)"><span class="opt-letter">C</span> Implement the WMS and revisit the ROI calculation after 12 months of use</label>
+      <label class="opt" id="o3_3" onclick="pick(3,3,0)"><span class="opt-letter">D</span> Proceed with a phased rollout to spread the cost over multiple years</label>
+    </div>
+    <div class="feedback" id="fb3">
+      <div class="fb-result" id="fbr3"></div>
+      <div class="fb-exp"><strong>Key point:</strong> A <em>negative NPV</em> means the investment destroys value — total costs exceed total benefits in present value terms. The correct decision is to reject or redesign. The company should look for ways to reduce implementation costs, expand the scope of captured benefits, phase the rollout, or find an alternative solution. Intangible benefits should have been included in the original analysis and do not justify proceeding when the quantified NPV is negative.</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block" id="qb4">
+    <div class="q-header">
+      <span class="q-num-badge">Q5</span>
+      <div>
+        <div class="q-topic">Technology Optimization</div>
+        <div class="q-text">A company spends €2.5M implementing an advanced ERP system. Eighteen months later, the planning team is still using spreadsheets because no user training was delivered and process redesign was skipped. This BEST illustrates the failure of:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o4_0" onclick="pick(4,0,1)"><span class="opt-letter">A</span> Technology analysis — the initial benefit-cost study was inadequate</label>
+      <label class="opt" id="o4_1" onclick="pick(4,1,1)"><span class="opt-letter">B</span> Technology optimization — the system was installed but not used to its full potential</label>
+      <label class="opt" id="o4_2" onclick="pick(4,2,1)"><span class="opt-letter">C</span> EDI integration — the ERP cannot connect to supplier systems</label>
+      <label class="opt" id="o4_3" onclick="pick(4,3,1)"><span class="opt-letter">D</span> Network architecture — the LAN infrastructure was not upgraded first</label>
+    </div>
+    <div class="feedback" id="fb4">
+      <div class="fb-result" id="fbr4"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Technology optimization</em> means ensuring installed technology is configured and used to its full potential. Installing software without process redesign and training = underutilization — the organization pays the full cost but captures only a fraction of the potential benefit. Many supply chain IT failures are optimization failures, not technology failures. The distinction: technology analysis evaluates whether to invest; technology optimization ensures the investment actually delivers value.</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block" id="qb5">
+    <div class="q-header">
+      <span class="q-num-badge">Q6</span>
+      <div>
+        <div class="q-topic">IT Benefits — Tangible vs. Intangible</div>
+        <div class="q-text">When building a business case for a supply chain IT investment, the recommended approach for estimating intangible benefits (e.g., improved decision speed, better supplier relationships) is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o5_0" onclick="pick(5,0,2)"><span class="opt-letter">A</span> Use only the project sponsor's estimate — they understand the system benefits best</label>
+      <label class="opt" id="o5_1" onclick="pick(5,1,2)"><span class="opt-letter">B</span> Exclude intangible benefits from the analysis — only use directly measurable financial figures</label>
+      <label class="opt" id="o5_2" onclick="pick(5,2,2)"><span class="opt-letter">C</span> Build a consensus estimate across multiple stakeholders to reduce individual bias</label>
+      <label class="opt" id="o5_3" onclick="pick(5,3,2)"><span class="opt-letter">D</span> Apply a standard multiplier of 1.5× to the tangible benefits as a proxy for intangibles</label>
+    </div>
+    <div class="feedback" id="fb5">
+      <div class="fb-result" id="fbr5"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Consensus-based estimation</em> reduces individual optimism bias — particularly from the project sponsor who is motivated to see the investment approved. Multiple stakeholder perspectives surface different risks and lead to more credible, balanced benefit estimates. This also increases organizational buy-in for the investment decision. The project sponsor's individual estimate is the MOST biased source because they have the strongest personal interest in approval.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: SC Technology Applications & Connectivity -->
+  <div class="section-header">Section 2 · SC Technology Applications &amp; Connectivity (Q7–Q13)</div>
+
+  <!-- Q7 -->
+  <div class="q-block" id="qb6">
+    <div class="q-header">
+      <span class="q-num-badge">Q7</span>
+      <div>
+        <div class="q-topic">SC Technology Systems</div>
+        <div class="q-text">A logistics manager wants to automate carrier selection for each outbound shipment, optimize truck loads for cost efficiency, audit freight invoices, and provide customers with real-time shipment tracking. Which system is specifically designed for these capabilities?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o6_0" onclick="pick(6,0,1)"><span class="opt-letter">A</span> ERP (Enterprise Resource Planning)</label>
+      <label class="opt" id="o6_1" onclick="pick(6,1,1)"><span class="opt-letter">B</span> TMS (Transportation Management System)</label>
+      <label class="opt" id="o6_2" onclick="pick(6,2,1)"><span class="opt-letter">C</span> WMS (Warehouse Management System)</label>
+      <label class="opt" id="o6_3" onclick="pick(6,3,1)"><span class="opt-letter">D</span> SRM (Supplier Relationship Management)</label>
+    </div>
+    <div class="feedback" id="fb6">
+      <div class="fb-result" id="fbr6"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>TMS (Transportation Management System)</em> manages transportation operations: carrier selection, load and route optimization, freight audit and payment, and shipment tracking. Distinguish from: WMS (warehouse operations — receiving, putaway, pick/pack/ship), ERP (enterprise-wide backbone), SRM (supplier performance and contracts). Each system has a distinct domain; best-in-class supply chains use all of them integrated.</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-block" id="qb7">
+    <div class="q-header">
+      <span class="q-num-badge">Q8</span>
+      <div>
+        <div class="q-topic">EDI</div>
+        <div class="q-text">A global retailer sends purchase orders, advance ship notices, and invoices electronically to 400 suppliers. Each document follows a standardized format (ANSI X12) that the suppliers' systems process automatically without manual re-entry. This B2B integration method is BEST described as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o7_0" onclick="pick(7,0,3)"><span class="opt-letter">A</span> API (Application Programming Interface) integration</label>
+      <label class="opt" id="o7_1" onclick="pick(7,1,3)"><span class="opt-letter">B</span> Cloud-based SaaS platform sharing</label>
+      <label class="opt" id="o7_2" onclick="pick(7,2,3)"><span class="opt-letter">C</span> Modular (best-of-breed) architecture</label>
+      <label class="opt" id="o7_3" onclick="pick(7,3,3)"><span class="opt-letter">D</span> EDI (Electronic Data Interchange)</label>
+    </div>
+    <div class="feedback" id="fb7">
+      <div class="fb-result" id="fbr7"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>EDI (Electronic Data Interchange)</em> is the structured electronic exchange of standard business documents (POs, invoices, ASNs) between trading partners using a standardized format (ANSI X12 in North America, EDIFACT internationally). EDI was the original B2B integration technology and remains dominant in retail, automotive, and healthcare. API integration is faster and more flexible but does not replace EDI where batch document exchange is the established standard.</div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-block" id="qb8">
+    <div class="q-header">
+      <span class="q-num-badge">Q9</span>
+      <div>
+        <div class="q-topic">APS vs. ERP</div>
+        <div class="q-text">A supply chain manager needs a system that simultaneously considers customer demand requirements AND available production capacity constraints to generate a feasible, optimized production and procurement schedule across multiple plants. Which system category is designed for this purpose?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o8_0" onclick="pick(8,0,0)"><span class="opt-letter">A</span> APS (Advanced Planning System)</label>
+      <label class="opt" id="o8_1" onclick="pick(8,1,0)"><span class="opt-letter">B</span> WMS (Warehouse Management System)</label>
+      <label class="opt" id="o8_2" onclick="pick(8,2,0)"><span class="opt-letter">C</span> CRM (Customer Relationship Management)</label>
+      <label class="opt" id="o8_3" onclick="pick(8,3,0)"><span class="opt-letter">D</span> DBMS (Database Management System)</label>
+    </div>
+    <div class="feedback" id="fb8">
+      <div class="fb-result" id="fbr8"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>APS (Advanced Planning System)</em> is constraint-based planning software — it simultaneously considers demand, supply, and capacity constraints to generate feasible plans. Standard ERP planning modules do not perform true constraint-based optimization. An APS handles demand planning, supply planning, and production scheduling together. It is more sophisticated than basic MRP/ERP because it accounts for real-world resource limitations rather than generating infinite-capacity plans.</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-block" id="qb9">
+    <div class="q-header">
+      <span class="q-num-badge">Q10</span>
+      <div>
+        <div class="q-topic">SC Technology Perspectives</div>
+        <div class="q-text">A supply chain technology architect describes the 'demand channel' component of the company's integrated system architecture. The PRIMARY role of the demand channel is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o9_0" onclick="pick(9,0,2)"><span class="opt-letter">A</span> Scheduling production orders and allocating plant capacity</label>
+      <label class="opt" id="o9_1" onclick="pick(9,1,2)"><span class="opt-letter">B</span> Managing warehouse receiving, putaway, and picking operations</label>
+      <label class="opt" id="o9_2" onclick="pick(9,2,2)"><span class="opt-letter">C</span> Collecting, analyzing, and disseminating market intelligence to supply chain planners</label>
+      <label class="opt" id="o9_3" onclick="pick(9,3,2)"><span class="opt-letter">D</span> Automating accounts payable processing with supplier invoice matching</label>
+    </div>
+    <div class="feedback" id="fb9">
+      <div class="fb-result" id="fbr9"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The three SC technology perspectives are: (1) <em>Process value supply chain</em> — the operational make/source/deliver chain; (2) <em>Value delivery supply chain</em> — how value and service are delivered to customers; (3) <em>Demand channel</em> — the information-gathering function that collects demand signals (POS data, orders, forecasts) from the market and feeds them to supply chain planners. Without an effective demand channel, the planning function is operating blind.</div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-block" id="qb10">
+    <div class="q-header">
+      <span class="q-num-badge">Q11</span>
+      <div>
+        <div class="q-topic">IS Architecture</div>
+        <div class="q-text">According to ASCM, an information system architecture is a model of how the organization operates regarding information. Which option correctly lists all four factors it considers?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o10_0" onclick="pick(10,0,1)"><span class="opt-letter">A</span> Hardware, software, networks, and database management systems</label>
+      <label class="opt" id="o10_1" onclick="pick(10,1,1)"><span class="opt-letter">B</span> Organizational functions, information requirements, data attributes, and information technologies</label>
+      <label class="opt" id="o10_2" onclick="pick(10,2,1)"><span class="opt-letter">C</span> ERP, WMS, TMS, and APS integration layers</label>
+      <label class="opt" id="o10_3" onclick="pick(10,3,1)"><span class="opt-letter">D</span> Suppliers, customers, products, and logistics service providers</label>
+    </div>
+    <div class="feedback" id="fb10">
+      <div class="fb-result" id="fbr10"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The ASCM definition of IS architecture considers four factors: (1) <em>Organizational functions</em> — what business processes exist; (2) <em>Information requirements</em> — what data each function needs; (3) <em>Data attributes</em> — the characteristics of that data (frequency, volume, format); (4) <em>Information technologies</em> — the systems that collect, store, and deliver it. This is a business-driven framework, not just a technology inventory — it starts with business need, then selects technology to match.</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-block" id="qb11">
+    <div class="q-header">
+      <span class="q-num-badge">Q12</span>
+      <div>
+        <div class="q-topic">SC Connectivity</div>
+        <div class="q-text">A company wants to view its key suppliers' inventory levels and production schedules in real time. Their IT team reports that no system-to-system connectivity exists between the company's ERP and the suppliers' systems. What is the PRIMARY operational consequence of this gap?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o11_0" onclick="pick(11,0,0)"><span class="opt-letter">A</span> Data must be collected and re-entered manually, introducing delay, errors, and excess cost</label>
+      <label class="opt" id="o11_1" onclick="pick(11,1,0)"><span class="opt-letter">B</span> The TMS will be unable to optimize carrier assignments for inbound freight</label>
+      <label class="opt" id="o11_2" onclick="pick(11,2,0)"><span class="opt-letter">C</span> The company's master data will become corrupted by incoming supplier data</label>
+      <label class="opt" id="o11_3" onclick="pick(11,3,0)"><span class="opt-letter">D</span> The ERP will automatically generate duplicate purchase orders</label>
+    </div>
+    <div class="feedback" id="fb11">
+      <div class="fb-result" id="fbr11"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Connectivity</em> is the foundation of supply chain visibility. Without system-to-system connectivity, partner data (inventory levels, production schedules, shipment status) must be collected via phone, email, or spreadsheets and re-entered manually. This introduces: (1) time delay — data is stale by the time it arrives; (2) errors — manual re-entry error rates; (3) cost — labor to collect and enter data. Connectivity eliminates all three problems simultaneously.</div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="q-block" id="qb12">
+    <div class="q-header">
+      <span class="q-num-badge">Q13</span>
+      <div>
+        <div class="q-topic">Data Sharing — Legal Risks</div>
+        <div class="q-text">Three competing food manufacturers agree to share current retail pricing data with each other as part of an industry supply chain benchmarking initiative. Which legal risk is MOST directly triggered by this arrangement?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o12_0" onclick="pick(12,0,2)"><span class="opt-letter">A</span> Data privacy violation (GDPR) — pricing data contains personal information</label>
+      <label class="opt" id="o12_1" onclick="pick(12,1,2)"><span class="opt-letter">B</span> Intellectual property exposure — retail pricing formulas are patentable</label>
+      <label class="opt" id="o12_2" onclick="pick(12,2,2)"><span class="opt-letter">C</span> Antitrust violations — sharing competitive pricing data between industry rivals can constitute price-fixing</label>
+      <label class="opt" id="o12_3" onclick="pick(12,3,2)"><span class="opt-letter">D</span> EDI non-compliance — the data format was not standardized</label>
+    </div>
+    <div class="feedback" id="fb12">
+      <div class="fb-result" id="fbr12"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Sharing <em>competitive pricing data</em> between direct competitors is a classic antitrust risk — it can constitute or facilitate price-fixing, which is illegal in most jurisdictions. The three legal risks of supply chain data sharing are: (1) <em>Data privacy</em> (GDPR/CCPA) — for personal data; (2) <em>Intellectual property</em> — sharing product specifications or formulas; (3) <em>Antitrust</em> — sharing competitive pricing or market-share data across industry rivals. Pricing data shared between competitors falls squarely into category 3.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Master Data & Data Governance -->
+  <div class="section-header">Section 3 · Master Data &amp; Data Governance (Q14–Q19)</div>
+
+  <!-- Q14 -->
+  <div class="q-block" id="qb13">
+    <div class="q-header">
+      <span class="q-num-badge">Q14</span>
+      <div>
+        <div class="q-topic">Master vs. Transactional Data</div>
+        <div class="q-text">Which of the following BEST distinguishes master data from transactional data in a supply chain context?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o13_0" onclick="pick(13,0,1)"><span class="opt-letter">A</span> Transactional data is stored in the cloud; master data is stored on-premise servers</label>
+      <label class="opt" id="o13_1" onclick="pick(13,1,1)"><span class="opt-letter">B</span> Master data is static reference data defining key entities (products, customers, suppliers), while transactional data captures business events that change constantly (orders, invoices, shipments)</label>
+      <label class="opt" id="o13_2" onclick="pick(13,2,1)"><span class="opt-letter">C</span> Master data is created by the IT department; transactional data is created by business users</label>
+      <label class="opt" id="o13_3" onclick="pick(13,3,1)"><span class="opt-letter">D</span> Transactional data is more accurate than master data because it is updated in real time</label>
+    </div>
+    <div class="feedback" id="fb13">
+      <div class="fb-result" id="fbr13"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Master data</em> = core, relatively static reference data (customer master, product master, supplier master, location master). It changes infrequently — a product's weight and unit of measure don't change with every order. <em>Transactional data</em> = dynamic event data that changes constantly — every purchase order, shipment, receipt, and invoice is a new transaction. The distinction matters because master data errors affect ALL transactions using that record, while transactional data errors affect only a single event.</div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="q-block" id="qb14">
+    <div class="q-header">
+      <span class="q-num-badge">Q15</span>
+      <div>
+        <div class="q-topic">Master Data Management</div>
+        <div class="q-text">Master Data Management (MDM) is BEST described as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o14_0" onclick="pick(14,0,3)"><span class="opt-letter">A</span> A warehouse inventory control system for tracking stock movements in real time</label>
+      <label class="opt" id="o14_1" onclick="pick(14,1,3)"><span class="opt-letter">B</span> A financial reporting standard for measuring supply chain cost-to-serve</label>
+      <label class="opt" id="o14_2" onclick="pick(14,2,3)"><span class="opt-letter">C</span> An ERP module that automates production scheduling based on BOMs and routings</label>
+      <label class="opt" id="o14_3" onclick="pick(14,3,3)"><span class="opt-letter">D</span> A discipline that coordinates the creating, updating, and archiving of core reference data to ensure accuracy, consistency, and availability across all systems</label>
+    </div>
+    <div class="feedback" id="fb14">
+      <div class="fb-result" id="fbr14"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>MDM (Master Data Management)</em> is a data governance discipline — not a specific software product. It governs master data throughout its entire life cycle: Plan → Create → Use → Maintain → Archive/Delete. Key MDM activities include: defining data ownership (data stewardship), establishing validation rules, deduplication, and ensuring the same customer, product, or supplier record is consistent across all systems (ERP, WMS, TMS, APS). Poor MDM is a leading cause of supply chain system failures.</div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="q-block" id="qb15">
+    <div class="q-header">
+      <span class="q-num-badge">Q16</span>
+      <div>
+        <div class="q-topic">Bill of Materials</div>
+        <div class="q-text">A Bill of Materials (BOM) is a supply chain master data file that specifies:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o15_0" onclick="pick(15,0,0)"><span class="opt-letter">A</span> The components and quantities required to produce one unit of each finished product</label>
+      <label class="opt" id="o15_1" onclick="pick(15,1,0)"><span class="opt-letter">B</span> The delivery schedule and order quantity for each customer shipment</label>
+      <label class="opt" id="o15_2" onclick="pick(15,2,0)"><span class="opt-letter">C</span> The financial payment terms negotiated with each key supplier</label>
+      <label class="opt" id="o15_3" onclick="pick(15,3,0)"><span class="opt-letter">D</span> The storage zone assignments and aisle locations within a distribution center</label>
+    </div>
+    <div class="feedback" id="fb15">
+      <div class="fb-result" id="fbr15"></div>
+      <div class="fb-exp"><strong>Key point:</strong> A <em>BOM (Bill of Materials)</em> is the product structure master — it lists every component (raw material, sub-assembly) and the exact quantity needed to produce one unit of a finished product. It is the critical link between demand planning (how many finished goods are needed) and material requirements planning (which components must be ordered/produced). An incorrect BOM directly causes production errors, material shortages, and costly rework. The BOM is one of the five critical master data files in supply chain.</div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="q-block" id="qb16">
+    <div class="q-header">
+      <span class="q-num-badge">Q17</span>
+      <div>
+        <div class="q-topic">Master Data Life Cycle</div>
+        <div class="q-text">During a post-merger ERP consolidation, the data governance team identifies 6,800 duplicate supplier records, multiple items with incorrect units of measure, and thousands of inactive customers who should be removed from the active supplier base. Resolving these issues falls under which stage of the master data life cycle?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o16_0" onclick="pick(16,0,2)"><span class="opt-letter">A</span> Plan — defining what master data is needed and who owns it</label>
+      <label class="opt" id="o16_1" onclick="pick(16,1,2)"><span class="opt-letter">B</span> Create — entering or loading master data with validation and approval workflows</label>
+      <label class="opt" id="o16_2" onclick="pick(16,2,2)"><span class="opt-letter">C</span> Maintain — ongoing cleansing, deduplication, correction, and security</label>
+      <label class="opt" id="o16_3" onclick="pick(16,3,2)"><span class="opt-letter">D</span> Archive — moving data that is no longer needed into long-term storage</label>
+    </div>
+    <div class="feedback" id="fb16">
+      <div class="fb-result" id="fbr16"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The five master data life cycle stages are: Plan → Create → Use → <em>Maintain</em> → Archive/Delete. <em>Maintain</em> = ongoing data stewardship: cleansing (removing errors), deduplication (merging duplicate records), validation (checking data quality), and security. Without active maintenance, master data quality degrades over time — duplicate records multiply, corrections never happen, and outdated records pile up. The distinction between Archive and Maintain: Archive is for data no longer in active use (historical); Maintain is for data still in active use.</div>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="q-block" id="qb17">
+    <div class="q-header">
+      <span class="q-num-badge">Q18</span>
+      <div>
+        <div class="q-topic">Master Data Quality Impact</div>
+        <div class="q-text">An item master record for a critical component shows a supplier lead time of 4 days. The actual supplier lead time is 14 days. The system uses this lead time to calculate planned order release dates. What is the MOST LIKELY operational consequence?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o17_0" onclick="pick(17,0,2)"><span class="opt-letter">A</span> The APS will refuse to generate a production schedule until the lead time is corrected</label>
+      <label class="opt" id="o17_1" onclick="pick(17,1,2)"><span class="opt-letter">B</span> The supplier will automatically update the lead time through EDI during the next transmission</label>
+      <label class="opt" id="o17_2" onclick="pick(17,2,2)"><span class="opt-letter">C</span> Purchase orders will be released too late, causing a 10-day supply gap, stockouts, and missed customer delivery commitments</label>
+      <label class="opt" id="o17_3" onclick="pick(17,3,2)"><span class="opt-letter">D</span> The financial system will flag a standard cost variance because the lead time is a costing parameter</label>
+    </div>
+    <div class="feedback" id="fb17">
+      <div class="fb-result" id="fbr17"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Lead time is a critical master data field — the planning system calculates order release dates by subtracting lead time from the required date. If the system thinks lead time is 4 days but it's actually 14, purchase orders will be released 10 days too late, creating a supply gap. This leads to stockouts, production stoppages, and missed customer deliveries. This is a systemic error — it affects every order for this component until the master data is corrected. Master data quality errors have supply chain-wide, recurring consequences.</div>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="q-block" id="qb18">
+    <div class="q-header">
+      <span class="q-num-badge">Q19</span>
+      <div>
+        <div class="q-topic">Master Data Governance Principles</div>
+        <div class="q-text">The MDM principle that "data collection should be driven by its expected USE" is specifically intended to prevent which problem?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o18_0" onclick="pick(18,0,3)"><span class="opt-letter">A</span> System downtime caused by excessively large database sizes</label>
+      <label class="opt" id="o18_1" onclick="pick(18,1,3)"><span class="opt-letter">B</span> Suppliers changing their own master data records without authorization</label>
+      <label class="opt" id="o18_2" onclick="pick(18,2,3)"><span class="opt-letter">C</span> Antitrust violations from sharing too much data with competitors</label>
+      <label class="opt" id="o18_3" onclick="pick(18,3,3)"><span class="opt-letter">D</span> Over-collecting unused data that creates unnecessary maintenance burden and compliance risk</label>
+    </div>
+    <div class="feedback" id="fb18">
+      <div class="fb-result" id="fbr18"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Collecting more data than you use creates two problems: (1) <em>Maintenance burden</em> — unused data fields still need to be kept accurate, secure, and current; (2) <em>Compliance risk</em> — under GDPR and similar regulations, organizations cannot hold personal data beyond what is necessary for the stated purpose (the "data minimization" principle). The MDM principle of "collect what you will use" keeps data governance manageable and keeps the organization compliant with privacy regulations.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Performance Metrics & SCOR -->
+  <div class="section-header">Section 4 · Performance Metrics &amp; SCOR (Q20–Q25)</div>
+
+  <!-- Q20 -->
+  <div class="q-block" id="qb19">
+    <div class="q-header">
+      <span class="q-num-badge">Q20</span>
+      <div>
+        <div class="q-topic">SCOR Performance Attributes</div>
+        <div class="q-text">The SCOR (Supply Chain Operations Reference) model organizes supply chain performance into five performance attributes. Which option correctly lists all five?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o19_0" onclick="pick(19,0,2)"><span class="opt-letter">A</span> Plan, Source, Make, Deliver, Return</label>
+      <label class="opt" id="o19_1" onclick="pick(19,1,2)"><span class="opt-letter">B</span> Quality, Cost, Delivery, Flexibility, and Safety</label>
+      <label class="opt" id="o19_2" onclick="pick(19,2,2)"><span class="opt-letter">C</span> Reliability, Responsiveness, Agility, Costs, and Asset Management</label>
+      <label class="opt" id="o19_3" onclick="pick(19,3,2)"><span class="opt-letter">D</span> Customer service, Financial efficiency, IT capability, Risk management, and Sustainability</label>
+    </div>
+    <div class="feedback" id="fb19">
+      <div class="fb-result" id="fbr19"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The SCOR model's five <em>performance attributes</em> are: (1) <em>Reliability</em> — right product, right place, right time, right condition (metric: Perfect Order Fulfillment); (2) <em>Responsiveness</em> — speed of fulfillment (metric: Order Fulfillment Cycle Time); (3) <em>Agility</em> — adaptability to market changes; (4) <em>Costs</em> — SC cost efficiency (metric: SC cost as % of revenue); (5) <em>Asset Management</em> — working capital efficiency (metric: Cash-to-Cash Cycle Time). Option A lists the six SCOR <em>processes</em> (Plan/Source/Make/Deliver/Return/Enable) — a common exam trap.</div>
+    </div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="q-block" id="qb20">
+    <div class="q-header">
+      <span class="q-num-badge">Q21</span>
+      <div>
+        <div class="q-topic">Perfect Order Fulfillment</div>
+        <div class="q-text">A customer receives an order that is delivered on time, contains the correct quantity of all items requested, and arrives in perfect condition — but the accompanying paperwork shows an incorrect purchase order number, causing a dispute in accounts payable. Under the Perfect Order Fulfillment metric, this order is classified as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o20_0" onclick="pick(20,0,1)"><span class="opt-letter">A</span> A perfect order — documentation errors are a finance issue, not a supply chain metric</label>
+      <label class="opt" id="o20_1" onclick="pick(20,1,1)"><span class="opt-letter">B</span> An imperfect order — incorrect documentation violates the 'correctly documented' criterion</label>
+      <label class="opt" id="o20_2" onclick="pick(20,2,1)"><span class="opt-letter">C</span> A perfect order — 3 of 4 criteria are met, which qualifies as a near-perfect order</label>
+      <label class="opt" id="o20_3" onclick="pick(20,3,1)"><span class="opt-letter">D</span> An imperfect order — the PO number error indicates a master data quality failure</label>
+    </div>
+    <div class="feedback" id="fb20">
+      <div class="fb-result" id="fbr20"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Perfect Order Fulfillment</em> is a strict composite metric — ALL four criteria must be met simultaneously: (1) Complete (correct quantity), (2) On time, (3) Damage-free, (4) Correctly documented (correct PO, invoice, ASN). Missing even ONE criterion makes the order imperfect. There is no "near-perfect" — it is binary. This is intentional: it gives a holistic view of supply chain reliability and prevents gaming the metric by optimizing only one component. Incorrect documentation causes real costs downstream (payment delays, disputes, returns).</div>
+    </div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="q-block" id="qb21">
+    <div class="q-header">
+      <span class="q-num-badge">Q22</span>
+      <div>
+        <div class="q-topic">Cash-to-Cash Cycle Time — Calculation</div>
+        <div class="q-text">A company reports the following working capital metrics: Days Inventory Outstanding (DIO) = 50 days, Days Sales Outstanding (DSO) = 35 days, Days Payable Outstanding (DPO) = 45 days. What is the Cash-to-Cash Cycle Time, and what does it indicate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o21_0" onclick="pick(21,0,1)"><span class="opt-letter">A</span> 130 days (50 + 35 + 45) — total days in the operating cycle</label>
+      <label class="opt" id="o21_1" onclick="pick(21,1,1)"><span class="opt-letter">B</span> 40 days (50 + 35 − 45) — the company has cash tied up in operations for 40 days</label>
+      <label class="opt" id="o21_2" onclick="pick(21,2,1)"><span class="opt-letter">C</span> 10 days (50 − 35 − 5) — minimal working capital requirement</label>
+      <label class="opt" id="o21_3" onclick="pick(21,3,1)"><span class="opt-letter">D</span> 85 days (50 + 35) — ignoring supplier payment terms</label>
+    </div>
+    <div class="feedback" id="fb21">
+      <div class="fb-result" id="fbr21"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> C2C = DIO + DSO − DPO = 50 + 35 − 45 = <strong>40 days</strong>. This means the company must finance 40 days of operations from its own cash — paying suppliers before it collects from customers. <em>Lower is better.</em> Ways to improve: reduce DIO (leaner inventory), reduce DSO (collect faster from customers), or increase DPO (negotiate longer payment terms with suppliers). A negative C2C (like Amazon's model) means customers pay before suppliers are paid — an extremely favorable working capital position.</div>
+    </div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="q-block" id="qb22">
+    <div class="q-header">
+      <span class="q-num-badge">Q23</span>
+      <div>
+        <div class="q-topic">Metrics Design Principles</div>
+        <div class="q-text">A warehouse manager establishes a KPI of "number of pallets shipped per hour" without any corresponding accuracy metric. Within three months, pickers dramatically increase their speed to hit the target, but order error rates climb from 1.2% to 6.8%, generating a surge in customer returns and complaints. This scenario BEST illustrates which measurement principle?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o22_0" onclick="pick(22,0,3)"><span class="opt-letter">A</span> The superiority of SCOR Level 3 operational diagnostic metrics over Level 1 strategic KPIs</label>
+      <label class="opt" id="o22_1" onclick="pick(22,1,3)"><span class="opt-letter">B</span> The importance of benchmarking actual performance against industry standards</label>
+      <label class="opt" id="o22_2" onclick="pick(22,2,3)"><span class="opt-letter">C</span> The need for supply chain metrics to be cross-functional rather than silo-specific</label>
+      <label class="opt" id="o22_3" onclick="pick(22,3,3)"><span class="opt-letter">D</span> "You get what you measure" — poorly designed metrics drive unintended and counterproductive behaviors</label>
+    </div>
+    <div class="feedback" id="fb22">
+      <div class="fb-result" id="fbr22"></div>
+      <div class="fb-exp"><strong>Key point:</strong> "You get what you measure" is the foundational principle of supply chain performance management. People optimize for whatever is measured — especially when metrics are tied to bonuses or evaluations. Measuring throughput alone without accuracy creates a perverse incentive. Well-designed metrics: (1) measure the RIGHT outcome (not just the easiest-to-count activity), (2) are balanced (speed AND accuracy, not just one), (3) cut across functions so departments can't optimize locally at the cost of global performance. This is why SCOR's Perfect Order Fulfillment combines multiple dimensions.</div>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="q-block" id="qb23">
+    <div class="q-header">
+      <span class="q-num-badge">Q24</span>
+      <div>
+        <div class="q-topic">Inventory Turns — Calculation</div>
+        <div class="q-text">A company reports annual COGS of €12 million and average inventory value of €2 million. What are the inventory turns and the approximate Days of Supply?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o23_0" onclick="pick(23,0,0)"><span class="opt-letter">A</span> 6 turns; approximately 61 days of supply</label>
+      <label class="opt" id="o23_1" onclick="pick(23,1,0)"><span class="opt-letter">B</span> 5 turns; approximately 73 days of supply</label>
+      <label class="opt" id="o23_2" onclick="pick(23,2,0)"><span class="opt-letter">C</span> 6 turns; approximately 45 days of supply</label>
+      <label class="opt" id="o23_3" onclick="pick(23,3,0)"><span class="opt-letter">D</span> 24 turns; approximately 15 days of supply</label>
+    </div>
+    <div class="feedback" id="fb23">
+      <div class="fb-result" id="fbr23"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> Inventory Turns = COGS ÷ Average Inventory = €12M ÷ €2M = <strong>6 turns</strong>. Days of Supply = 365 ÷ Inventory Turns = 365 ÷ 6 ≈ <strong>61 days</strong>. This means the company sells and replenishes its entire inventory 6 times per year and holds about 2 months of stock at any given time. Higher turns = more efficient use of working capital, lower holding costs. Too high turns = risk of stockouts. Note: Days of Supply can also be calculated as Average Inventory ÷ Average Daily COGS = €2M ÷ (€12M ÷ 365) ≈ 61 days.</div>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="q-block" id="qb24">
+    <div class="q-header">
+      <span class="q-num-badge">Q25</span>
+      <div>
+        <div class="q-topic">Integration — Financial Impact Scenario</div>
+        <div class="q-text">
+          <div style="background:#f0f7ff;border-left:4px solid #2e86de;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px;font-style:italic;font-size:.87rem;color:#1e3a5f">Scenario: GlobalParts Co. implements a supply chain improvement programme. Average inventory falls from €8M to €5M. The order-to-cash cycle shortens by 15 days. Order error rates drop by 30%, reducing returns. Net income holds at €2M, total assets were €20M (now €17M), and annual COGS remains €15M.</div>
+          Which combination of financial and operational metrics shows the MOST DIRECT improvement as a result of this programme?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o24_0" onclick="pick(24,0,2)"><span class="opt-letter">A</span> Gross margin percentage and standard cost variance</label>
+      <label class="opt" id="o24_1" onclick="pick(24,1,2)"><span class="opt-letter">B</span> Supplier scorecard ratings and fill rate</label>
+      <label class="opt" id="o24_2" onclick="pick(24,2,2)"><span class="opt-letter">C</span> ROA (higher — lower asset base), Cash-to-Cash Cycle Time (lower DIO), inventory turns (higher), and Perfect Order Fulfillment (fewer errors)</label>
+      <label class="opt" id="o24_3" onclick="pick(24,3,2)"><span class="opt-letter">D</span> Operating expenses per unit and COGS as a percentage of revenue</label>
+    </div>
+    <div class="feedback" id="fb24">
+      <div class="fb-result" id="fbr24"></div>
+      <div class="fb-exp"><strong>Key point:</strong> This scenario shows how supply chain improvements create multi-dimensional financial impact: (1) <em>ROA improves</em>: ROA = Net Income ÷ Total Assets = €2M ÷ €17M = 11.8% (vs. 10% before) — lower assets, same income; (2) <em>C2C improves</em>: DIO decreases because average inventory dropped €3M — less cash tied up; (3) <em>Inventory turns improve</em>: €15M COGS ÷ €5M inventory = 3 turns (vs. 1.9 before); (4) <em>Perfect Order Fulfillment improves</em>: 30% fewer errors = more orders meeting all four criteria. This is why supply chain excellence is a strategic financial lever — it simultaneously improves the P&L, balance sheet, and cash flow.</div>
+    </div>
+  </div>
+
+  <!-- Final Score -->
+  <div style="background:var(--card);border-radius:12px;padding:24px;margin-top:28px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center">
+    <div style="font-size:1rem;color:#555;margin-bottom:6px">Final Score</div>
+    <div style="font-size:2.4rem;font-weight:700;color:var(--accent)" id="final-score">0 / 25</div>
+    <div style="font-size:.9rem;color:#777;margin-top:4px" id="final-pct">Answer all questions to see your result</div>
+    <div style="margin-top:16px;font-size:.85rem;color:#555" id="final-msg"></div>
+  </div>
+
+</div>
+
+<footer>Day 3 Quiz · CSCP Exam Prep · Christophe Goossens · July 2026</footer>
+
+<script>
+const TOTAL = 25;
+const ANSWERS = [1,3,2,0,1,2,1,3,0,2,1,0,2,1,3,0,2,2,3,2,1,1,3,0,2];
+let answered = new Array(TOTAL).fill(false);
+let correct = new Array(TOTAL).fill(false);
+let score = 0;
+
+function pick(qIdx, optIdx, correctOpt) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const isCorrect = (optIdx === correctOpt);
+  if (isCorrect) { score++; correct[qIdx] = true; }
+
+  // Style chosen option
+  const chosen = document.getElementById('o' + qIdx + '_' + optIdx);
+  chosen.classList.add(isCorrect ? 'correct' : 'wrong');
+  chosen.classList.add('disabled');
+
+  // If wrong, reveal the correct option
+  if (!isCorrect) {
+    const corEl = document.getElementById('o' + qIdx + '_' + correctOpt);
+    corEl.classList.add('correct');
+  }
+
+  // Disable all options
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById('o' + qIdx + '_' + i);
+    if (el) el.classList.add('disabled');
+  }
+
+  // Show feedback
+  const fb = document.getElementById('fb' + qIdx);
+  const fbr = document.getElementById('fbr' + qIdx);
+  fb.style.display = 'block';
+  fbr.textContent = isCorrect ? '✅ Correct!' : '❌ Incorrect';
+  fbr.className = 'fb-result ' + (isCorrect ? 'fb-correct' : 'fb-wrong');
+
+  updateUI();
+}
+
+function updateUI() {
+  const answeredCount = answered.filter(Boolean).length;
+  const pct = Math.round(answeredCount / TOTAL * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = answeredCount + ' of ' + TOTAL + ' answered';
+  document.getElementById('score-num').textContent = score + ' / ' + TOTAL;
+  document.getElementById('final-score').textContent = score + ' / ' + TOTAL;
+
+  if (answeredCount === TOTAL) {
+    const scorePct = Math.round(score / TOTAL * 100);
+    document.getElementById('final-pct').textContent = scorePct + '% (' + (scorePct >= 80 ? 'Target reached! ✅' : 'Below 80% target — review missed questions') + ')';
+    let msg = '';
+    if (scorePct >= 92) msg = '🏆 Outstanding! You have strong command of Module 2 material.';
+    else if (scorePct >= 80) msg = '✅ Good work! Focus on the questions you missed before Day 4.';
+    else if (scorePct >= 64) msg = '⚠️ Review the sections where you struggled before moving on.';
+    else msg = '🔄 Consider re-reading Module 2 topics and retaking this quiz before Day 4.';
+    document.getElementById('final-msg').textContent = msg;
+  } else {
+    document.getElementById('final-pct').textContent = 'Answer all questions to see your result';
+  }
+}
+
+function resetQuiz() {
+  answered = new Array(TOTAL).fill(false);
+  correct = new Array(TOTAL).fill(false);
+  score = 0;
+  for (let q = 0; q < TOTAL; q++) {
+    for (let o = 0; o < 4; o++) {
+      const el = document.getElementById('o' + q + '_' + o);
+      if (el) { el.className = 'opt'; const inp = el.querySelector('input'); if(inp) inp.checked=false; }
+    }
+    const fb = document.getElementById('fb' + q);
+    if (fb) fb.style.display = 'none';
+  }
+  updateUI();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+updateUI();
+</script>
+</body>
+</html>

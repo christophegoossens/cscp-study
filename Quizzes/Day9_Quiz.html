@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 9 Quiz — Quality Tools, CI Methods &amp; Module 5 Start</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f4f7fb;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;min-height:100vh}
+header{background:var(--blue);color:#fff;padding:22px 36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+header h1{font-size:1.4rem}
+header p{font-size:.85rem;opacity:.75;margin-top:3px}
+.badge{background:rgba(255,255,255,.18);padding:6px 16px;border-radius:20px;font-size:.9rem;font-weight:700;white-space:nowrap}
+.container{max-width:860px;margin:0 auto;padding:28px 18px}
+.quiz-meta{display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.meta-pill{background:var(--card);border-radius:8px;padding:10px 18px;font-size:.85rem;box-shadow:0 2px 6px rgba(0,0,0,.08);display:flex;align-items:center;gap:8px}
+.meta-pill strong{color:var(--accent)}
+.progress-wrap{background:var(--card);border-radius:10px;padding:16px 20px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07)}
+.progress-label{display:flex;justify-content:space-between;font-size:.83rem;color:#666;margin-bottom:8px}
+.progress-bar{height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:.4s}
+.score-summary{background:var(--card);border-radius:10px;padding:18px 22px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.score-num{font-size:1.6rem;font-weight:700;color:var(--accent)}
+.score-label{font-size:.85rem;color:#555}
+.btn-reset{background:#fee2e2;color:#991b1b;border:none;padding:9px 18px;border-radius:7px;font-size:.88rem;font-weight:600;cursor:pointer}
+.btn-reset:hover{background:#fecaca}
+.q-block{background:var(--card);border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:.2s}
+.q-block.answered{opacity:.92}
+.q-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.q-num-badge{background:var(--blue);color:#fff;border-radius:8px;padding:4px 10px;font-size:.8rem;font-weight:700;white-space:nowrap;margin-top:1px}
+.q-topic{font-size:.75rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.q-text{font-size:.94rem;font-weight:600;line-height:1.55;color:#1a1a2e}
+.q-scenario{background:#f0f7ff;border-left:4px solid var(--accent);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:14px;font-size:.87rem;line-height:1.5;color:#1e3a5f;font-style:italic}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.88rem;line-height:1.45;transition:.15s;user-select:none}
+.opt:hover:not(.correct):not(.wrong):not(.disabled){background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46;font-weight:500}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.opt.disabled{cursor:default}
+.opt-letter{background:#f3f4f6;color:#374151;border-radius:5px;padding:2px 7px;font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.opt.correct .opt-letter{background:#059669;color:#fff}
+.opt.wrong .opt-letter{background:#dc2626;color:#fff}
+.feedback{margin-top:14px;border-radius:8px;overflow:hidden;display:none}
+.fb-result{padding:8px 14px;font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:7px}
+.fb-correct{background:#d1fae5;color:#065f46}
+.fb-wrong{background:#fee2e2;color:#991b1b}
+.fb-exp{padding:10px 14px;font-size:.85rem;line-height:1.55;background:#f9fafb;border-top:1px solid #f0f0f0;color:#374151}
+.fb-exp strong{color:var(--blue)}
+.section-header{font-size:1rem;font-weight:700;color:var(--blue);margin:28px 0 12px;padding-left:12px;border-left:4px solid var(--orange)}
+footer{text-align:center;padding:30px;color:#9ca3af;font-size:.8rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../Topics/00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div>
+    <p>Day 9 End-of-Day Quiz · CSCP Exam Prep</p>
+    <h1>Quality Tools, CI Methods &amp; Module 5 Start</h1>
+  </div>
+  <div class="badge">25 Questions</div>
+</header>
+
+<div class="container">
+
+  <div class="quiz-meta">
+    <div class="meta-pill">📅 Day 9 — Tuesday 28 July 2026</div>
+    <div class="meta-pill">📖 Module 4 Part 2 + Module 5 Start</div>
+    <div class="meta-pill">🎯 Target score: <strong>80%+ (20/25)</strong></div>
+    <div class="meta-pill">⏱ Estimated: <strong>30–35 min</strong></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress</span><span id="prog-text">0 of 25 answered</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="score-summary">
+    <div><div class="score-num" id="score-num">0 / 25</div><div class="score-label">Current Score</div></div>
+    <button class="btn-reset" onclick="resetQuiz()">🔄 Reset Quiz</button>
+  </div>
+
+  <!-- SECTION 1: Quality Tools -->
+  <div class="section-header">Section 1 · Quality Tools &amp; SPC (Q1–Q4)</div>
+
+  <!-- Q1 -->
+  <div class="q-block" id="qb0">
+    <div class="q-header">
+      <span class="q-num-badge">Q1</span>
+      <div>
+        <div class="q-topic">Quality Tools</div>
+        <div class="q-text">Which of the 7 basic quality tools (Ishikawa's toolkit) is MOST appropriate for detecting whether a manufacturing process is producing variation due to common causes or special causes?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o0_0" onclick="pick(0,0,2)"><span class="opt-letter">A</span> Pareto chart</label>
+      <label class="opt" id="o0_1" onclick="pick(0,1,2)"><span class="opt-letter">B</span> Scatter diagram</label>
+      <label class="opt" id="o0_2" onclick="pick(0,2,2)"><span class="opt-letter">C</span> Control chart</label>
+      <label class="opt" id="o0_3" onclick="pick(0,3,2)"><span class="opt-letter">D</span> Histogram</label>
+    </div>
+    <div class="feedback" id="fb0">
+      <div class="fb-result" id="fbr0"></div>
+      <div class="fb-exp"><strong>Key point:</strong> A <em>control chart</em> plots process measurements over time with Upper Control Limit (UCL) and Lower Control Limit (LCL). Points within the limits in a random pattern = common cause variation (process is "in control"). A point outside UCL/LCL or a non-random pattern = special cause present. The other options cannot distinguish between these two types of variation — they reveal distribution shape (histogram), priorities (Pareto), or correlation (scatter).</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block" id="qb1">
+    <div class="q-header">
+      <span class="q-num-badge">Q2</span>
+      <div>
+        <div class="q-topic">Quality Tools</div>
+        <div class="q-text">A quality manager wants to identify which 3 defect types account for the majority of customer returns so improvement resources can be focused most effectively. Which quality tool is BEST suited?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o1_0" onclick="pick(1,0,1)"><span class="opt-letter">A</span> Control chart</label>
+      <label class="opt" id="o1_1" onclick="pick(1,1,1)"><span class="opt-letter">B</span> Pareto chart</label>
+      <label class="opt" id="o1_2" onclick="pick(1,2,1)"><span class="opt-letter">C</span> Fishbone diagram</label>
+      <label class="opt" id="o1_3" onclick="pick(1,3,1)"><span class="opt-letter">D</span> Check sheet</label>
+    </div>
+    <div class="feedback" id="fb1">
+      <div class="fb-result" id="fbr1"></div>
+      <div class="fb-exp"><strong>Key point:</strong> A <em>Pareto chart</em> ranks defect types from most to least frequent, with a cumulative percentage line — directly visualizing the 80/20 rule (80% of problems come from 20% of causes). It tells management exactly where to focus improvement effort for maximum return. The fishbone diagram helps find causes AFTER priorities are set; the check sheet collects raw data; the control chart monitors over time.</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block" id="qb2">
+    <div class="q-header">
+      <span class="q-num-badge">Q3</span>
+      <div>
+        <div class="q-topic">Quality Tools / Root Cause Analysis</div>
+        <div class="q-text">A production team is investigating why a CNC machine intermittently produces parts that are 0.3mm oversized. They want to brainstorm and organize ALL possible root causes by category before investigating further. Which tool should they use?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o2_0" onclick="pick(2,0,3)"><span class="opt-letter">A</span> Histogram</label>
+      <label class="opt" id="o2_1" onclick="pick(2,1,3)"><span class="opt-letter">B</span> Scatter diagram</label>
+      <label class="opt" id="o2_2" onclick="pick(2,2,3)"><span class="opt-letter">C</span> Control chart</label>
+      <label class="opt" id="o2_3" onclick="pick(2,3,3)"><span class="opt-letter">D</span> Cause-and-effect (fishbone / Ishikawa) diagram</label>
+    </div>
+    <div class="feedback" id="fb2">
+      <div class="fb-result" id="fbr2"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The <em>fishbone (Ishikawa) diagram</em> is specifically designed for brainstorming and organizing potential causes of a problem. It structures causes by the 6 M categories: Man, Machine, Method, Material, Measurement, Mother Nature. This structured approach prevents teams from fixating on the most obvious cause while missing others. Once the fishbone is built, the team can prioritize which branches to investigate — often using the 5 Whys.</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block" id="qb3">
+    <div class="q-header">
+      <span class="q-num-badge">Q4</span>
+      <div>
+        <div class="q-topic">Statistical Process Control</div>
+        <div class="q-text">A process has a capability index of Cp = 1.05. What does this indicate, and what action is warranted?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o3_0" onclick="pick(3,0,2)"><span class="opt-letter">A</span> The process is highly capable — a Cp above 1.0 guarantees zero defects</label>
+      <label class="opt" id="o3_1" onclick="pick(3,1,2)"><span class="opt-letter">B</span> The process is perfectly centered and no action is needed</label>
+      <label class="opt" id="o3_2" onclick="pick(3,2,2)"><span class="opt-letter">C</span> The process barely exceeds minimum capability — improvement is warranted since Cp ≥ 1.33 is generally required for capable processes</label>
+      <label class="opt" id="o3_3" onclick="pick(3,3,2)"><span class="opt-letter">D</span> The process is out of statistical control and must be shut down immediately</label>
+    </div>
+    <div class="feedback" id="fb3">
+      <div class="fb-result" id="fbr3"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Cp measures the ratio of the specification width to the process spread. Cp = 1.0 means the process just fits within specifications — any shift in the mean will produce defects. The industry standard for a capable process is <em>Cp ≥ 1.33</em> (sometimes 1.67 for critical processes). Cp = 1.05 is marginally capable — the process is not out of control (that's determined by control charts), but it lacks the cushion needed for sustained quality. Note: Cp does not account for process centering — Cpk does.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Continuous Improvement Methods -->
+  <div class="section-header">Section 2 · Continuous Improvement: Lean, Six Sigma &amp; TOC (Q5–Q8)</div>
+
+  <!-- Q5 -->
+  <div class="q-block" id="qb4">
+    <div class="q-header">
+      <span class="q-num-badge">Q5</span>
+      <div>
+        <div class="q-topic">Theory of Constraints</div>
+        <div class="q-text">According to the Theory of Constraints 5 Focusing Steps, AFTER identifying the system constraint, the NEXT immediate step is to:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o4_0" onclick="pick(4,0,1)"><span class="opt-letter">A</span> Invest in new equipment or additional shifts to increase the constraint's capacity</label>
+      <label class="opt" id="o4_1" onclick="pick(4,1,1)"><span class="opt-letter">B</span> Exploit the constraint — squeeze maximum output from it using current resources before spending any money</label>
+      <label class="opt" id="o4_2" onclick="pick(4,2,1)"><span class="opt-letter">C</span> Subordinate all other processes to operate at the constraint's pace</label>
+      <label class="opt" id="o4_3" onclick="pick(4,3,1)"><span class="opt-letter">D</span> Elevate the constraint by outsourcing the bottleneck operation</label>
+    </div>
+    <div class="feedback" id="fb4">
+      <div class="fb-result" id="fbr4"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The 5 Focusing Steps in order: (1) <strong>Identify</strong> the constraint → (2) <strong>Exploit</strong> it (maximize its output with what you already have — reduce downtime, eliminate waste at the bottleneck, improve scheduling) → (3) <strong>Subordinate</strong> everything else (all other stations exist to feed and protect the constraint) → (4) <strong>Elevate</strong> (invest capital to increase constraint capacity if still limiting) → (5) <strong>Repeat</strong>. The exam frequently tests the ORDER of these steps. "Exploit before elevate" is the key principle — never spend money until you've maximized current resources.</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block" id="qb5">
+    <div class="q-header">
+      <span class="q-num-badge">Q6</span>
+      <div>
+        <div class="q-topic">Six Sigma / DMAIC</div>
+        <div class="q-text">A Six Sigma project team has just completed a root cause analysis revealing that 78% of product defects are caused by three specific variables in the curing process. They are currently in which DMAIC phase?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o5_0" onclick="pick(5,0,3)"><span class="opt-letter">A</span> Define</label>
+      <label class="opt" id="o5_1" onclick="pick(5,1,3)"><span class="opt-letter">B</span> Control</label>
+      <label class="opt" id="o5_2" onclick="pick(5,2,3)"><span class="opt-letter">C</span> Improve</label>
+      <label class="opt" id="o5_3" onclick="pick(5,3,3)"><span class="opt-letter">D</span> Analyze</label>
+    </div>
+    <div class="feedback" id="fb5">
+      <div class="fb-result" id="fbr5"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Analyze</em> is where the team uses data, fishbone diagrams, regression, and hypothesis testing to find the <em>root causes</em> of defects and variation. The sequence: Define (scope and VOC) → Measure (baseline data) → <strong>Analyze (root causes)</strong> → Improve (solutions) → Control (sustain). If the team has already identified WHICH variables cause most defects, they are finishing the Analyze phase and about to enter Improve. A common exam trap: "implementing solutions" = Improve; "finding what causes defects" = Analyze.</div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-block" id="qb6">
+    <div class="q-header">
+      <span class="q-num-badge">Q7</span>
+      <div>
+        <div class="q-topic">Lean Manufacturing / Takt Time</div>
+        <div class="q-text">A factory operates two shifts of 7.5 hours each per day and must produce 360 units to meet customer demand. What is the takt time?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o6_0" onclick="pick(6,0,1)"><span class="opt-letter">A</span> 2.0 minutes per unit</label>
+      <label class="opt" id="o6_1" onclick="pick(6,1,1)"><span class="opt-letter">B</span> 2.5 minutes per unit</label>
+      <label class="opt" id="o6_2" onclick="pick(6,2,1)"><span class="opt-letter">C</span> 3.0 minutes per unit</label>
+      <label class="opt" id="o6_3" onclick="pick(6,3,1)"><span class="opt-letter">D</span> 5.0 minutes per unit</label>
+    </div>
+    <div class="feedback" id="fb6">
+      <div class="fb-result" id="fbr6"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> Takt Time = Available Production Time ÷ Customer Demand Rate. Available time = 2 shifts × 7.5 hours × 60 min = 900 minutes. Takt Time = 900 ÷ 360 = <strong>2.5 minutes per unit</strong>. This means one unit must exit the production line every 2.5 minutes to exactly match customer demand. Any workstation with a cycle time longer than 2.5 minutes is a bottleneck. Takt time sets the production "heartbeat" — neither faster (overproduction waste) nor slower (missed demand).</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-block" id="qb7">
+    <div class="q-header">
+      <span class="q-num-badge">Q8</span>
+      <div>
+        <div class="q-topic">Lean vs. Six Sigma</div>
+        <div class="q-text">Which statement BEST distinguishes Lean manufacturing from Six Sigma?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o7_0" onclick="pick(7,0,1)"><span class="opt-letter">A</span> Lean uses belt certification (Green Belt, Black Belt); Six Sigma does not require certification</label>
+      <label class="opt" id="o7_1" onclick="pick(7,1,1)"><span class="opt-letter">B</span> Lean focuses on eliminating waste and improving flow (speed); Six Sigma focuses on reducing variation and defects (quality)</label>
+      <label class="opt" id="o7_2" onclick="pick(7,2,1)"><span class="opt-letter">C</span> Six Sigma originated in Japan as part of the Toyota Production System; Lean was developed at Motorola</label>
+      <label class="opt" id="o7_3" onclick="pick(7,3,1)"><span class="opt-letter">D</span> Lean requires advanced statistical analysis of process data; Six Sigma relies on kaizen events</label>
+    </div>
+    <div class="feedback" id="fb7">
+      <div class="fb-result" id="fbr7"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Lean</em> (from Toyota Production System) targets <strong>waste and speed</strong> — removing non-value-added activities to make processes flow faster. <em>Six Sigma</em> (developed at Motorola/GE) targets <strong>variation and defects</strong> — using statistical tools to make processes more consistent. Option A has the certifications backwards (Six Sigma uses belt certifications). Option C has the origins reversed. <em>Lean Six Sigma</em> integrates both: faster AND more consistent. Both apply across manufacturing and service industries.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Logistics Foundations & Warehousing -->
+  <div class="section-header">Section 3 · Logistics Foundations &amp; Warehousing (Q9–Q17)</div>
+
+  <!-- Q9 -->
+  <div class="q-block" id="qb8">
+    <div class="q-header">
+      <span class="q-num-badge">Q9</span>
+      <div>
+        <div class="q-topic">Logistics Fundamentals</div>
+        <div class="q-text">Which element of the CSCMP definition of logistics distinguishes it from a simple "forward movement of goods" definition?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o8_0" onclick="pick(8,0,2)"><span class="opt-letter">A</span> Its exclusive emphasis on minimizing transportation cost at all times</label>
+      <label class="opt" id="o8_1" onclick="pick(8,1,2)"><span class="opt-letter">B</span> Its focus on inbound materials management only</label>
+      <label class="opt" id="o8_2" onclick="pick(8,2,2)"><span class="opt-letter">C</span> Explicit inclusion of both forward AND reverse flow — encompassing returns, recycling, recalls, and remanufacturing</label>
+      <label class="opt" id="o8_3" onclick="pick(8,3,2)"><span class="opt-letter">D</span> The requirement to use third-party logistics providers for all logistics functions</label>
+    </div>
+    <div class="feedback" id="fb8">
+      <div class="fb-result" id="fbr8"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The CSCMP definition is: "the planning, implementation, and control of the efficient, effective <em>forward and reverse flow</em> and storage of goods, services, and related information between the point of origin and the point of consumption to meet customer requirements." The <em>reverse flow</em> component covers reverse logistics: customer returns, product recalls, end-of-life recycling, warranty repairs, and remanufacturing. With e-commerce return rates of 20–30%, reverse logistics is a major operational challenge — not an afterthought.</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-block" id="qb9">
+    <div class="q-header">
+      <span class="q-num-badge">Q10</span>
+      <div>
+        <div class="q-topic">Total Logistics Cost</div>
+        <div class="q-text">A company is considering switching from a slow, inexpensive ocean carrier to a faster, more expensive air freight option. Under a total logistics cost framework, this change is financially justified when:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o9_0" onclick="pick(9,0,2)"><span class="opt-letter">A</span> The marketing department requests faster delivery as a competitive feature</label>
+      <label class="opt" id="o9_1" onclick="pick(9,1,2)"><span class="opt-letter">B</span> The new carrier offers superior shipment tracking technology</label>
+      <label class="opt" id="o9_2" onclick="pick(9,2,2)"><span class="opt-letter">C</span> The resulting reduction in inventory carrying costs (and safety stock) exceeds the increase in transportation costs</label>
+      <label class="opt" id="o9_3" onclick="pick(9,3,2)"><span class="opt-letter">D</span> The new carrier provides higher cargo liability coverage</label>
+    </div>
+    <div class="feedback" id="fb9">
+      <div class="fb-result" id="fbr9"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Total logistics cost (TLC)</em> = transportation + warehousing + inventory carrying + order processing + packaging + administration. The key principle: optimize the TOTAL, not each component independently. Faster transport reduces lead time → less safety stock needed → lower inventory carrying costs. If the inventory savings exceed the transport premium, the switch lowers TOTAL cost even though the transport line item goes up. This trade-off thinking is a core CSCP exam concept.</div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-block" id="qb10">
+    <div class="q-header">
+      <span class="q-num-badge">Q11</span>
+      <div>
+        <div class="q-topic">Logistics Activities</div>
+        <div class="q-text">According to the logistics activity classification, which of the following is a PRIMARY logistics activity (one that directly creates time and place utility)?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o10_0" onclick="pick(10,0,3)"><span class="opt-letter">A</span> Packaging</label>
+      <label class="opt" id="o10_1" onclick="pick(10,1,3)"><span class="opt-letter">B</span> Materials handling</label>
+      <label class="opt" id="o10_2" onclick="pick(10,2,3)"><span class="opt-letter">C</span> Warehousing</label>
+      <label class="opt" id="o10_3" onclick="pick(10,3,3)"><span class="opt-letter">D</span> Transportation</label>
+    </div>
+    <div class="feedback" id="fb10">
+      <div class="fb-result" id="fbr10"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Primary logistics activities</em> directly create time and place value: (1) Transportation, (2) Inventory management, (3) Order processing. <em>Secondary (supporting) activities</em> enable the primary ones: warehousing, materials handling, packaging, procurement, and logistics information systems (WMS, TMS). This is a commonly tested classification — particularly the surprising fact that warehousing is classified as SECONDARY, supporting storage and flow but not directly creating customer value in the way transportation does.</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-block" id="qb11">
+    <div class="q-header">
+      <span class="q-num-badge">Q12</span>
+      <div>
+        <div class="q-topic">Logistics Network / Cross-Docking</div>
+        <div class="q-text">Cross-docking is MOST beneficial and operationally feasible for which type of product and supply chain situation?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o11_0" onclick="pick(11,0,1)"><span class="opt-letter">A</span> Slow-moving, high-value specialty items requiring secure long-term storage</label>
+      <label class="opt" id="o11_1" onclick="pick(11,1,1)"><span class="opt-letter">B</span> Fast-moving consumer goods where supplier deliveries can be synchronized with outbound customer demand</label>
+      <label class="opt" id="o11_2" onclick="pick(11,2,1)"><span class="opt-letter">C</span> Products requiring extensive value-added services (kitting, labeling, customization) before shipment</label>
+      <label class="opt" id="o11_3" onclick="pick(11,3,1)"><span class="opt-letter">D</span> Items with unpredictable demand that need significant safety stock buffering</label>
+    </div>
+    <div class="feedback" id="fb11">
+      <div class="fb-result" id="fbr11"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Cross-docking requires tight supply-demand synchronization — goods flow directly from inbound vehicles to outbound vehicles with minimal dwell time. This works when: (1) demand is high and predictable (fast-movers), (2) supplier deliveries can be timed to match outbound schedules, (3) products don't need storage-based VAS. It fails for slow-movers (no outbound vehicle ready), items needing VAS (requires processing time), or high-variability products (buffers are needed). Walmart's distribution network is the classic cross-docking example.</div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="q-block" id="qb12">
+    <div class="q-header">
+      <span class="q-num-badge">Q13</span>
+      <div>
+        <div class="q-topic">Warehouse Types</div>
+        <div class="q-text">A fast-growing e-commerce startup expects order volumes to triple over the next 18 months but has high uncertainty about regional demand patterns. Which warehouse type BEST fits this situation?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o12_0" onclick="pick(12,0,2)"><span class="opt-letter">A</span> Private warehouse — company-owned, providing full operational control</label>
+      <label class="opt" id="o12_1" onclick="pick(12,1,2)"><span class="opt-letter">B</span> A dedicated fulfillment center built near the company headquarters</label>
+      <label class="opt" id="o12_2" onclick="pick(12,2,2)"><span class="opt-letter">C</span> Public or contract warehouse — providing flexible, scalable capacity without major capital commitment</label>
+      <label class="opt" id="o12_3" onclick="pick(12,3,2)"><span class="opt-letter">D</span> A cross-docking facility to eliminate storage entirely</label>
+    </div>
+    <div class="feedback" id="fb12">
+      <div class="fb-result" id="fbr12"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Public warehouses</em> (rented by space/time) or <em>contract warehouses</em> (dedicated 3PL space under agreement) are the right fit for high-growth, uncertain demand scenarios: no large capital outlay, scale up as volumes grow, change footprint as regional demand patterns become clear. A <em>private warehouse</em> locks in fixed cost and capacity — risky when you don't know how much space you'll need and where. Cross-docking requires fast-moving, predictable flows — not ideal for a startup with uncertain demand.</div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="q-block" id="qb13">
+    <div class="q-header">
+      <span class="q-num-badge">Q14</span>
+      <div>
+        <div class="q-topic">Warehouse Technology / WMS</div>
+        <div class="q-text">A Warehouse Management System (WMS) improves picking accuracy PRIMARILY by:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o13_0" onclick="pick(13,0,2)"><span class="opt-letter">A</span> Replacing human pickers entirely with robotic automated storage and retrieval systems</label>
+      <label class="opt" id="o13_1" onclick="pick(13,1,2)"><span class="opt-letter">B</span> Forecasting which SKUs will be ordered and pre-staging them at the shipping dock</label>
+      <label class="opt" id="o13_2" onclick="pick(13,2,2)"><span class="opt-letter">C</span> Directing workers to precise storage locations via system-generated pick lists and confirming each pick through barcode scanning or voice confirmation</label>
+      <label class="opt" id="o13_3" onclick="pick(13,3,2)"><span class="opt-letter">D</span> Automatically reordering inventory from suppliers when stock falls below the reorder point</label>
+    </div>
+    <div class="feedback" id="fb13">
+      <div class="fb-result" id="fbr13"></div>
+      <div class="fb-exp"><strong>Key point:</strong> A WMS manages warehouse execution — it tells workers <em>exactly</em> where to go, what to pick, and in what sequence, then <em>confirms</em> the pick via barcode scan or RFID. This eliminates memory-based picking (prone to errors) and verifies accuracy in real time. A WMS also optimizes pick paths (reducing travel), manages wave planning, tracks labor productivity, and provides real-time inventory visibility. Note: D describes an ERP or inventory planning system, not a WMS.</div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="q-block" id="qb14">
+    <div class="q-header">
+      <span class="q-num-badge">Q15</span>
+      <div>
+        <div class="q-topic">Value-Added Services / Postponement</div>
+        <div class="q-text">A consumer electronics company stores generic base units in its European DC and only installs country-specific power adapters, applies language-specific packaging, and adds regulatory labels when a confirmed order arrives. This practice BEST supports which supply chain strategy?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o14_0" onclick="pick(14,0,2)"><span class="opt-letter">A</span> Cross-docking — eliminating storage by moving goods directly from inbound to outbound</label>
+      <label class="opt" id="o14_1" onclick="pick(14,1,2)"><span class="opt-letter">B</span> Vendor-managed inventory (VMI) — suppliers manage replenishment based on DC stock levels</label>
+      <label class="opt" id="o14_2" onclick="pick(14,2,2)"><span class="opt-letter">C</span> Postponement — delaying product differentiation until actual demand is known, reducing finished-goods SKU proliferation</label>
+      <label class="opt" id="o14_3" onclick="pick(14,3,2)"><span class="opt-letter">D</span> Make-to-stock — building standard inventory to achieve production scale economies</label>
+    </div>
+    <div class="feedback" id="fb14">
+      <div class="fb-result" id="fbr14"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Postponement</em> = delaying the point of product differentiation as close to actual demand as possible. Instead of stocking 20 country-specific SKUs (each with its own forecast error), the company stocks one generic SKU and customizes it via value-added services (VAS) in the warehouse only when an order is placed. Benefits: fewer finished-goods SKUs to forecast, lower total inventory, faster response to actual demand mix. The warehouse becomes a "last-mile" customization center, not just a storage facility.</div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="q-block" id="qb15">
+    <div class="q-header">
+      <span class="q-num-badge">Q16</span>
+      <div>
+        <div class="q-topic">Warehouse Layout / Slotting</div>
+        <div class="q-text">In warehouse slotting optimization, fast-moving "A" items (top 20% of SKUs by pick frequency) should be located:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o15_0" onclick="pick(15,0,1)"><span class="opt-letter">A</span> At the highest rack locations to maximize use of vertical storage space</label>
+      <label class="opt" id="o15_1" onclick="pick(15,1,1)"><span class="opt-letter">B</span> Near the shipping/outbound staging area to minimize total picker travel distance</label>
+      <label class="opt" id="o15_2" onclick="pick(15,2,1)"><span class="opt-letter">C</span> In a completely separate aisle dedicated to fast-movers, regardless of distance from shipping</label>
+      <label class="opt" id="o15_3" onclick="pick(15,3,1)"><span class="opt-letter">D</span> At the back of the warehouse to protect them from receiving traffic and damage</label>
+    </div>
+    <div class="feedback" id="fb15">
+      <div class="fb-result" id="fbr15"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Slotting principle: <em>place items where they are needed most frequently closest to shipping</em>. Since A items are picked dozens to hundreds of times per day, even a 30-second travel reduction per pick multiplied across thousands of picks creates significant labor savings. Secondary slotting rules: heavy/bulky items at floor level (ergonomics), items often picked together stored near each other (reduce multi-location trips), seasonal rotation as demand patterns shift. Good slotting alone can reduce warehouse picking labor by 10–20% with no capital investment.</div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="q-block" id="qb16">
+    <div class="q-header">
+      <span class="q-num-badge">Q17</span>
+      <div>
+        <div class="q-topic">Warehouse Operations — Scenario</div>
+        <div class="q-text">A distribution center manager analyzes labor allocation: receiving 10%, putaway 15%, storage 5%, order picking 57%, packing &amp; shipping 13%. Where should the manager FOCUS process improvement efforts FIRST to achieve the greatest cost reduction?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o16_0" onclick="pick(16,0,2)"><span class="opt-letter">A</span> Receiving — because errors here cascade downstream and damage all other functions</label>
+      <label class="opt" id="o16_1" onclick="pick(16,1,2)"><span class="opt-letter">B</span> Putaway — because poor putaway placement directly increases picking time</label>
+      <label class="opt" id="o16_2" onclick="pick(16,2,2)"><span class="opt-letter">C</span> Order picking — it consumes the largest share of labor (57%) and directly drives order accuracy and fulfillment speed</label>
+      <label class="opt" id="o16_3" onclick="pick(16,3,2)"><span class="opt-letter">D</span> Packing and shipping — because errors here result in customer-facing failures and returns</label>
+    </div>
+    <div class="feedback" id="fb16">
+      <div class="fb-result" id="fbr16"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Order picking</em> typically accounts for 50–60% of total warehouse labor cost — making it the highest-leverage function to optimize. Improvements in picking (slotting, pick-to-light, voice picking, route optimization, batching) deliver the largest absolute cost savings. This is a classic application of the Pareto principle in operations: focus where the most resources are consumed. While receiving errors do cascade, they represent a fraction of total labor cost. The exam often presents this as a resource allocation or Pareto-type scenario.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Transportation Strategy & Distribution Services -->
+  <div class="section-header">Section 4 · Transportation Strategy &amp; Distribution Services (Q18–Q25)</div>
+
+  <!-- Q18 -->
+  <div class="q-block" id="qb17">
+    <div class="q-header">
+      <span class="q-num-badge">Q18</span>
+      <div>
+        <div class="q-topic">Transportation Modes</div>
+        <div class="q-text">A pharmaceutical company must ship temperature-controlled biological samples from its lab in Brussels to a clinical trial site in Singapore. The samples degrade if transit exceeds 48 hours and the shipment weighs only 12 kg. Despite the very high cost, the only viable mode is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o17_0" onclick="pick(17,0,3)"><span class="opt-letter">A</span> Ocean freight in a refrigerated (reefer) container — lowest cost per ton-mile</label>
+      <label class="opt" id="o17_1" onclick="pick(17,1,3)"><span class="opt-letter">B</span> Rail via the Europe-Asia rail corridor — good balance of cost and transit time</label>
+      <label class="opt" id="o17_2" onclick="pick(17,2,3)"><span class="opt-letter">C</span> Pipeline — extremely low variable cost for liquid materials</label>
+      <label class="opt" id="o17_3" onclick="pick(17,3,3)"><span class="opt-letter">D</span> Air freight — the only mode that can deliver internationally within 24–48 hours</label>
+    </div>
+    <div class="feedback" id="fb17">
+      <div class="fb-result" id="fbr17"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Mode selection is driven by the intersection of time, cost, and product characteristics. The 48-hour constraint eliminates all other modes: ocean takes 3–4 weeks, rail takes 10–15 days, pipeline is irrelevant for biological samples. <em>Air freight</em> is the only option — despite costing 8–10× ocean per kg. For low-weight, extremely time-sensitive, or very high-value goods, air freight cost per unit of value is often justified. The exam frequently tests mode selection based on speed-cost trade-offs; memorize the mode ranking: Air = fastest + most expensive; Ocean = slowest + cheapest per ton-mile.</div>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="q-block" id="qb18">
+    <div class="q-header">
+      <span class="q-num-badge">Q19</span>
+      <div>
+        <div class="q-topic">Transportation Strategy / Safety Stock</div>
+        <div class="q-text">A company's current ocean carrier delivers in 18–24 days (average 21 days, ±3 days variability). A competing carrier offers an average of 22 days but with only ±1 day variability. If the company switches carriers, what is the MOST LIKELY impact on inventory levels?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o18_0" onclick="pick(18,0,1)"><span class="opt-letter">A</span> Safety stock will increase because the average transit time is 1 day longer</label>
+      <label class="opt" id="o18_1" onclick="pick(18,1,1)"><span class="opt-letter">B</span> Safety stock will decrease because lower variability reduces the lead-time uncertainty that safety stock is designed to cover</label>
+      <label class="opt" id="o18_2" onclick="pick(18,2,1)"><span class="opt-letter">C</span> No change — safety stock is driven only by demand variability, not supply lead-time variability</label>
+      <label class="opt" id="o18_3" onclick="pick(18,3,1)"><span class="opt-letter">D</span> Total logistics cost will increase with no benefit to service levels</label>
+    </div>
+    <div class="feedback" id="fb18">
+      <div class="fb-result" id="fbr18"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Safety stock covers TWO types of uncertainty: demand variability AND supply lead-time variability. With the current carrier (±3 days), the planner must buffer for worst-case delivery (24 days). With the new carrier (±1 day), the worst case is only 23 days — allowing safety stock reduction even though average transit is 1 day longer. <em>Reducing lead-time variability is often more valuable than reducing average lead time</em> for safety stock purposes. This is a high-frequency exam concept: consistent, reliable suppliers → lower safety stock requirements.</div>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="q-block" id="qb19">
+    <div class="q-header">
+      <span class="q-num-badge">Q20</span>
+      <div>
+        <div class="q-topic">Intermodal Transportation</div>
+        <div class="q-text">A shipper uses a truck to pick up goods at a factory and haul them to a rail terminal, where the truck trailer is loaded directly onto a flatcar for a 1,400-mile haul across country, then a local truck delivers the trailer to the customer. This logistics arrangement is BEST described as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o19_0" onclick="pick(19,0,2)"><span class="opt-letter">A</span> Cross-docking — goods transfer directly from one vehicle to another without storage</label>
+      <label class="opt" id="o19_1" onclick="pick(19,1,2)"><span class="opt-letter">B</span> Full truckload (FTL) shipping — one shipper fills a dedicated truck</label>
+      <label class="opt" id="o19_2" onclick="pick(19,2,2)"><span class="opt-letter">C</span> TOFC (Trailer On FlatCar) intermodal transportation — combining truck flexibility with rail cost efficiency</label>
+      <label class="opt" id="o19_3" onclick="pick(19,3,2)"><span class="opt-letter">D</span> LTL (Less-than-Truckload) consolidation — multiple shippers sharing carrier capacity</label>
+    </div>
+    <div class="feedback" id="fb19">
+      <div class="fb-result" id="fbr19"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>TOFC (Trailer On FlatCar)</em> is a specific form of intermodal transportation where a truck trailer is loaded onto a railroad flatcar for the long-haul portion, then picked up by a local truck for final delivery. Benefits: truck provides door-to-door flexibility at both ends; rail provides dramatically lower cost per mile for the long-haul portion. The key advantage of intermodal: no reloading of cargo — the container or trailer moves intact between modes. COFC (Container on Flatcar) is the container equivalent.</div>
+    </div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="q-block" id="qb20">
+    <div class="q-header">
+      <span class="q-num-badge">Q21</span>
+      <div>
+        <div class="q-topic">Transportation Management / LTL vs FTL</div>
+        <div class="q-text">A regional manufacturer ships approximately 5,500 lbs of finished goods monthly to a retailer located 300 miles away. The minimum weight for Full Truckload (FTL) pricing is 20,000 lbs. What is the MOST cost-effective shipping option?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o20_0" onclick="pick(20,0,2)"><span class="opt-letter">A</span> FTL — pay for the full truck to guarantee direct, undisturbed delivery</label>
+      <label class="opt" id="o20_1" onclick="pick(20,1,2)"><span class="opt-letter">B</span> Air freight — the short transit time justifies the premium</label>
+      <label class="opt" id="o20_2" onclick="pick(20,2,2)"><span class="opt-letter">C</span> LTL (Less-than-Truckload) — share truck capacity with other shippers and pay only for the space used</label>
+      <label class="opt" id="o20_3" onclick="pick(20,3,2)"><span class="opt-letter">D</span> Rail — lower cost per ton-mile for bulk freight movements</label>
+    </div>
+    <div class="feedback" id="fb20">
+      <div class="fb-result" id="fbr20"></div>
+      <div class="fb-exp"><strong>Key point:</strong> At 5,500 lbs against a 20,000 lb FTL threshold, FTL would mean paying for 14,500 lbs of empty space — extremely wasteful. <em>LTL</em> is designed for shipments that don't fill a truck: the carrier consolidates loads from multiple shippers at a hub, each shipper pays for their portion. Trade-offs of LTL vs FTL: LTL = more handling touches (damage risk), slower (consolidation/deconsolidation adds time), but cost-effective for small volumes. FTL = direct, fast, fewer touches, economical at scale. For 300 miles at 5,500 lbs, LTL is clearly the right answer.</div>
+    </div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="q-block" id="qb21">
+    <div class="q-header">
+      <span class="q-num-badge">Q22</span>
+      <div>
+        <div class="q-topic">Distribution Services / Perfect Order</div>
+        <div class="q-text">A distributor reports the following monthly performance metrics: 96% on time, 98% in full, 99% damage-free, and 98% invoice accuracy. What is the approximate Perfect Order rate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o21_0" onclick="pick(21,0,2)"><span class="opt-letter">A</span> 97.75% (simple average of the four metrics)</label>
+      <label class="opt" id="o21_1" onclick="pick(21,1,2)"><span class="opt-letter">B</span> 96.0% (limited by the weakest metric)</label>
+      <label class="opt" id="o21_2" onclick="pick(21,2,2)"><span class="opt-letter">C</span> 91.2% (product of all four metrics: 0.96 × 0.98 × 0.99 × 0.98)</label>
+      <label class="opt" id="o21_3" onclick="pick(21,3,2)"><span class="opt-letter">D</span> 100% (all individual metrics exceed 95%)</label>
+    </div>
+    <div class="feedback" id="fb21">
+      <div class="fb-result" id="fbr21"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> Perfect Order % = % On Time × % In Full × % Damage Free × % Invoice Accurate = 0.96 × 0.98 × 0.99 × 0.98 = 0.9408 × 0.9702 = approximately <strong>91.2%</strong>. The <em>multiplicative</em> formula is critical — it means that ALL dimensions must be right for an order to be "perfect." Four 98%-ish scores combine to only ~91%. This illustrates why companies must drive ALL dimensions simultaneously. Even small improvements across all four (e.g., each to 99%) dramatically lift the combined score: 0.99⁴ ≈ 96%.</div>
+    </div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="q-block" id="qb22">
+    <div class="q-header">
+      <span class="q-num-badge">Q23</span>
+      <div>
+        <div class="q-topic">Distribution Services / E-Commerce Logistics</div>
+        <div class="q-text">Last-mile delivery is considered the most expensive component of e-commerce logistics PRIMARILY because:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o22_0" onclick="pick(22,0,2)"><span class="opt-letter">A</span> International customs clearance and duties add cost to every residential delivery</label>
+      <label class="opt" id="o22_1" onclick="pick(22,1,2)"><span class="opt-letter">B</span> Cargo insurance rates are highest for residential addresses</label>
+      <label class="opt" id="o22_2" onclick="pick(22,2,2)"><span class="opt-letter">C</span> Many individual stops replace bulk deliveries — fixed vehicle and driver costs are spread over far fewer units per trip, driving up cost per package</label>
+      <label class="opt" id="o22_3" onclick="pick(22,3,2)"><span class="opt-letter">D</span> Residential zones have higher fuel consumption due to lower speed limits</label>
+    </div>
+    <div class="feedback" id="fb22">
+      <div class="fb-result" id="fbr22"></div>
+      <div class="fb-exp"><strong>Key point:</strong> A truck delivering pallets to a supermarket makes 5–10 stops per route. A parcel delivery truck might make 100–150 stops per route — each stop consuming fixed time (park, walk, attempt delivery). Fixed vehicle and driver costs are spread over many fewer units at each residential stop, pushing cost per package high. Compounding factors: failed deliveries (no one home = costly re-delivery attempts), urban traffic, and customer expectations of same/next-day delivery. Last-mile = 40–50% of total e-commerce delivery cost — why logistics innovation (drone, autonomous, locker networks) focuses here.</div>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="q-block" id="qb23">
+    <div class="q-header">
+      <span class="q-num-badge">Q24</span>
+      <div>
+        <div class="q-topic">Omnichannel Distribution</div>
+        <div class="q-text">A retailer wants to implement "buy online, pick up in store" (BOPIS) and allow customers to return online purchases at any physical location. The single MOST critical operational capability required for this omnichannel strategy is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o23_0" onclick="pick(23,0,3)"><span class="opt-letter">A</span> Dedicated warehouse space at each store for online order staging</label>
+      <label class="opt" id="o23_1" onclick="pick(23,1,3)"><span class="opt-letter">B</span> A mobile app enabling customers to track their order status</label>
+      <label class="opt" id="o23_2" onclick="pick(23,2,3)"><span class="opt-letter">C</span> A Transportation Management System (TMS) for carrier selection and routing</label>
+      <label class="opt" id="o23_3" onclick="pick(23,3,3)"><span class="opt-letter">D</span> Real-time unified inventory visibility across all stores, DCs, and in-transit stock</label>
+    </div>
+    <div class="feedback" id="fb23">
+      <div class="fb-result" id="fbr23"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Omnichannel = fulfilling from any channel, delivering or picking up through any channel, returning through any channel. The foundational enabler is <em>unified real-time inventory visibility</em> across all nodes. Without it: BOPIS orders are accepted for items that are actually out of stock or held in the wrong location; customers can't return at a different store than where purchased. An Order Management System (OMS) typically provides this unified inventory view across stores, DCs, and in-transit positions. A TMS (Option C) is important but secondary — you first need to know WHERE the inventory is before you can route it.</div>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="q-block" id="qb24">
+    <div class="q-header">
+      <span class="q-num-badge">Q25</span>
+      <div>
+        <div class="q-topic">Distribution Channel Strategy — Scenario</div>
+        <div class="q-text">
+          <div style="background:#f0f7ff;border-left:4px solid #2e86de;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px;font-style:italic;font-size:.87rem;color:#1e3a5f">Scenario: ManufactureCo sells all products exclusively through a network of regional distributors. A competitor has launched a direct-to-consumer (D2C) website, capturing premium customers with personalized offers and 25% better margins by eliminating distributor markup. ManufactureCo's board is considering launching its own D2C channel while keeping its existing distributor relationships.</div>
+          The PRIMARY risk ManufactureCo must manage when adding a D2C channel alongside its distributor network is:
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o24_0" onclick="pick(24,0,2)"><span class="opt-letter">A</span> ManufactureCo will be legally required to discontinue its distributor agreements</label>
+      <label class="opt" id="o24_1" onclick="pick(24,1,2)"><span class="opt-letter">B</span> D2C logistics costs will fully offset the margin gains from eliminating distributors</label>
+      <label class="opt" id="o24_2" onclick="pick(24,2,2)"><span class="opt-letter">C</span> Channel conflict — distributors may reduce sales effort for ManufactureCo products or shift customers to competing brands they represent</label>
+      <label class="opt" id="o24_3" onclick="pick(24,3,2)"><span class="opt-letter">D</span> The D2C channel will require ManufactureCo to abandon omnichannel capabilities</label>
+    </div>
+    <div class="feedback" id="fb24">
+      <div class="fb-result" id="fbr24"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Channel conflict</em> is the primary strategic risk when a manufacturer adds direct channels alongside existing indirect channels. Distributors who built their business on ManufactureCo products now face competition from the manufacturer itself — they may retaliate by de-emphasizing the brand, pushing competitor products, or renegotiating terms. Managing channel conflict requires: clear segment separation (D2C for premium/direct consumers; distributors for SMB or geographic reach), pricing discipline (no undercutting), and transparent communication. Option B (logistics offsetting gains) is a risk but is often manageable; channel conflict is the relationship and strategic risk that's harder to fix once damaged.</div>
+    </div>
+  </div>
+
+  <!-- Final Score -->
+  <div style="background:var(--card);border-radius:12px;padding:24px;margin-top:28px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center">
+    <div style="font-size:1rem;color:#555;margin-bottom:6px">Final Score</div>
+    <div style="font-size:2.4rem;font-weight:700;color:var(--accent)" id="final-score">0 / 25</div>
+    <div style="font-size:.9rem;color:#777;margin-top:4px" id="final-pct">Answer all questions to see your result</div>
+    <div style="margin-top:16px;font-size:.85rem;color:#555" id="final-msg"></div>
+  </div>
+
+</div>
+
+<footer>Day 9 Quiz · CSCP Exam Prep · Christophe Goossens · July 2026</footer>
+
+<script>
+const TOTAL = 25;
+const ANSWERS = [2,1,3,2,1,3,1,1,2,2,3,1,2,2,2,1,2,3,1,2,2,2,2,3,2];
+let answered = new Array(TOTAL).fill(false);
+let correct = new Array(TOTAL).fill(false);
+let score = 0;
+
+function pick(qIdx, optIdx, correctOpt) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const isCorrect = (optIdx === correctOpt);
+  if (isCorrect) { score++; correct[qIdx] = true; }
+
+  // Style chosen option
+  const chosen = document.getElementById('o' + qIdx + '_' + optIdx);
+  chosen.classList.add(isCorrect ? 'correct' : 'wrong');
+  chosen.classList.add('disabled');
+
+  // If wrong, reveal the correct option
+  if (!isCorrect) {
+    const corEl = document.getElementById('o' + qIdx + '_' + correctOpt);
+    corEl.classList.add('correct');
+  }
+
+  // Disable all options
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById('o' + qIdx + '_' + i);
+    if (el) el.classList.add('disabled');
+  }
+
+  // Show feedback
+  const fb = document.getElementById('fb' + qIdx);
+  const fbr = document.getElementById('fbr' + qIdx);
+  fb.style.display = 'block';
+  fbr.textContent = isCorrect ? '✅ Correct!' : '❌ Incorrect';
+  fbr.className = 'fb-result ' + (isCorrect ? 'fb-correct' : 'fb-wrong');
+
+  updateUI();
+}
+
+function updateUI() {
+  const answeredCount = answered.filter(Boolean).length;
+  const pct = Math.round(answeredCount / TOTAL * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = answeredCount + ' of ' + TOTAL + ' answered';
+  document.getElementById('score-num').textContent = score + ' / ' + TOTAL;
+  document.getElementById('final-score').textContent = score + ' / ' + TOTAL;
+
+  if (answeredCount === TOTAL) {
+    const scorePct = Math.round(score / TOTAL * 100);
+    document.getElementById('final-pct').textContent = scorePct + '% (' + (scorePct >= 80 ? 'Target reached! ✅' : 'Below 80% target — review missed questions') + ')';
+    let msg = '';
+    if (scorePct >= 92) msg = '🏆 Outstanding! Strong command of quality tools and logistics fundamentals.';
+    else if (scorePct >= 80) msg = '✅ Good work! Review any missed questions before Day 10.';
+    else if (scorePct >= 64) msg = '⚠️ Review the sections where you struggled — focus on TOC steps, Perfect Order, and total logistics cost trade-offs.';
+    else msg = '🔄 Consider re-reading Module 4 Part 2 and Module 5 sections before continuing.';
+    document.getElementById('final-msg').textContent = msg;
+  } else {
+    document.getElementById('final-pct').textContent = 'Answer all questions to see your result';
+  }
+}
+
+function resetQuiz() {
+  answered = new Array(TOTAL).fill(false);
+  correct = new Array(TOTAL).fill(false);
+  score = 0;
+  for (let q = 0; q < TOTAL; q++) {
+    for (let o = 0; o < 4; o++) {
+      const el = document.getElementById('o' + q + '_' + o);
+      if (el) { el.className = 'opt'; const inp = el.querySelector('input'); if(inp) inp.checked=false; }
+    }
+    const fb = document.getElementById('fb' + q);
+    if (fb) fb.style.display = 'none';
+  }
+  updateUI();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+updateUI();
+</script>
+</body>
+</html>

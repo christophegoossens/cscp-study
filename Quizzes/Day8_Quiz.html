@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 8 Quiz — Module 4: Internal Operations Part 1</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f4f7fb;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;min-height:100vh}
+header{background:var(--blue);color:#fff;padding:22px 36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+header h1{font-size:1.4rem}
+header p{font-size:.85rem;opacity:.75;margin-top:3px}
+.badge{background:rgba(255,255,255,.18);padding:6px 16px;border-radius:20px;font-size:.9rem;font-weight:700;white-space:nowrap}
+.container{max-width:860px;margin:0 auto;padding:28px 18px}
+.quiz-meta{display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.meta-pill{background:var(--card);border-radius:8px;padding:10px 18px;font-size:.85rem;box-shadow:0 2px 6px rgba(0,0,0,.08);display:flex;align-items:center;gap:8px}
+.meta-pill strong{color:var(--accent)}
+.progress-wrap{background:var(--card);border-radius:10px;padding:16px 20px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07)}
+.progress-label{display:flex;justify-content:space-between;font-size:.83rem;color:#666;margin-bottom:8px}
+.progress-bar{height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:.4s}
+.score-summary{background:var(--card);border-radius:10px;padding:18px 22px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.score-num{font-size:1.6rem;font-weight:700;color:var(--accent)}
+.score-label{font-size:.85rem;color:#555}
+.btn-reset{background:#fee2e2;color:#991b1b;border:none;padding:9px 18px;border-radius:7px;font-size:.88rem;font-weight:600;cursor:pointer}
+.btn-reset:hover{background:#fecaca}
+.q-block{background:var(--card);border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:.2s}
+.q-block.answered{opacity:.92}
+.q-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.q-num-badge{background:var(--blue);color:#fff;border-radius:8px;padding:4px 10px;font-size:.8rem;font-weight:700;white-space:nowrap;margin-top:1px}
+.q-topic{font-size:.75rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.q-text{font-size:.94rem;font-weight:600;line-height:1.55;color:#1a1a2e}
+.q-scenario{background:#f0f7ff;border-left:4px solid var(--accent);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:14px;font-size:.87rem;line-height:1.5;color:#1e3a5f;font-style:italic}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.88rem;line-height:1.45;transition:.15s;user-select:none}
+.opt:hover:not(.correct):not(.wrong):not(.disabled){background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46;font-weight:500}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.opt.disabled{cursor:default}
+.opt-letter{background:#f3f4f6;color:#374151;border-radius:5px;padding:2px 7px;font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.opt.correct .opt-letter{background:#059669;color:#fff}
+.opt.wrong .opt-letter{background:#dc2626;color:#fff}
+.feedback{margin-top:14px;border-radius:8px;overflow:hidden;display:none}
+.fb-result{padding:8px 14px;font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:7px}
+.fb-correct{background:#d1fae5;color:#065f46}
+.fb-wrong{background:#fee2e2;color:#991b1b}
+.fb-exp{padding:10px 14px;font-size:.85rem;line-height:1.55;background:#f9fafb;border-top:1px solid #f0f0f0;color:#374151}
+.fb-exp strong{color:var(--blue)}
+.section-header{font-size:1rem;font-weight:700;color:var(--blue);margin:28px 0 12px;padding-left:12px;border-left:4px solid var(--orange)}
+footer{text-align:center;padding:30px;color:#9ca3af;font-size:.8rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../Topics/00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div>
+    <p>Day 8 End-of-Day Quiz · CSCP Exam Prep</p>
+    <h1>Module 4: Internal Operations Part 1 — Inventory, Replenishment, Traceability &amp; CI</h1>
+  </div>
+  <div class="badge">25 Questions</div>
+</header>
+
+<div class="container">
+
+  <div class="quiz-meta">
+    <div class="meta-pill">📅 Day 8 — Monday 27 July 2026</div>
+    <div class="meta-pill">📖 Modules 4.3.1 – 4.4.2: <strong>100%</strong></div>
+    <div class="meta-pill">🎯 Target score: <strong>80%+ (20/25)</strong></div>
+    <div class="meta-pill">⏱ Estimated: <strong>30–35 min</strong></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress</span><span id="prog-text">0 of 25 answered</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="score-summary">
+    <div><div class="score-num" id="score-num">0 / 25</div><div class="score-label">Current Score</div></div>
+    <button class="btn-reset" onclick="resetQuiz()">🔄 Reset Quiz</button>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section-header">Section 1 · Inventory Types &amp; Costs (Q1–Q6)</div>
+
+  <!-- Q1 -->
+  <div class="q-block" id="qb0">
+    <div class="q-header">
+      <span class="q-num-badge">Q1</span>
+      <div>
+        <div class="q-topic">Inventory Types</div>
+        <div class="q-text">Which of the following BEST describes anticipation inventory?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o0_0" onclick="pick(0,0,3)"><span class="opt-letter">A</span> Goods currently moving in transit between supply chain facilities</label>
+      <label class="opt" id="o0_1" onclick="pick(0,1,3)"><span class="opt-letter">B</span> Buffer stock held to protect against demand variability and lead time uncertainty</label>
+      <label class="opt" id="o0_2" onclick="pick(0,2,3)"><span class="opt-letter">C</span> Inventory that results from ordering in batches rather than piece by piece</label>
+      <label class="opt" id="o0_3" onclick="pick(0,3,3)"><span class="opt-letter">D</span> Inventory built in advance of a known future demand spike, such as a seasonal peak or planned plant shutdown</label>
+    </div>
+    <div class="feedback" id="fb0">
+      <div class="fb-result" id="fbr0"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The four functional inventory types are: <em>Cycle stock</em> (batch replenishment, avg = Q/2), <em>Safety stock</em> (buffer against uncertainty), <em>Anticipation inventory</em> (built for a known future spike — seasonal, promotional, shutdown), and <em>Pipeline/in-transit inventory</em> (goods moving through the chain). Option A = pipeline, B = safety stock, C = cycle stock.</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block" id="qb1">
+    <div class="q-header">
+      <span class="q-num-badge">Q2</span>
+      <div>
+        <div class="q-topic">EOQ Calculation</div>
+        <div class="q-text">A company has annual demand of 2,500 units, an ordering cost of €50 per order, and a carrying cost of €2 per unit per year. What is the Economic Order Quantity (EOQ)?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o1_0" onclick="pick(1,0,2)"><span class="opt-letter">A</span> 125 units</label>
+      <label class="opt" id="o1_1" onclick="pick(1,1,2)"><span class="opt-letter">B</span> 250 units</label>
+      <label class="opt" id="o1_2" onclick="pick(1,2,2)"><span class="opt-letter">C</span> 354 units</label>
+      <label class="opt" id="o1_3" onclick="pick(1,3,2)"><span class="opt-letter">D</span> 500 units</label>
+    </div>
+    <div class="feedback" id="fb1">
+      <div class="fb-result" id="fbr1"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> EOQ = √(2 × D × S / H) = √(2 × 2,500 × €50 / €2) = √(250,000 / 2) = √125,000 ≈ <strong>354 units</strong>. At this order quantity, annual ordering cost = annual carrying cost (each ≈ €354). Ordering fewer than 354 units increases ordering cost; ordering more increases carrying cost.</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block" id="qb2">
+    <div class="q-header">
+      <span class="q-num-badge">Q3</span>
+      <div>
+        <div class="q-topic">Inventory Costs</div>
+        <div class="q-text">A warehouse holds average inventory of €800,000. The annual carrying cost rate is 25%. What is the annual carrying cost?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o2_0" onclick="pick(2,0,1)"><span class="opt-letter">A</span> €80,000</label>
+      <label class="opt" id="o2_1" onclick="pick(2,1,1)"><span class="opt-letter">B</span> €200,000</label>
+      <label class="opt" id="o2_2" onclick="pick(2,2,1)"><span class="opt-letter">C</span> €250,000</label>
+      <label class="opt" id="o2_3" onclick="pick(2,3,1)"><span class="opt-letter">D</span> €320,000</label>
+    </div>
+    <div class="feedback" id="fb2">
+      <div class="fb-result" id="fbr2"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> Annual Carrying Cost = Average Inventory × Carrying Cost Rate = €800,000 × 25% = <strong>€200,000 per year</strong>. This 25% rate typically encompasses: capital (opportunity cost of money tied up), storage and handling, insurance, obsolescence risk, and damage/shrinkage. The industry range is 20–30% per year.</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block" id="qb3">
+    <div class="q-header">
+      <span class="q-num-badge">Q4</span>
+      <div>
+        <div class="q-topic">Cycle Stock</div>
+        <div class="q-text">A company uses an order quantity of 400 units per replenishment cycle. Under the EOQ model, what is the average cycle stock carried between replenishments?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o3_0" onclick="pick(3,0,2)"><span class="opt-letter">A</span> 400 units (the full order quantity)</label>
+      <label class="opt" id="o3_1" onclick="pick(3,1,2)"><span class="opt-letter">B</span> 300 units</label>
+      <label class="opt" id="o3_2" onclick="pick(3,2,2)"><span class="opt-letter">C</span> 200 units</label>
+      <label class="opt" id="o3_3" onclick="pick(3,3,2)"><span class="opt-letter">D</span> 100 units</label>
+    </div>
+    <div class="feedback" id="fb3">
+      <div class="fb-result" id="fbr3"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Average cycle stock = Order Quantity ÷ 2 = 400 ÷ 2 = <strong>200 units</strong>. This is because inventory starts at the full order quantity when a batch arrives and depletes linearly to zero before the next order — so the average is half the order quantity. Larger batches → more average cycle stock → higher carrying cost.</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block" id="qb4">
+    <div class="q-header">
+      <span class="q-num-badge">Q5</span>
+      <div>
+        <div class="q-topic">Inventory Cost Tradeoff</div>
+        <div class="q-text">A supply chain manager increases the standard order quantity from 100 units to 500 units. Which statement BEST describes the impact on annual inventory costs?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o4_0" onclick="pick(4,0,0)"><span class="opt-letter">A</span> Annual ordering cost decreases; annual carrying cost increases</label>
+      <label class="opt" id="o4_1" onclick="pick(4,1,0)"><span class="opt-letter">B</span> Annual ordering cost increases; annual carrying cost decreases</label>
+      <label class="opt" id="o4_2" onclick="pick(4,2,0)"><span class="opt-letter">C</span> Both ordering cost and carrying cost decrease</label>
+      <label class="opt" id="o4_3" onclick="pick(4,3,0)"><span class="opt-letter">D</span> Both ordering cost and carrying cost increase</label>
+    </div>
+    <div class="feedback" id="fb4">
+      <div class="fb-result" id="fbr4"></div>
+      <div class="fb-exp"><strong>Key point:</strong> This is the fundamental inventory cost tradeoff. Ordering cost is fixed per order — so fewer orders per year (larger batches) = <em>lower</em> annual ordering cost. But larger batches mean more average inventory = <em>higher</em> annual carrying cost. EOQ is the point where total cost is minimized — the crossover where ordering cost = carrying cost.</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block" id="qb5">
+    <div class="q-header">
+      <span class="q-num-badge">Q6</span>
+      <div>
+        <div class="q-topic">Safety Stock</div>
+        <div class="q-text">A planner is sizing safety stock using the formula SS = Z × σ × √LT. Which factor does NOT directly increase the required safety stock level?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o5_0" onclick="pick(5,0,3)"><span class="opt-letter">A</span> A higher standard deviation of daily demand (σ increases)</label>
+      <label class="opt" id="o5_1" onclick="pick(5,1,3)"><span class="opt-letter">B</span> A longer average supplier lead time (LT increases)</label>
+      <label class="opt" id="o5_2" onclick="pick(5,2,3)"><span class="opt-letter">C</span> A higher target customer service level (higher Z-score)</label>
+      <label class="opt" id="o5_3" onclick="pick(5,3,3)"><span class="opt-letter">D</span> Increasing the EOQ order quantity</label>
+    </div>
+    <div class="feedback" id="fb5">
+      <div class="fb-result" id="fbr5"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Safety stock = Z × σ × √LT. The three drivers are: (1) demand variability (σ), (2) lead time (LT), and (3) service level target (Z). EOQ determines <em>cycle stock</em> (how much to order each time) — it has <strong>no direct effect on safety stock</strong>. Safety stock protects against uncertainty; cycle stock manages the batch replenishment rhythm. These are independent calculations.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section-header">Section 2 · Replenishment Strategies (Q7–Q12)</div>
+
+  <!-- Q7 -->
+  <div class="q-block" id="qb6">
+    <div class="q-header">
+      <span class="q-num-badge">Q7</span>
+      <div>
+        <div class="q-topic">Reorder Point Calculation</div>
+        <div class="q-text">A product has average daily demand of 80 units, a supplier lead time of 5 days, and a safety stock of 200 units. What is the reorder point (ROP)?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o6_0" onclick="pick(6,0,2)"><span class="opt-letter">A</span> 200 units</label>
+      <label class="opt" id="o6_1" onclick="pick(6,1,2)"><span class="opt-letter">B</span> 400 units</label>
+      <label class="opt" id="o6_2" onclick="pick(6,2,2)"><span class="opt-letter">C</span> 600 units</label>
+      <label class="opt" id="o6_3" onclick="pick(6,3,2)"><span class="opt-letter">D</span> 800 units</label>
+    </div>
+    <div class="feedback" id="fb6">
+      <div class="fb-result" id="fbr6"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> ROP = (d × LT) + SS = (80 units/day × 5 days) + 200 = 400 + 200 = <strong>600 units</strong>. When on-hand inventory hits 600 units, a new order is placed. Under normal conditions, the shipment arrives just as inventory has been drawn down to the safety stock level (200 units). Option B (400 units) is demand during lead time only — ignoring safety stock.</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-block" id="qb7">
+    <div class="q-header">
+      <span class="q-num-badge">Q8</span>
+      <div>
+        <div class="q-topic">Q System vs P System</div>
+        <div class="q-text">A warehouse manager monitors inventory levels continuously and places an order for exactly 600 units every time stock falls below 250 units. This BEST describes which replenishment system?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o7_0" onclick="pick(7,0,2)"><span class="opt-letter">A</span> Periodic review (P) system — orders placed at fixed time intervals</label>
+      <label class="opt" id="o7_1" onclick="pick(7,1,2)"><span class="opt-letter">B</span> Min-max system — orders placed to bring inventory to a maximum target level</label>
+      <label class="opt" id="o7_2" onclick="pick(7,2,2)"><span class="opt-letter">C</span> Continuous review (Q) system — fixed order quantity triggered by hitting the reorder point</label>
+      <label class="opt" id="o7_3" onclick="pick(7,3,2)"><span class="opt-letter">D</span> Vendor-Managed Inventory (VMI) — the supplier decides when to replenish</label>
+    </div>
+    <div class="feedback" id="fb7">
+      <div class="fb-result" id="fbr7"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The Q (continuous review) system = FIXED ORDER QUANTITY ordered at VARIABLE TIMES (whenever inventory hits the ROP). The P (periodic review) system = VARIABLE ORDER QUANTITY ordered at FIXED TIME INTERVALS. The exam frequently tests this distinction. Clue words: "fixed 600 units" + "whenever stock falls below" = Q system.</div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-block" id="qb8">
+    <div class="q-header">
+      <span class="q-num-badge">Q9</span>
+      <div>
+        <div class="q-topic">Vendor-Managed Inventory</div>
+        <div class="q-text">Under a VMI arrangement, the PRIMARY benefit to the SUPPLIER is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o8_0" onclick="pick(8,0,1)"><span class="opt-letter">A</span> The supplier can set prices unilaterally since it now controls replenishment</label>
+      <label class="opt" id="o8_1" onclick="pick(8,1,1)"><span class="opt-letter">B</span> The supplier gains real-time visibility into customer consumption, enabling better production planning and reduced Bullwhip Effect</label>
+      <label class="opt" id="o8_2" onclick="pick(8,2,1)"><span class="opt-letter">C</span> The supplier completely eliminates its need for safety stock</label>
+      <label class="opt" id="o8_3" onclick="pick(8,3,1)"><span class="opt-letter">D</span> The supplier reduces its product range to simplify production runs</label>
+    </div>
+    <div class="feedback" id="fb8">
+      <div class="fb-result" id="fbr8"></div>
+      <div class="fb-exp"><strong>Key point:</strong> VMI transfers the replenishment decision to the supplier. The supplier receives real-time inventory and sales data from the customer — meaning it sees <em>actual demand signals</em>, not distorted purchase orders. This visibility lets the supplier plan production smoothly, reduce its own safety stock, and avoid the Bullwhip Effect (over-ordering due to uncertainty about real demand).</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-block" id="qb9">
+    <div class="q-header">
+      <span class="q-num-badge">Q10</span>
+      <div>
+        <div class="q-topic">Kanban / Lean Pull</div>
+        <div class="q-text">A production floor uses two bins for each component. When a worker empties the first bin, it is returned to the supply area as a replenishment signal, while the second bin is pulled into use. This is BEST described as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o9_0" onclick="pick(9,0,1)"><span class="opt-letter">A</span> A periodic review (P) replenishment system with fixed review intervals</label>
+      <label class="opt" id="o9_1" onclick="pick(9,1,1)"><span class="opt-letter">B</span> A two-bin Kanban pull system</label>
+      <label class="opt" id="o9_2" onclick="pick(9,2,1)"><span class="opt-letter">C</span> MRP-driven push replenishment based on the production schedule</label>
+      <label class="opt" id="o9_3" onclick="pick(9,3,1)"><span class="opt-letter">D</span> A min-max inventory replenishment system</label>
+    </div>
+    <div class="feedback" id="fb9">
+      <div class="fb-result" id="fbr9"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The two-bin system is a simple, visual form of Kanban. The empty bin is the physical <em>kanban signal</em> — it triggers replenishment of exactly one bin's worth. No complex inventory tracking required. This is a lean <em>pull</em> system: replenishment happens only in response to actual consumption, not a forecast or schedule push.</div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-block" id="qb10">
+    <div class="q-header">
+      <span class="q-num-badge">Q11</span>
+      <div>
+        <div class="q-topic">Just-in-Time (JIT)</div>
+        <div class="q-text">Which condition is MOST critical for a Just-in-Time (JIT) replenishment system to function effectively?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o10_0" onclick="pick(10,0,2)"><span class="opt-letter">A</span> Large safety stock buffers at each production stage to absorb supply disruptions</label>
+      <label class="opt" id="o10_1" onclick="pick(10,1,2)"><span class="opt-letter">B</span> Infrequent but very large deliveries to minimize transportation cost per unit</label>
+      <label class="opt" id="o10_2" onclick="pick(10,2,2)"><span class="opt-letter">C</span> Highly reliable supplier deliveries with minimal lead time variation and near-perfect quality</label>
+      <label class="opt" id="o10_3" onclick="pick(10,3,2)"><span class="opt-letter">D</span> Long planning horizons to allow sufficient time for replenishment ordering</label>
+    </div>
+    <div class="feedback" id="fb10">
+      <div class="fb-result" id="fbr10"></div>
+      <div class="fb-exp"><strong>Key point:</strong> JIT eliminates all buffer inventory — which means there is <em>no cushion</em> to absorb late or defective deliveries. If a supplier delivers late or delivers poor-quality material, production stops immediately. This is why JIT demands: (1) extremely reliable, frequent supplier deliveries, (2) near-perfect quality (no buffer for rework), and (3) stable, predictable demand. Without these, JIT creates costly production stoppages.</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-block" id="qb11">
+    <div class="q-header">
+      <span class="q-num-badge">Q12</span>
+      <div>
+        <div class="q-topic">Min-Max System</div>
+        <div class="q-text">An item's min-max parameters are: minimum (reorder point) = 500 units, maximum = 2,000 units. Current inventory is 420 units — below the minimum — so an order is triggered. How many units should be ordered?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o11_0" onclick="pick(11,0,1)"><span class="opt-letter">A</span> 500 units — to bring inventory to the minimum level</label>
+      <label class="opt" id="o11_1" onclick="pick(11,1,1)"><span class="opt-letter">B</span> 1,580 units — to bring inventory back to the maximum level</label>
+      <label class="opt" id="o11_2" onclick="pick(11,2,1)"><span class="opt-letter">C</span> 1,500 units — the difference between max and min</label>
+      <label class="opt" id="o11_3" onclick="pick(11,3,1)"><span class="opt-letter">D</span> 2,000 units — the maximum level</label>
+    </div>
+    <div class="feedback" id="fb11">
+      <div class="fb-result" id="fbr11"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> In a min-max system, the order quantity = Maximum − Current Inventory on Hand = 2,000 − 420 = <strong>1,580 units</strong>. Option C (1,500) is the difference between max and min — which would be correct only if inventory were exactly at the minimum. Option D (2,000) ignores existing inventory. The goal is to always return to the maximum level.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section-header">Section 3 · Traceability, Accuracy &amp; Disposition (Q13–Q17)</div>
+
+  <!-- Q13 -->
+  <div class="q-block" id="qb12">
+    <div class="q-header">
+      <span class="q-num-badge">Q13</span>
+      <div>
+        <div class="q-topic">Inventory Traceability</div>
+        <div class="q-text">An aerospace manufacturer assigns a unique identifier to EVERY individual component and can trace each unit back to its raw material source, production date, operator, and test results. This level of traceability BEST describes:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o12_0" onclick="pick(12,0,2)"><span class="opt-letter">A</span> Lot/batch number tracking assigned at the production batch level</label>
+      <label class="opt" id="o12_1" onclick="pick(12,1,2)"><span class="opt-letter">B</span> ABC analysis with cycle counting for high-value items</label>
+      <label class="opt" id="o12_2" onclick="pick(12,2,2)"><span class="opt-letter">C</span> Serial number tracking — a unique identifier per individual unit</label>
+      <label class="opt" id="o12_3" onclick="pick(12,3,2)"><span class="opt-letter">D</span> RFID-enabled location tracking within the warehouse</label>
+    </div>
+    <div class="feedback" id="fb12">
+      <div class="fb-result" id="fbr12"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Serial number tracking</em> assigns a unique ID to each individual item — the highest level of traceability. Required in aerospace, medical devices, and high-value industries where full unit history must be documented. <em>Lot/batch tracking</em> (option A) assigns one number to a group of items produced together — sufficient for food/pharma recalls but not for individual component history. RFID tracks location, not product history.</div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="q-block" id="qb13">
+    <div class="q-header">
+      <span class="q-num-badge">Q14</span>
+      <div>
+        <div class="q-topic">Cycle Counting</div>
+        <div class="q-text">A logistics company replaces its annual physical inventory count with a cycle counting program. Which advantage does cycle counting provide that the annual count CANNOT?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o13_0" onclick="pick(13,0,2)"><span class="opt-letter">A</span> It counts every single SKU at least once per day</label>
+      <label class="opt" id="o13_1" onclick="pick(13,1,2)"><span class="opt-letter">B</span> It is fully automated and requires no manual labor</label>
+      <label class="opt" id="o13_2" onclick="pick(13,2,2)"><span class="opt-letter">C</span> It catches inventory discrepancies much earlier and without shutting down warehouse operations, with effort focused on high-impact items</label>
+      <label class="opt" id="o13_3" onclick="pick(13,3,2)"><span class="opt-letter">D</span> It permanently eliminates inventory shrinkage and theft</label>
+    </div>
+    <div class="feedback" id="fb13">
+      <div class="fb-result" id="fbr13"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Cycle counting's three advantages over annual counts: (1) <em>Frequency</em> — errors caught sooner, so root causes are easier to identify and fix; (2) <em>No operational shutdown</em> — the warehouse keeps running while a subset of items is counted daily/weekly; (3) <em>ABC prioritization</em> — A items (highest value/movement) are counted most frequently, where errors have the greatest financial impact. Annual counts treat all items equally and require a costly, disruptive shutdown.</div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="q-block" id="qb14">
+    <div class="q-header">
+      <span class="q-num-badge">Q15</span>
+      <div>
+        <div class="q-topic">Inventory Record Accuracy</div>
+        <div class="q-text">According to ASCM best practice, effective MRP planning requires inventory record accuracy to be at or above what minimum threshold?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o14_0" onclick="pick(14,0,2)"><span class="opt-letter">A</span> 80%</label>
+      <label class="opt" id="o14_1" onclick="pick(14,1,2)"><span class="opt-letter">B</span> 90%</label>
+      <label class="opt" id="o14_2" onclick="pick(14,2,2)"><span class="opt-letter">C</span> 95%</label>
+      <label class="opt" id="o14_3" onclick="pick(14,3,2)"><span class="opt-letter">D</span> 99%</label>
+    </div>
+    <div class="feedback" id="fb14">
+      <div class="fb-result" id="fbr14"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The industry benchmark is <strong>≥95% inventory record accuracy</strong> for reliable MRP. Below 95%, the system records diverge too much from physical reality. MRP plans based on what the system <em>thinks</em> is available — not what is actually there. This creates phantom inventory (system shows stock that doesn't exist → shortages) or missed available inventory → excess orders. Both destroy MRP's value.</div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="q-block" id="qb15">
+    <div class="q-header">
+      <span class="q-num-badge">Q16</span>
+      <div>
+        <div class="q-topic">ABC Analysis in Cycle Counting</div>
+        <div class="q-text">Under an ABC-based cycle counting program, which items should be counted LEAST frequently?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o15_0" onclick="pick(15,0,3)"><span class="opt-letter">A</span> A items — highest value, highest movement — counted weekly</label>
+      <label class="opt" id="o15_1" onclick="pick(15,1,3)"><span class="opt-letter">B</span> B items — medium value, moderate movement — counted monthly</label>
+      <label class="opt" id="o15_2" onclick="pick(15,2,3)"><span class="opt-letter">C</span> Items currently at or near their reorder point</label>
+      <label class="opt" id="o15_3" onclick="pick(15,3,3)"><span class="opt-letter">D</span> C items — lowest value, lowest movement — counted quarterly or annually</label>
+    </div>
+    <div class="feedback" id="fb15">
+      <div class="fb-result" id="fbr15"></div>
+      <div class="fb-exp"><strong>Key point:</strong> ABC cycle counting frequency follows Pareto logic — invest audit effort where it matters most financially. <em>A items</em>: top 20% of items representing ~80% of inventory value → counted most frequently (weekly or monthly). <em>B items</em>: monthly to quarterly. <em>C items</em>: lowest value (bottom ~50% of SKUs but only ~5% of total value) → counted least frequently (quarterly to annually). An error on a C item costs little; an error on an A item can seriously disrupt operations.</div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="q-block" id="qb16">
+    <div class="q-header">
+      <span class="q-num-badge">Q17</span>
+      <div>
+        <div class="q-topic">Inventory Disposition</div>
+        <div class="q-text">A food manufacturer discovers 10,000 units of a product that have passed their expiration date. They cannot be sold, returned to the supplier, donated, or repurposed. Which inventory disposition option applies?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o16_0" onclick="pick(16,0,3)"><span class="opt-letter">A</span> Rework or remanufacture to restore the items to saleable condition</label>
+      <label class="opt" id="o16_1" onclick="pick(16,1,3)"><span class="opt-letter">B</span> Return to supplier for credit</label>
+      <label class="opt" id="o16_2" onclick="pick(16,2,3)"><span class="opt-letter">C</span> Sell through the secondary market at a reduced price</label>
+      <label class="opt" id="o16_3" onclick="pick(16,3,3)"><span class="opt-letter">D</span> Write off and dispose of the items — no recovery value</label>
+    </div>
+    <div class="feedback" id="fb16">
+      <div class="fb-result" id="fbr16"></div>
+      <div class="fb-exp"><strong>Key point:</strong> When no recovery option is possible (expired, unsaleable, no return/rework path), the only remaining disposition is write-off and disposal. The five CSCP disposition options in value-recovery order are: (1) Return to supplier, (2) Rework/remanufacture, (3) Donate, (4) Sell as scrap/secondary market, (5) Write off and dispose. Prevention is better than cure: shorter order quantities, better forecasting, and regular slow-mover reviews reduce obsolescence risk.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section-header">Section 4 · Performance Metrics &amp; Continuous Improvement (Q18–Q25)</div>
+
+  <!-- Q18 -->
+  <div class="q-block" id="qb17">
+    <div class="q-header">
+      <span class="q-num-badge">Q18</span>
+      <div>
+        <div class="q-topic">Inventory Turnover</div>
+        <div class="q-text">A company reports annual COGS of €6 million and maintains average inventory of €500,000. What is the inventory turnover?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o17_0" onclick="pick(17,0,2)"><span class="opt-letter">A</span> 5 times</label>
+      <label class="opt" id="o17_1" onclick="pick(17,1,2)"><span class="opt-letter">B</span> 8 times</label>
+      <label class="opt" id="o17_2" onclick="pick(17,2,2)"><span class="opt-letter">C</span> 12 times</label>
+      <label class="opt" id="o17_3" onclick="pick(17,3,2)"><span class="opt-letter">D</span> 30 times</label>
+    </div>
+    <div class="feedback" id="fb17">
+      <div class="fb-result" id="fbr17"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> Inventory Turnover = COGS ÷ Average Inventory = €6,000,000 ÷ €500,000 = <strong>12 times per year</strong>. This means the company sells and replenishes its average inventory 12 times per year — approximately every 30 days. Higher turnover = more efficient use of inventory investment. Note: use COGS (not sales revenue) — sales includes profit margin which would overstate efficiency.</div>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="q-block" id="qb18">
+    <div class="q-header">
+      <span class="q-num-badge">Q19</span>
+      <div>
+        <div class="q-topic">Cash-to-Cash Cycle Time</div>
+        <div class="q-text">A company has the following metrics: Days Inventory Outstanding (DIO) = 45 days, Days Sales Outstanding (DSO) = 30 days, Days Payable Outstanding (DPO) = 60 days. What is the cash-to-cash (C2C) cycle time?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o18_0" onclick="pick(18,0,0)"><span class="opt-letter">A</span> 15 days</label>
+      <label class="opt" id="o18_1" onclick="pick(18,1,0)"><span class="opt-letter">B</span> 45 days</label>
+      <label class="opt" id="o18_2" onclick="pick(18,2,0)"><span class="opt-letter">C</span> 75 days</label>
+      <label class="opt" id="o18_3" onclick="pick(18,3,0)"><span class="opt-letter">D</span> 135 days</label>
+    </div>
+    <div class="feedback" id="fb18">
+      <div class="fb-result" id="fbr18"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> C2C = DIO + DSO − DPO = 45 + 30 − 60 = <strong>15 days</strong>. The company collects from customers relatively quickly (DIO 45 + DSO 30 = 75 days from inventory purchase to cash receipt) AND has 60 days to pay suppliers — so it only needs to finance 15 days of operations with its own cash. A negative C2C (like Amazon or Walmart) means the company collects cash before paying suppliers — the supply chain funds itself.</div>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="q-block" id="qb19">
+    <div class="q-header">
+      <span class="q-num-badge">Q20</span>
+      <div>
+        <div class="q-topic">Days of Supply</div>
+        <div class="q-text">A distribution company has average inventory valued at €900,000 and annual COGS of €3,285,000. How many days of supply does current inventory represent?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o19_0" onclick="pick(19,0,2)"><span class="opt-letter">A</span> 27 days</label>
+      <label class="opt" id="o19_1" onclick="pick(19,1,2)"><span class="opt-letter">B</span> 60 days</label>
+      <label class="opt" id="o19_2" onclick="pick(19,2,2)"><span class="opt-letter">C</span> 100 days</label>
+      <label class="opt" id="o19_3" onclick="pick(19,3,2)"><span class="opt-letter">D</span> 365 days</label>
+    </div>
+    <div class="feedback" id="fb19">
+      <div class="fb-result" id="fbr19"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> Daily COGS = €3,285,000 ÷ 365 = €9,000/day. Days of Supply = Average Inventory ÷ Daily COGS = €900,000 ÷ €9,000 = <strong>100 days</strong>. This tells managers: at the current consumption rate, existing inventory will last 100 days before stockout. Used to set reorder points, evaluate safety stock adequacy, and identify potential overstock or understock situations.</div>
+    </div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="q-block" id="qb20">
+    <div class="q-header">
+      <span class="q-num-badge">Q21</span>
+      <div>
+        <div class="q-topic">Inventory &amp; Return on Assets</div>
+        <div class="q-text">A company has net income of €2M and total assets of €20M (including €8M of inventory), giving ROA = 10%. After a lean initiative, inventory is reduced by €2M (net income unchanged). What is the new ROA?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o20_0" onclick="pick(20,0,1)"><span class="opt-letter">A</span> 10% — unchanged, since net income did not change</label>
+      <label class="opt" id="o20_1" onclick="pick(20,1,1)"><span class="opt-letter">B</span> 11.1% — reduced assets improve the ratio</label>
+      <label class="opt" id="o20_2" onclick="pick(20,2,1)"><span class="opt-letter">C</span> 8% — lower inventory reduces efficiency</label>
+      <label class="opt" id="o20_3" onclick="pick(20,3,1)"><span class="opt-letter">D</span> 12.5% — assets fall to €16M</label>
+    </div>
+    <div class="feedback" id="fb20">
+      <div class="fb-result" id="fbr20"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> ROA = Net Income ÷ Total Assets. New total assets = €20M − €2M = €18M. New ROA = €2M ÷ €18M = <strong>11.1%</strong>. This illustrates a key linkage: reducing excess inventory lowers total assets → improves ROA (with same income). It also reduces DIO → shorter C2C → better cash flow. This is why lean inventory management has a direct financial statement impact.</div>
+    </div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="q-block" id="qb21">
+    <div class="q-header">
+      <span class="q-num-badge">Q22</span>
+      <div>
+        <div class="q-topic">MRP Inputs</div>
+        <div class="q-text">Which of the following are the THREE inputs required to run Material Requirements Planning (MRP)?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o21_0" onclick="pick(21,0,1)"><span class="opt-letter">A</span> Customer demand forecast, safety stock levels, and supplier lead times</label>
+      <label class="opt" id="o21_1" onclick="pick(21,1,1)"><span class="opt-letter">B</span> Master Production Schedule (MPS), Bill of Materials (BOM), and inventory records</label>
+      <label class="opt" id="o21_2" onclick="pick(21,2,1)"><span class="opt-letter">C</span> Economic Order Quantities, reorder points, and carrying cost rates</label>
+      <label class="opt" id="o21_3" onclick="pick(21,3,1)"><span class="opt-letter">D</span> S&amp;OP plan, capacity plan, and financial budget</label>
+    </div>
+    <div class="feedback" id="fb21">
+      <div class="fb-result" id="fbr21"></div>
+      <div class="fb-exp"><strong>Key point:</strong> MRP's three mandatory inputs: (1) <em>MPS</em> — what finished goods to produce and when; (2) <em>BOM</em> (Bill of Materials) — the recipe: what components/raw materials are needed per unit at each level; (3) <em>Inventory records</em> — what's already on hand or on order. MRP combines these to answer: what to order, in what quantity, and when. Options A and C describe EOQ/safety stock inputs; D describes S&OP inputs.</div>
+    </div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="q-block" id="qb22">
+    <div class="q-header">
+      <span class="q-num-badge">Q23</span>
+      <div>
+        <div class="q-topic">PDCA Cycle</div>
+        <div class="q-text">After identifying a recurring defect in a packaging process, a quality team designs a corrective process change and implements it on ONE of five packaging lines for 30 days. The 30-day trial on the single line represents which PDCA phase?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o22_0" onclick="pick(22,0,1)"><span class="opt-letter">A</span> Plan — the problem is being identified and the solution designed</label>
+      <label class="opt" id="o22_1" onclick="pick(22,1,1)"><span class="opt-letter">B</span> Do — the improved process is being piloted on a small scale</label>
+      <label class="opt" id="o22_2" onclick="pick(22,2,1)"><span class="opt-letter">C</span> Check — results are being measured against expected outcomes</label>
+      <label class="opt" id="o22_3" onclick="pick(22,3,1)"><span class="opt-letter">D</span> Act — the solution is being standardized across all production lines</label>
+    </div>
+    <div class="feedback" id="fb22">
+      <div class="fb-result" id="fbr22"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The PDCA sequence: <em>Plan</em> (analyze root cause, design solution) → <em>Do</em> (implement on a small scale / pilot) → <em>Check</em> (measure results vs. expected) → <em>Act</em> (standardize if successful, or repeat cycle). Implementing on ONE line for 30 days = <em>Do</em> (small-scale pilot). If the question said "measure defect rates after the 30-day pilot," that would be <em>Check</em>. If it said "roll out to all 5 lines," that would be <em>Act</em>.</div>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="q-block" id="qb23">
+    <div class="q-header">
+      <span class="q-num-badge">Q24</span>
+      <div>
+        <div class="q-topic">Lean 8 Wastes (TIMWOODS)</div>
+        <div class="q-text">At a manufacturing facility, production workers spend significant time walking to a centralized tool storage room at the far end of the floor every hour to collect tools they use constantly. Under Lean's TIMWOODS framework, this waste is BEST classified as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o23_0" onclick="pick(23,0,3)"><span class="opt-letter">A</span> Transportation — moving materials or products unnecessarily</label>
+      <label class="opt" id="o23_1" onclick="pick(23,1,3)"><span class="opt-letter">B</span> Waiting — idle time while workers pause to retrieve tools</label>
+      <label class="opt" id="o23_2" onclick="pick(23,2,3)"><span class="opt-letter">C</span> Overprocessing — performing more steps than the customer requires</label>
+      <label class="opt" id="o23_3" onclick="pick(23,3,3)"><span class="opt-letter">D</span> Motion — unnecessary movement of people</label>
+    </div>
+    <div class="feedback" id="fb23">
+      <div class="fb-result" id="fbr23"></div>
+      <div class="fb-exp"><strong>Key point:</strong> TIMWOODS distinction: <em>Transportation</em> = moving MATERIALS/PRODUCTS unnecessarily. <em>Motion</em> = unnecessary movement of PEOPLE. Workers walking = <em>Motion</em>. The Lean solution is 5S — specifically "Set in order" (Seiton): place tools at the point of use, within arm's reach of where they are needed, eliminating the walk entirely. A common exam trap is confusing Transportation (goods move) with Motion (people move).</div>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="q-block" id="qb24">
+    <div class="q-header">
+      <span class="q-num-badge">Q25</span>
+      <div>
+        <div class="q-topic">Lean &amp; Financial Performance — Scenario</div>
+        <div class="q-text">
+          <div style="background:#f0f7ff;border-left:4px solid #2e86de;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px;font-style:italic;font-size:.87rem;color:#1e3a5f">Scenario: GlobalParts Co. has annual COGS of €6 million and average inventory of €2 million, giving an inventory turnover of 3×. After a lean improvement initiative — tighter replenishment, improved forecasting, and cycle counting — average inventory is reduced by €500,000.</div>
+          What is GlobalParts Co.'s new inventory turnover after the lean initiative?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o24_0" onclick="pick(24,0,1)"><span class="opt-letter">A</span> 3× — unchanged, since annual COGS did not change</label>
+      <label class="opt" id="o24_1" onclick="pick(24,1,1)"><span class="opt-letter">B</span> 4× — lower average inventory increases the turnover ratio</label>
+      <label class="opt" id="o24_2" onclick="pick(24,2,1)"><span class="opt-letter">C</span> 5×</label>
+      <label class="opt" id="o24_3" onclick="pick(24,3,1)"><span class="opt-letter">D</span> 6×</label>
+    </div>
+    <div class="feedback" id="fb24">
+      <div class="fb-result" id="fbr24"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> New average inventory = €2,000,000 − €500,000 = €1,500,000. New Inventory Turnover = COGS ÷ Average Inventory = €6,000,000 ÷ €1,500,000 = <strong>4×</strong>. COGS is unchanged (same sales volume), but the denominator shrinks → turnover improves. This also reduces DIO (365 ÷ 4 = 91 days vs. 365 ÷ 3 = 122 days), shortening cash-to-cash cycle by 31 days. Lean improvements directly and measurably improve financial metrics.</div>
+    </div>
+  </div>
+
+  <!-- Final Score -->
+  <div style="background:var(--card);border-radius:12px;padding:24px;margin-top:28px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center">
+    <div style="font-size:1rem;color:#555;margin-bottom:6px">Final Score</div>
+    <div style="font-size:2.4rem;font-weight:700;color:var(--accent)" id="final-score">0 / 25</div>
+    <div style="font-size:.9rem;color:#777;margin-top:4px" id="final-pct">Answer all questions to see your result</div>
+    <div style="margin-top:16px;font-size:.85rem;color:#555" id="final-msg"></div>
+  </div>
+
+</div>
+
+<footer>Day 8 Quiz · CSCP Exam Prep · Christophe Goossens · July 2026</footer>
+
+<script>
+const TOTAL = 25;
+const ANSWERS = [3,2,1,2,0,3,2,2,1,1,2,1,2,2,2,3,3,2,0,2,1,1,1,3,1];
+let answered = new Array(TOTAL).fill(false);
+let correct = new Array(TOTAL).fill(false);
+let score = 0;
+
+function pick(qIdx, optIdx, correctOpt) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const isCorrect = (optIdx === correctOpt);
+  if (isCorrect) { score++; correct[qIdx] = true; }
+
+  // Style chosen option
+  const chosen = document.getElementById('o' + qIdx + '_' + optIdx);
+  chosen.classList.add(isCorrect ? 'correct' : 'wrong');
+  chosen.classList.add('disabled');
+
+  // If wrong, reveal the correct option
+  if (!isCorrect) {
+    const corEl = document.getElementById('o' + qIdx + '_' + correctOpt);
+    corEl.classList.add('correct');
+  }
+
+  // Disable all options
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById('o' + qIdx + '_' + i);
+    if (el) el.classList.add('disabled');
+  }
+
+  // Show feedback
+  const fb = document.getElementById('fb' + qIdx);
+  const fbr = document.getElementById('fbr' + qIdx);
+  fb.style.display = 'block';
+  fbr.textContent = isCorrect ? '✅ Correct!' : '❌ Incorrect';
+  fbr.className = 'fb-result ' + (isCorrect ? 'fb-correct' : 'fb-wrong');
+
+  updateUI();
+}
+
+function updateUI() {
+  const answeredCount = answered.filter(Boolean).length;
+  const pct = Math.round(answeredCount / TOTAL * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = answeredCount + ' of ' + TOTAL + ' answered';
+  document.getElementById('score-num').textContent = score + ' / ' + TOTAL;
+  document.getElementById('final-score').textContent = score + ' / ' + TOTAL;
+
+  if (answeredCount === TOTAL) {
+    const scorePct = Math.round(score / TOTAL * 100);
+    document.getElementById('final-pct').textContent = scorePct + '% (' + (scorePct >= 80 ? 'Target reached! ✅' : 'Below 80% target — review missed questions') + ')';
+    let msg = '';
+    if (scorePct >= 92) msg = '🏆 Outstanding! Strong command of inventory, replenishment, and CI material.';
+    else if (scorePct >= 80) msg = '✅ Good work! Review any missed questions before Day 9.';
+    else if (scorePct >= 64) msg = '⚠️ Review the sections where you struggled — re-read the relevant topic files.';
+    else msg = '🔄 Consider re-reading Modules 4.3.1–4.4.2 and retaking this quiz before moving on.';
+    document.getElementById('final-msg').textContent = msg;
+  } else {
+    document.getElementById('final-pct').textContent = 'Answer all questions to see your result';
+  }
+}
+
+function resetQuiz() {
+  answered = new Array(TOTAL).fill(false);
+  correct = new Array(TOTAL).fill(false);
+  score = 0;
+  for (let q = 0; q < TOTAL; q++) {
+    for (let o = 0; o < 4; o++) {
+      const el = document.getElementById('o' + q + '_' + o);
+      if (el) { el.className = 'opt'; const inp = el.querySelector('input'); if(inp) inp.checked=false; }
+    }
+    const fb = document.getElementById('fb' + q);
+    if (fb) fb.style.display = 'none';
+  }
+  updateUI();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+updateUI();
+</script>
+</body>
+</html>

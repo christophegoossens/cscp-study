@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 13 Quiz — Module 8: Optimization, Sustainability &amp; Emerging Tech</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f4f7fb;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;min-height:100vh}
+header{background:var(--blue);color:#fff;padding:22px 36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+header h1{font-size:1.4rem}
+header p{font-size:.85rem;opacity:.75;margin-top:3px}
+.badge{background:rgba(255,255,255,.18);padding:6px 16px;border-radius:20px;font-size:.9rem;font-weight:700;white-space:nowrap}
+.container{max-width:860px;margin:0 auto;padding:28px 18px}
+.quiz-meta{display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.meta-pill{background:var(--card);border-radius:8px;padding:10px 18px;font-size:.85rem;box-shadow:0 2px 6px rgba(0,0,0,.08);display:flex;align-items:center;gap:8px}
+.meta-pill strong{color:var(--accent)}
+.progress-wrap{background:var(--card);border-radius:10px;padding:16px 20px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07)}
+.progress-label{display:flex;justify-content:space-between;font-size:.83rem;color:#666;margin-bottom:8px}
+.progress-bar{height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:.4s}
+.score-summary{background:var(--card);border-radius:10px;padding:18px 22px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.score-num{font-size:1.6rem;font-weight:700;color:var(--accent)}
+.score-label{font-size:.85rem;color:#555}
+.btn-reset{background:#fee2e2;color:#991b1b;border:none;padding:9px 18px;border-radius:7px;font-size:.88rem;font-weight:600;cursor:pointer}
+.btn-reset:hover{background:#fecaca}
+.q-block{background:var(--card);border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:.2s}
+.q-block.answered{opacity:.92}
+.q-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.q-num-badge{background:var(--blue);color:#fff;border-radius:8px;padding:4px 10px;font-size:.8rem;font-weight:700;white-space:nowrap;margin-top:1px}
+.q-topic{font-size:.75rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.q-text{font-size:.94rem;font-weight:600;line-height:1.55;color:#1a1a2e}
+.q-scenario{background:#f0f7ff;border-left:4px solid var(--accent);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:14px;font-size:.87rem;line-height:1.5;color:#1e3a5f;font-style:italic}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.88rem;line-height:1.45;transition:.15s;user-select:none}
+.opt:hover:not(.correct):not(.wrong):not(.disabled){background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46;font-weight:500}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.opt.disabled{cursor:default}
+.opt-letter{background:#f3f4f6;color:#374151;border-radius:5px;padding:2px 7px;font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.opt.correct .opt-letter{background:#059669;color:#fff}
+.opt.wrong .opt-letter{background:#dc2626;color:#fff}
+.feedback{margin-top:14px;border-radius:8px;overflow:hidden;display:none}
+.fb-result{padding:8px 14px;font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:7px}
+.fb-correct{background:#d1fae5;color:#065f46}
+.fb-wrong{background:#fee2e2;color:#991b1b}
+.fb-exp{padding:10px 14px;font-size:.85rem;line-height:1.55;background:#f9fafb;border-top:1px solid #f0f0f0;color:#374151}
+.fb-exp strong{color:var(--blue)}
+.section-header{font-size:1rem;font-weight:700;color:var(--blue);margin:28px 0 12px;padding-left:12px;border-left:4px solid var(--orange)}
+footer{text-align:center;padding:30px;color:#9ca3af;font-size:.8rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../Topics/00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div>
+    <p>Day 13 End-of-Day Quiz · CSCP Exam Prep</p>
+    <h1>Module 8: Optimization, Sustainability &amp; Emerging Tech</h1>
+  </div>
+  <div class="badge">25 Questions</div>
+</header>
+
+<div class="container">
+
+  <div class="quiz-meta">
+    <div class="meta-pill">📅 Day 13 — Saturday 1 August 2026</div>
+    <div class="meta-pill">📖 Module 8 coverage: <strong>100%</strong></div>
+    <div class="meta-pill">🎯 Target score: <strong>80%+ (20/25)</strong></div>
+    <div class="meta-pill">⏱ Estimated: <strong>30–35 min</strong></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress</span><span id="prog-text">0 of 25 answered</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="score-summary">
+    <div><div class="score-num" id="score-num">0 / 25</div><div class="score-label">Current Score</div></div>
+    <button class="btn-reset" onclick="resetQuiz()">🔄 Reset Quiz</button>
+  </div>
+
+  <!-- SECTION 1: SC Strategy & Strategic Value -->
+  <div class="section-header">Section 1 · SC Strategy &amp; Strategic Value (Q1–Q7)</div>
+
+  <!-- Q1 -->
+  <div class="q-block" id="qb0">
+    <div class="q-header">
+      <span class="q-num-badge">Q1</span>
+      <div>
+        <div class="q-topic">Fisher's Model</div>
+        <div class="q-text">A consumer electronics company launches a new smartphone with highly uncertain demand, a 6-month product life cycle, and 12 color/storage configurations. According to Fisher's model, which supply chain type is BEST aligned with this product?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o0_0" onclick="pick(0,0,1)"><span class="opt-letter">A</span> An efficient supply chain focused on lowest unit cost, long production runs, and minimal inventory buffers</label>
+      <label class="opt" id="o0_1" onclick="pick(0,1,1)"><span class="opt-letter">B</span> A responsive supply chain optimized for speed, flexibility, and the ability to handle demand volatility — even at higher cost</label>
+      <label class="opt" id="o0_2" onclick="pick(0,2,1)"><span class="opt-letter">C</span> A fully push supply chain that manufactures all configurations to forecast six months in advance</label>
+      <label class="opt" id="o0_3" onclick="pick(0,3,1)"><span class="opt-letter">D</span> A keiretsu-based supply chain leveraging exclusive supplier partnerships for volume discounts</label>
+    </div>
+    <div class="feedback" id="fb0">
+      <div class="fb-result" id="fbr0"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Fisher's model: <em>Innovative products</em> (short life cycle, uncertain demand, high variety) → <strong>Responsive supply chain</strong>. The smartphone matches all innovative product criteria. An efficient SC (built for predictable demand with long runs and low buffers) would create stockouts on popular configurations and excess inventory on unpopular ones — the fundamental strategic misalignment Fisher's model is designed to prevent.</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block" id="qb1">
+    <div class="q-header">
+      <span class="q-num-badge">Q2</span>
+      <div>
+        <div class="q-topic">Decoupling Point</div>
+        <div class="q-text">A furniture manufacturer produces standard semi-finished frames to forecast (push), then applies customer-selected finishes and upholstery only when orders are received (pull). The point where this transition occurs is BEST defined as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o1_0" onclick="pick(1,0,2)"><span class="opt-letter">A</span> The customer order fulfillment point where delivery commitments are made</label>
+      <label class="opt" id="o1_1" onclick="pick(1,1,2)"><span class="opt-letter">B</span> The incoterms transfer point where risk moves from seller to buyer</label>
+      <label class="opt" id="o1_2" onclick="pick(1,2,2)"><span class="opt-letter">C</span> The decoupling point — where production switches from push (make-to-forecast) to pull (make/configure-to-order), determining the trade-off between inventory investment and customer lead time</label>
+      <label class="opt" id="o1_3" onclick="pick(1,3,2)"><span class="opt-letter">D</span> The postponement threshold that triggers vendor-managed inventory replenishment</label>
+    </div>
+    <div class="feedback" id="fb1">
+      <div class="fb-result" id="fbr1"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The <em>decoupling point</em> divides push from pull. Everything upstream (frames built to forecast) = push: long runs, economies of scale, but finished inventory risk. Everything downstream (finishing to specific order) = pull: no finished goods until an order arrives. Strategic positioning: moving the decoupling point downstream shortens customer lead time but requires more finished inventory; moving it upstream reduces finished inventory but extends lead time. This trade-off is the central tension of supply chain network design.</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block" id="qb2">
+    <div class="q-header">
+      <span class="q-num-badge">Q3</span>
+      <div>
+        <div class="q-topic">Postponement Strategy</div>
+        <div class="q-text">Benetton manufactures garments in an undyed, generic form and dyes them to specific colors only after seasonal orders reveal actual customer color preferences. This supply chain strategy is BEST described as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o2_0" onclick="pick(2,0,3)"><span class="opt-letter">A</span> A fully push supply chain — all production and customization completed to forecast</label>
+      <label class="opt" id="o2_1" onclick="pick(2,1,3)"><span class="opt-letter">B</span> Vertical integration — owning the dyeing process eliminates supplier dependency</label>
+      <label class="opt" id="o2_2" onclick="pick(2,2,3)"><span class="opt-letter">C</span> A keiretsu arrangement giving Benetton preferential capacity access with dye suppliers</label>
+      <label class="opt" id="o2_3" onclick="pick(2,3,3)"><span class="opt-letter">D</span> Postponement — delaying product differentiation as far downstream as possible to reduce finished goods risk while maintaining responsiveness to actual demand</label>
+    </div>
+    <div class="feedback" id="fb2">
+      <div class="fb-result" id="fbr2"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Postponement</em> deliberately delays the decoupling point — when a generic product becomes a specific finished SKU. Benetton: undyed garments (one generic inventory position) → dyed on order (N colors × M styles). This reduces the risk of excess orange sweaters and a stockout of blue. Key benefit: carry one generic inventory position instead of N × M finished SKUs, while still being able to respond to actual customer color preferences. Dell's original model (standard components, custom-configured PCs on order) is the other classic example.</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block" id="qb3">
+    <div class="q-header">
+      <span class="q-num-badge">Q4</span>
+      <div>
+        <div class="q-topic">Zone of Strategic Fit</div>
+        <div class="q-text">The "zone of strategic fit" in Fisher's supply chain framework refers to:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o3_0" onclick="pick(3,0,0)"><span class="opt-letter">A</span> The alignment region where the supply chain's capabilities (efficiency vs. responsiveness) match the demand uncertainty and service requirements of the markets it serves</label>
+      <label class="opt" id="o3_1" onclick="pick(3,1,0)"><span class="opt-letter">B</span> The geographic zone where all strategic suppliers must be located to qualify for preferred supplier status</label>
+      <label class="opt" id="o3_2" onclick="pick(3,2,0)"><span class="opt-letter">C</span> The financial performance band where supply chain ROI exceeds the cost of capital</label>
+      <label class="opt" id="o3_3" onclick="pick(3,3,0)"><span class="opt-letter">D</span> The compliance corridor within which supply chain operations conform to all applicable regulatory requirements</label>
+    </div>
+    <div class="feedback" id="fb3">
+      <div class="fb-result" id="fbr3"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Fisher's <em>zone of strategic fit</em>: every market has an <em>implied demand uncertainty</em> (how predictable is demand?); every supply chain has an <em>implied supply uncertainty</em> (how flexible and responsive is it?). Strategic fit = aligning these two dimensions. Operating outside: too-efficient SC for volatile market → stockouts and markdowns; too-responsive SC for stable demand → unnecessary cost. Achieving and maintaining fit as markets evolve is THE central task of supply chain strategy.</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block" id="qb4">
+    <div class="q-header">
+      <span class="q-num-badge">Q5</span>
+      <div>
+        <div class="q-topic">Total Landed Cost</div>
+        <div class="q-text">A supply chain manager compares two sourcing options: Supplier A in Vietnam at $15/unit; Supplier B in Mexico at $19/unit. In which situation would Supplier B be the BETTER sourcing decision?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o4_0" onclick="pick(4,0,1)"><span class="opt-letter">A</span> Only when regulatory requirements mandate regional sourcing for government contracts</label>
+      <label class="opt" id="o4_1" onclick="pick(4,1,1)"><span class="opt-letter">B</span> When the Total Landed Cost from Mexico (including transport, duties, inventory carrying cost, and lead time risk) is lower than Vietnam — even though Vietnam's unit purchase price is lower</label>
+      <label class="opt" id="o4_2" onclick="pick(4,2,1)"><span class="opt-letter">C</span> When the company's procurement policy mandates geographic diversification across all spend categories</label>
+      <label class="opt" id="o4_3" onclick="pick(4,3,1)"><span class="opt-letter">D</span> When Supplier B offers longer payment terms that improve the company's cash conversion cycle</label>
+    </div>
+    <div class="feedback" id="fb4">
+      <div class="fb-result" id="fbr4"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Total Landed Cost</em> = Production Cost + Transportation + Duties/Tariffs + Insurance + Inventory Carrying Cost + Compliance. Vietnam at $15 may have: ocean freight ($3), import duties ($3.75 at 25%), 30-day extra transit → higher safety stock carrying cost. Mexico at $19 may have: truck freight ($1), USMCA zero duty, 5-day lead time → minimal safety stock. Mexico's TLC could be $20–21 vs. Vietnam's $24–27. The fundamental insight: <em>purchase price is not cost</em>. Companies that source based on purchase price alone often end up with the higher actual cost.</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block" id="qb5">
+    <div class="q-header">
+      <span class="q-num-badge">Q6</span>
+      <div>
+        <div class="q-topic">Economic Value Added (EVA)</div>
+        <div class="q-text">A supply chain team reduces average inventory by $50 million through improved demand forecasting and vendor-managed inventory. Which of the following BEST describes the impact on Economic Value Added (EVA)?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o5_0" onclick="pick(5,0,2)"><span class="opt-letter">A</span> No EVA impact — inventory reduction only affects the balance sheet, not operating profit</label>
+      <label class="opt" id="o5_1" onclick="pick(5,1,2)"><span class="opt-letter">B</span> EVA decreases because the supply chain now carries less buffer against demand uncertainty</label>
+      <label class="opt" id="o5_2" onclick="pick(5,2,2)"><span class="opt-letter">C</span> EVA increases: capital employed decreases by $50M, reducing the capital charge (Capital Employed × Cost of Capital) by ~$5M/year (at 10% cost of capital), while NOPAT is also improved by carrying cost savings</label>
+      <label class="opt" id="o5_3" onclick="pick(5,3,2)"><span class="opt-letter">D</span> EVA is unaffected until the inventory reduction translates into higher customer service and revenue growth</label>
+    </div>
+    <div class="feedback" id="fb5">
+      <div class="fb-result" id="fbr5"></div>
+      <div class="fb-exp"><strong>Key point:</strong> EVA = NOPAT − (Capital Employed × Cost of Capital). Inventory is Capital Employed. $50M inventory reduction → Capital Employed drops $50M → at 10% cost of capital, the capital charge falls by $5M/year → EVA improves by $5M/year immediately. Additionally, carrying cost savings (storage, insurance, obsolescence risk) improve NOPAT directly. This is why supply chain professionals say <em>"inventory is capital in disguise"</em> — every dollar of unnecessary inventory has a real annual cost equal to the company's required return on capital.</div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-block" id="qb6">
+    <div class="q-header">
+      <span class="q-num-badge">Q7</span>
+      <div>
+        <div class="q-topic">Supply Chain Analytics</div>
+        <div class="q-text">A supply chain team progresses from producing monthly performance dashboards to running network optimization models that recommend which distribution centers to consolidate to minimize total network cost. This BEST represents a shift from:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o6_0" onclick="pick(6,0,3)"><span class="opt-letter">A</span> Descriptive to predictive analytics</label>
+      <label class="opt" id="o6_1" onclick="pick(6,1,3)"><span class="opt-letter">B</span> Diagnostic to predictive analytics</label>
+      <label class="opt" id="o6_2" onclick="pick(6,2,3)"><span class="opt-letter">C</span> Predictive to autonomous analytics</label>
+      <label class="opt" id="o6_3" onclick="pick(6,3,3)"><span class="opt-letter">D</span> Descriptive to prescriptive analytics — from reporting what happened to recommending what to do</label>
+    </div>
+    <div class="feedback" id="fb6">
+      <div class="fb-result" id="fbr6"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Analytics maturity: <em>Descriptive</em> (what happened? → dashboards, reports) → <em>Diagnostic</em> (why did it happen? → root cause analysis) → <em>Predictive</em> (what will happen? → demand forecasting, ML) → <em>Prescriptive</em> (what should we do? → optimization models, AI recommendations). Monthly dashboards = Descriptive. Network optimization recommending DC consolidation = Prescriptive — the highest maturity level, going from <em>reporting</em> historical performance to making forward-looking <em>optimization recommendations</em>.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Sustainability & Green SC -->
+  <div class="section-header">Section 2 · Sustainability &amp; Green Supply Chain (Q8–Q14)</div>
+
+  <!-- Q8 -->
+  <div class="q-block" id="qb7">
+    <div class="q-header">
+      <span class="q-num-badge">Q8</span>
+      <div>
+        <div class="q-topic">Triple Bottom Line</div>
+        <div class="q-text">The "triple bottom line" (TBL) framework requires sustainable supply chains to measure performance across:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o7_0" onclick="pick(7,0,0)"><span class="opt-letter">A</span> Profit (economic performance), People (social responsibility), and Planet (environmental impact) — simultaneously optimizing all three rather than maximizing profit at the expense of the other two</label>
+      <label class="opt" id="o7_1" onclick="pick(7,1,0)"><span class="opt-letter">B</span> Quality, cost, and delivery performance across all supply chain tiers</label>
+      <label class="opt" id="o7_2" onclick="pick(7,2,0)"><span class="opt-letter">C</span> Financial performance, operational KPIs, and strategic positioning on a balanced scorecard</label>
+      <label class="opt" id="o7_3" onclick="pick(7,3,0)"><span class="opt-letter">D</span> Short-term profitability, medium-term market share, and long-term brand equity</label>
+    </div>
+    <div class="feedback" id="fb7">
+      <div class="fb-result" id="fbr7"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Triple bottom line (TBL)</em>: <strong>Profit</strong> = financial/economic performance; <strong>People</strong> = labor standards, human rights, community impact, diversity; <strong>Planet</strong> = carbon footprint, resource consumption, waste, biodiversity. Sustainable supply chain management optimizes all three — not just profit. Why commercially relevant: ESG performance affects investor capital access (institutional investors apply ESG screens), customer requirements (B2B buyers demand supplier ESG compliance), regulatory compliance (CSRD, CSDDD), and talent attraction. TBL is not just a CSR framework — it's a strategic performance system.</div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-block" id="qb8">
+    <div class="q-header">
+      <span class="q-num-badge">Q9</span>
+      <div>
+        <div class="q-topic">GHG Emissions Scopes</div>
+        <div class="q-text">A consumer goods company's manufacturing facilities and purchased electricity represent 15% of its total carbon footprint. The remaining 85% comes from supplier manufacturing, inbound/outbound transportation, and product use and end-of-life disposal. The 85% is BEST classified as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o8_0" onclick="pick(8,0,1)"><span class="opt-letter">A</span> Scope 1 emissions — direct emissions from the extended enterprise</label>
+      <label class="opt" id="o8_1" onclick="pick(8,1,1)"><span class="opt-letter">B</span> Scope 3 emissions — all indirect value chain emissions, both upstream (supply chain) and downstream (product use/disposal)</label>
+      <label class="opt" id="o8_2" onclick="pick(8,2,1)"><span class="opt-letter">C</span> Unregulated emissions that do not need to be included in corporate carbon targets</label>
+      <label class="opt" id="o8_3" onclick="pick(8,3,1)"><span class="opt-letter">D</span> Scope 2 emissions from energy consumed at supplier and customer facilities</label>
+    </div>
+    <div class="feedback" id="fb8">
+      <div class="fb-result" id="fbr8"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Scope 1 = direct from owned operations. Scope 2 = indirect from purchased energy (the 15% in this example). <em>Scope 3</em> = ALL other indirect emissions — purchased goods (supplier manufacturing), transportation (inbound + outbound), business travel, waste, and product use/disposal. 70–90% of most companies' total footprint is Scope 3. Corporate carbon commitments that exclude Scope 3 are often criticized as greenwashing — you cannot meaningfully reduce your footprint without addressing supply chain emissions. Science-based targets require Scope 3 inclusion for exactly this reason.</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-block" id="qb9">
+    <div class="q-header">
+      <span class="q-num-badge">Q10</span>
+      <div>
+        <div class="q-topic">Supply Chain Social Responsibility</div>
+        <div class="q-text">A company discovers that its Tier 1 supplier subcontracted production to a Tier 2 factory where child labor violations occurred. The company had a supplier code of conduct requiring Tier 1 compliance. The PRIMARY gap in the company's sustainability program was:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o9_0" onclick="pick(9,0,2)"><span class="opt-letter">A</span> Failure to obtain ISO 14001 environmental certification from Tier 1 suppliers</label>
+      <label class="opt" id="o9_1" onclick="pick(9,1,2)"><span class="opt-letter">B</span> Not requiring the company's own social audit team to physically approve every Tier 2 facility before production begins</label>
+      <label class="opt" id="o9_2" onclick="pick(9,2,2)"><span class="opt-letter">C</span> The code of conduct did not cascade requirements to sub-suppliers, and/or the company did not audit beyond Tier 1 to verify that subcontracting was disclosed and compliant</label>
+      <label class="opt" id="o9_3" onclick="pick(9,3,2)"><span class="opt-letter">D</span> The company failed to establish science-based targets covering supply chain Scope 3 emissions</label>
+    </div>
+    <div class="feedback" id="fb9">
+      <div class="fb-result" id="fbr9"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The most common supply chain social responsibility failure: violations concentrate at Tier 2/3 sub-suppliers that most companies never audit. A supplier code of conduct must: (1) explicitly require Tier 1 to flow down code requirements to their suppliers; and (2) require disclosure of subcontracting relationships. Verification through deeper-tier audits, shared platforms (SMETA/Sedex), or blockchain traceability extends visibility. The EU Corporate Sustainability Due Diligence Directive now creates legal liability for exactly this type of Tier 2+ violation — companies cannot plead ignorance.</div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-block" id="qb10">
+    <div class="q-header">
+      <span class="q-num-badge">Q11</span>
+      <div>
+        <div class="q-topic">Science-Based Targets</div>
+        <div class="q-text">A company announces it will reduce carbon emissions by 30% by 2035 through energy efficiency at its own facilities only. Why might this commitment NOT qualify as a validated science-based target (SBT)?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o10_0" onclick="pick(10,0,3)"><span class="opt-letter">A</span> SBTs require ISO 14001 certification before any emission reduction commitment can be made public</label>
+      <label class="opt" id="o10_1" onclick="pick(10,1,3)"><span class="opt-letter">B</span> SBTs are only available to companies in the energy sector, not consumer goods or manufacturing</label>
+      <label class="opt" id="o10_2" onclick="pick(10,2,3)"><span class="opt-letter">C</span> A 30% reduction target by 2035 is not ambitious enough to qualify regardless of scope</label>
+      <label class="opt" id="o10_3" onclick="pick(10,3,3)"><span class="opt-letter">D</span> SBTs validated by the SBTi require: (1) reduction pathway aligned with the 1.5°C climate science; and (2) mandatory inclusion of Scope 3 (value chain) emissions — a target covering only Scope 1/2 typically cannot be accepted as an SBT for most sectors</label>
+    </div>
+    <div class="feedback" id="fb10">
+      <div class="fb-result" id="fbr10"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Science-based targets</em> have two critical requirements beyond generic carbon pledges: (1) the reduction must be scientifically aligned with the Paris Agreement 1.5°C pathway — the remaining global carbon budget imposes a specific reduction rate per year; (2) for most sectors, Scope 3 must be included because supply chain emissions represent 70–90% of corporate footprints. The SBTi (Science Based Targets initiative) independently validates that targets are both <em>ambitious enough</em> (aligned with science) and <em>comprehensive enough</em> (includes supply chain). Without Scope 3, the commitment excludes the majority of the carbon footprint.</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-block" id="qb11">
+    <div class="q-header">
+      <span class="q-num-badge">Q12</span>
+      <div>
+        <div class="q-topic">Sustainability Standards</div>
+        <div class="q-text">A buyer evaluating a supplier's environmental credentials asks for evidence of systematic environmental management. The supplier provides a GRI sustainability report. Why might this be insufficient compared to ISO 14001 certification?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o11_0" onclick="pick(11,0,0)"><span class="opt-letter">A</span> ISO 14001 requires independent third-party verification of a working Environmental Management System — not just disclosure. GRI is a reporting framework for what companies choose to disclose; it does not verify that a management system is actually operating effectively</label>
+      <label class="opt" id="o11_1" onclick="pick(11,1,0)"><span class="opt-letter">B</span> GRI sustainability reports are only valid for publicly traded companies, making them inapplicable for supplier evaluation purposes</label>
+      <label class="opt" id="o11_2" onclick="pick(11,2,0)"><span class="opt-letter">C</span> ISO 14001 covers all 17 UN SDGs, while GRI covers only environmental topics</label>
+      <label class="opt" id="o11_3" onclick="pick(11,3,0)"><span class="opt-letter">D</span> GRI requires government regulatory approval, making it less credible than privately administered ISO standards</label>
+    </div>
+    <div class="feedback" id="fb11">
+      <div class="fb-result" id="fbr11"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>GRI</em> = a <em>reporting framework</em> — companies disclose sustainability information in a standardized format, but disclosure does not require verification of management system effectiveness. <em>ISO 14001</em> = a <em>management system standard</em> — requires establishing environmental objectives, controls, procedures, monitoring, and evidence of systematic management. Third-party auditors certify the EMS meets the standard. Key distinction: GRI tells you <em>what a company says it's doing</em>; ISO 14001 gives independent verification that a <em>management system is actually operating</em>. Buyers generally prefer ISO 14001 certification because it is verifiable, not self-declared.</div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="q-block" id="qb12">
+    <div class="q-header">
+      <span class="q-num-badge">Q13</span>
+      <div>
+        <div class="q-topic">SMETA Audit</div>
+        <div class="q-text">The supply chain problem that SMETA (Sedex Members Ethical Trade Audit) was specifically designed to address is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o12_0" onclick="pick(12,0,1)"><span class="opt-letter">A</span> The absence of environmental management standards in developing country manufacturing</label>
+      <label class="opt" id="o12_1" onclick="pick(12,1,1)"><span class="opt-letter">B</span> Supplier audit fatigue — where large suppliers receive dozens of separate buyer-specific social audits annually, wasting resources on both sides. SMETA's shared-audit format means one report satisfies multiple buyers.</label>
+      <label class="opt" id="o12_2" onclick="pick(12,2,1)"><span class="opt-letter">C</span> The inability of buyers to verify supplier financial stability before awarding long-term contracts</label>
+      <label class="opt" id="o12_3" onclick="pick(12,3,1)"><span class="opt-letter">D</span> The lack of an internationally recognized certification scheme for organic product sourcing</label>
+    </div>
+    <div class="feedback" id="fb12">
+      <div class="fb-result" id="fbr12"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>SMETA</em> was created to solve <em>audit fatigue</em>. A large supplier to 20 multinationals might receive 20 separate buyer-specific audits per year — enormous cost and disruption. SMETA solution: standardized audit methodology conducted once and uploaded to Sedex platform → all Sedex-member buyers access the same report. Supplier audited once; multiple buyers' requirements satisfied. SMETA covers 4 pillars: Labor, Health &amp; Safety, Environment, Business Ethics. The <em>sharing mechanism</em> through the Sedex platform is the key innovation — the same principle as RBA-VAP in the electronics industry.</div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="q-block" id="qb13">
+    <div class="q-header">
+      <span class="q-num-badge">Q14</span>
+      <div>
+        <div class="q-topic">EU Sustainability Regulation</div>
+        <div class="q-text">How does the EU Corporate Sustainability Due Diligence Directive (CSDDD) fundamentally differ from the EU Corporate Sustainability Reporting Directive (CSRD)?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o13_0" onclick="pick(13,0,2)"><span class="opt-letter">A</span> CSRD applies only to manufacturing companies; CSDDD covers all industry sectors</label>
+      <label class="opt" id="o13_1" onclick="pick(13,1,2)"><span class="opt-letter">B</span> CSDDD addresses environmental impacts only; CSRD covers social and labor impacts only</label>
+      <label class="opt" id="o13_2" onclick="pick(13,2,2)"><span class="opt-letter">C</span> CSRD requires companies to DISCLOSE sustainability information; CSDDD requires companies to IDENTIFY, PREVENT, AND ADDRESS human rights and environmental violations throughout their supply chains — with legal civil liability for non-compliance</label>
+      <label class="opt" id="o13_3" onclick="pick(13,3,2)"><span class="opt-letter">D</span> CSRD requires annual sustainability reports; CSDDD requires quarterly supply chain audits filed with EU authorities</label>
+    </div>
+    <div class="feedback" id="fb13">
+      <div class="fb-result" id="fbr13"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The CSRD vs. CSDDD distinction is a common exam topic. <em>CSRD</em> = <em>reporting</em> directive: companies must disclose sustainability information (including supply chain impacts) in a standardized, auditable format. <em>CSDDD</em> = <em>due diligence</em> directive: companies must conduct active due diligence to identify human rights and environmental violations in their supply chains, take action to prevent and address them, and face <em>civil liability</em> for failure. CSDDD is more consequential — it converts supply chain violations from reputational risk to legal liability. Both apply to large EU companies AND large non-EU companies selling in the EU above revenue thresholds.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Emerging Technology -->
+  <div class="section-header">Section 3 · Emerging Technology in Supply Chains (Q15–Q21)</div>
+
+  <!-- Q15 -->
+  <div class="q-block" id="qb14">
+    <div class="q-header">
+      <span class="q-num-badge">Q15</span>
+      <div>
+        <div class="q-topic">Digital Twin</div>
+        <div class="q-text">A global manufacturer wants to evaluate the operational impact of closing one of its three distribution centers before committing to the change. Which emerging technology capability BEST enables this type of risk-free evaluation?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o14_0" onclick="pick(14,0,3)"><span class="opt-letter">A</span> Blockchain — creating an immutable record of all DC operations to compare historical performance across all three sites</label>
+      <label class="opt" id="o14_1" onclick="pick(14,1,3)"><span class="opt-letter">B</span> RPA — automating data collection from all three DCs simultaneously to speed up the analysis process</label>
+      <label class="opt" id="o14_2" onclick="pick(14,2,3)"><span class="opt-letter">C</span> Big data analytics — running three years of historical transaction data to identify which DC has the lowest throughput efficiency</label>
+      <label class="opt" id="o14_3" onclick="pick(14,3,3)"><span class="opt-letter">D</span> A supply chain digital twin — a virtual model of the network continuously updated with real data, enabling simulation of the "close DC #2" scenario before any real-world commitment is made</label>
+    </div>
+    <div class="feedback" id="fb14">
+      <div class="fb-result" id="fbr14"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Digital twin</em> = virtual replica of a physical system, continuously updated with real-world data. For supply chain network decisions: instead of closing DC #2 and discovering three months later that service levels in the Northeast have collapsed, you test it first in the virtual model. The digital twin shows: which customer zones move to farther DCs, what happens to lead times, where costs increase or decrease, and whether service targets can still be met. This is the core value proposition of digital twins: <em>test expensive, risky, irreversible decisions in a risk-free virtual environment</em> before committing capital or disrupting operations.</div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="q-block" id="qb15">
+    <div class="q-header">
+      <span class="q-num-badge">Q16</span>
+      <div>
+        <div class="q-topic">Blockchain</div>
+        <div class="q-text">A food company implements blockchain to track fresh produce from farm to retail shelf. Which blockchain property makes it MORE credible for food safety traceability than traditional paper certificate systems?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o15_0" onclick="pick(15,0,0)"><span class="opt-letter">A</span> Immutability — once a supply chain event (harvest date, temperature reading, organic certification) is recorded, it cannot be altered without consensus of all participants, making falsification of origin records practically impossible</label>
+      <label class="opt" id="o15_1" onclick="pick(15,1,0)"><span class="opt-letter">B</span> Blockchain automatically tests whether produce meets safety and quality standards through embedded sensors</label>
+      <label class="opt" id="o15_2" onclick="pick(15,2,0)"><span class="opt-letter">C</span> Blockchain eliminates the need for physical product inspections by food safety regulatory authorities</label>
+      <label class="opt" id="o15_3" onclick="pick(15,3,0)"><span class="opt-letter">D</span> Blockchain lowers the total cost of food safety compliance by replacing all third-party audit requirements</label>
+    </div>
+    <div class="feedback" id="fb15">
+      <div class="fb-result" id="fbr15"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Blockchain's value for traceability: <em>immutability + distributed consensus</em>. Traditional paper certificates (organic certification, HACCP compliance, cold chain records) can be forged. Once data is recorded in blockchain, it's replicated across all network nodes — changing any record requires consensus of all participants, making falsification practically impossible without detection. Food safety example: IBM Food Trust reduced the time to trace a food contamination event from 7 days to 2.2 seconds. Key limitation: <em>"garbage in, garbage out"</em> — blockchain secures data after entry but cannot prevent false data from being recorded in the first place.</div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="q-block" id="qb16">
+    <div class="q-header">
+      <span class="q-num-badge">Q17</span>
+      <div>
+        <div class="q-topic">IoT in Supply Chain</div>
+        <div class="q-text">A pharmaceutical company ships temperature-sensitive vaccines that must remain between 2°C and 8°C. Which IoT application provides the MOST direct benefit for maintaining cold chain integrity?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o16_0" onclick="pick(16,0,2)"><span class="opt-letter">A</span> RFID-based inventory counting at the pharmaceutical distribution center</label>
+      <label class="opt" id="o16_1" onclick="pick(16,1,2)"><span class="opt-letter">B</span> Real-time GPS tracking of delivery vehicles for estimated time of departure optimization</label>
+      <label class="opt" id="o16_2" onclick="pick(16,2,2)"><span class="opt-letter">C</span> Temperature sensors embedded in shipments that continuously transmit readings and immediately alert the supply chain team when the cold chain threshold is breached — enabling intervention before delivery</label>
+      <label class="opt" id="o16_3" onclick="pick(16,3,2)"><span class="opt-letter">D</span> AI-powered demand forecasting for vaccine production planning and replenishment scheduling</label>
+    </div>
+    <div class="feedback" id="fb16">
+      <div class="fb-result" id="fbr16"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Cold chain integrity: product exposed to out-of-range temperatures may be unsafe even if visually unchanged. Traditional cold chain: driver checks temperature at pickup and delivery — a <em>snapshot</em>, too late to intervene. IoT solution: <em>continuous monitoring</em> with real-time alerting. If temperature exceeds threshold at 3am in a truck overnight, the IoT system triggers an immediate alert → intervention is possible (reroute to cold storage, notify customer, salvage shipment). This transforms cold chain management from <em>periodic-reactive</em> (discover breach on delivery) to <em>continuous-proactive</em> (detect breach in real time, respond before damage is done) — the fundamental IoT value proposition.</div>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="q-block" id="qb17">
+    <div class="q-header">
+      <span class="q-num-badge">Q18</span>
+      <div>
+        <div class="q-topic">AI/ML Demand Forecasting</div>
+        <div class="q-text">A fashion retailer deploys an AI/ML demand forecasting system that ingests social media trend data, weather forecasts, competitor promotional calendars, and local event schedules — in addition to historical sales. Compared to a 12-period moving average, the PRIMARY advantage of the AI system for this retailer is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o17_0" onclick="pick(17,0,3)"><span class="opt-letter">A</span> The AI system requires less computing infrastructure and is easier for planners to interpret and explain</label>
+      <label class="opt" id="o17_1" onclick="pick(17,1,3)"><span class="opt-letter">B</span> Moving averages are unreliable for fashion; the AI system eliminates all demand uncertainty, making safety stock unnecessary</label>
+      <label class="opt" id="o17_2" onclick="pick(17,2,3)"><span class="opt-letter">C</span> The AI system produces significantly smoother, more stable forecasts that are easier for production planners to work with</label>
+      <label class="opt" id="o17_3" onclick="pick(17,3,3)"><span class="opt-letter">D</span> The AI system identifies and responds to external demand drivers that historical patterns alone cannot capture — producing significantly more accurate forecasts for volatile, trend-sensitive products</label>
+    </div>
+    <div class="feedback" id="fb17">
+      <div class="fb-result" id="fbr17"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Traditional time-series methods (moving average, exponential smoothing) use <em>only historical sales</em>. For fashion: a viral social media post can cause a demand spike completely unrelated to historical patterns — a moving average sees it only after 12 periods of history, by which time the trend has passed. AI/ML can detect these signals <em>before</em> they materialize as orders: social media mentions rising → position inventory proactively. For stable/predictable demand, moving averages work fine. For volatile, trend-driven products with identifiable external drivers, AI/ML provides materially better forecasts → lower safety stock AND fewer stockouts simultaneously.</div>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="q-block" id="qb18">
+    <div class="q-header">
+      <span class="q-num-badge">Q19</span>
+      <div>
+        <div class="q-topic">Robotic Process Automation</div>
+        <div class="q-text">Which of the following supply chain processes is the BEST candidate for Robotic Process Automation (RPA)?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o18_0" onclick="pick(18,0,3)"><span class="opt-letter">A</span> Evaluating and recommending the optimal sourcing strategy for a new product launch across 12 potential supplier countries</label>
+      <label class="opt" id="o18_1" onclick="pick(18,1,3)"><span class="opt-letter">B</span> Managing complex multi-year supplier contract negotiations involving pricing, quality, and capacity commitments</label>
+      <label class="opt" id="o18_2" onclick="pick(18,2,3)"><span class="opt-letter">C</span> Developing a risk mitigation strategy for a geopolitical disruption to a critical tier-2 supplier network</label>
+      <label class="opt" id="o18_3" onclick="pick(18,3,3)"><span class="opt-letter">D</span> Matching supplier invoices to purchase orders and generating payment approvals for invoices that match within tolerance — rule-based, high-volume, currently performed manually</label>
+    </div>
+    <div class="feedback" id="fb18">
+      <div class="fb-result" id="fbr18"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>RPA</em> is ideal for: <em>repetitive, high-volume, rule-based tasks</em> that currently require humans to follow defined steps. Invoice matching: if invoice amount = PO amount within tolerance AND goods receipt confirms delivery → approve payment. Pure rules-based, no judgment required. 24/7 operation, zero fatigue errors, faster than humans. Options A, B, and C all require strategic judgment, contextual understanding, nuanced decision-making, and handling novel situations — <em>not</em> appropriate for rules-based RPA. RPA does NOT apply to tasks requiring creativity, judgment, or processing truly unstructured information. It automates the <em>mechanical</em> steps humans currently perform.</div>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="q-block" id="qb19">
+    <div class="q-header">
+      <span class="q-num-badge">Q20</span>
+      <div>
+        <div class="q-topic">Technology Assessment — Build vs. Buy vs. Subscribe</div>
+        <div class="q-text">A mid-size logistics company needs a Transportation Management System (TMS) to improve route optimization. They have limited internal IT resources, need deployment within 3 months, and have standard shipping requirements without unique proprietary processes. Which technology acquisition approach is MOST appropriate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o19_0" onclick="pick(19,0,0)"><span class="opt-letter">A</span> SaaS/Cloud subscription — lowest upfront cost, fastest deployment (weeks not months), vendor-maintained, appropriate for standard TMS functionality with no unique competitive requirements to justify custom development</label>
+      <label class="opt" id="o19_1" onclick="pick(19,1,0)"><span class="opt-letter">B</span> Custom build — develop a proprietary TMS to embed unique logistics algorithms that serve as the company's competitive differentiator</label>
+      <label class="opt" id="o19_2" onclick="pick(19,2,0)"><span class="opt-letter">C</span> On-premise licensed software — purchase a perpetual license and manage it internally for maximum data control and customization flexibility</label>
+      <label class="opt" id="o19_3" onclick="pick(19,3,0)"><span class="opt-letter">D</span> Issue an RFP to 3–5 technology partners to co-develop a shared logistics platform consortium</label>
+    </div>
+    <div class="feedback" id="fb19">
+      <div class="fb-result" id="fbr19"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Decision criteria point to <em>SaaS</em>: (1) Limited IT resources → no bandwidth for custom build or complex on-premise management; (2) 3-month timeline → SaaS deploys in weeks; build takes 12–24+ months; (3) Standard requirements → no unique competitive differentiator justifying custom development. SaaS TMS advantages: vendor handles infrastructure/updates, pay-as-you-grow pricing, rapid time-to-value, lower TCO for standard processes. Custom build is justified <em>only</em> when the technology itself IS the competitive differentiator (e.g., Amazon's proprietary routing algorithms). For a mid-size company with standard needs, SaaS is the correct answer.</div>
+    </div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="q-block" id="qb20">
+    <div class="q-header">
+      <span class="q-num-badge">Q21</span>
+      <div>
+        <div class="q-topic">Technology Implementation</div>
+        <div class="q-text">A company spends $5M on a new WMS implementation. Six months after go-live, warehouse productivity has dropped 15% and system adoption is below 40%. The MOST likely root cause is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o20_0" onclick="pick(20,0,1)"><span class="opt-letter">A</span> The WMS software itself had defects that were not discovered during the vendor's quality testing phase</label>
+      <label class="opt" id="o20_1" onclick="pick(20,1,1)"><span class="opt-letter">B</span> Insufficient change management — inadequate user training, absence of executive sponsorship driving adoption, and resistance from warehouse staff who were not involved in the design process</label>
+      <label class="opt" id="o20_2" onclick="pick(20,2,1)"><span class="opt-letter">C</span> The implementation budget was too small to cover all required system customizations for the specific warehouse layout</label>
+      <label class="opt" id="o20_3" onclick="pick(20,3,1)"><span class="opt-letter">D</span> The company chose a SaaS deployment model when an on-premise model would have provided better operational fit</label>
+    </div>
+    <div class="feedback" id="fb20">
+      <div class="fb-result" id="fbr20"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Classic WMS failure pattern: the technology works, but people don't use it. Evidence: 40% adoption = 60% of staff working around the system (slower than old process alone = productivity drop). Root causes: (1) No executive champion → no enforcement of adoption; (2) Insufficient training → users don't know how to use the system correctly; (3) Staff not involved in design → system doesn't match actual workflows; (4) Resistance to change → fear of job loss, comfort with familiar processes. <em>Rule of thumb: technology implementations are 30% technology, 70% people and process change.</em> The technology rarely fails — adoption does. Poor data quality would cause wrong outputs, not 40% adoption.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Integration & Capstone -->
+  <div class="section-header">Section 4 · Technology Assessment &amp; Integration Review (Q22–Q25)</div>
+
+  <!-- Q22 -->
+  <div class="q-block" id="qb21">
+    <div class="q-header">
+      <span class="q-num-badge">Q22</span>
+      <div>
+        <div class="q-topic">Integration — Scenario</div>
+        <div class="q-text">
+          <div style="background:#f0f7ff;border-left:4px solid #2e86de;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px;font-style:italic;font-size:.87rem;color:#1e3a5f">Scenario: TechMart, a global electronics retailer, faces three simultaneous challenges: (1) demand volatility causing frequent stockouts and excess inventory across 8,000 SKUs; (2) investor ESG pressure requiring supply chain emissions reporting and proof of ethical labor practices; (3) a US regulatory requirement to prove no products contain conflict minerals from high-risk zones.</div>
+          Which combination of supply chain capabilities BEST addresses all three challenges simultaneously?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o21_0" onclick="pick(21,0,2)"><span class="opt-letter">A</span> Lean manufacturing at Tier 1 suppliers; ISO 14001 certification requirement; EDI for order transmission</label>
+      <label class="opt" id="o21_1" onclick="pick(21,1,2)"><span class="opt-letter">B</span> SMETA audits at Tier 1 only; shift to a fully push supply chain with 6-month production runs; ERP upgrade across all entities</label>
+      <label class="opt" id="o21_2" onclick="pick(21,2,2)"><span class="opt-letter">C</span> AI/ML demand forecasting (addresses volatility), supplier ESG reporting aligned with GRI and science-based targets (addresses investor pressure), and blockchain for conflict mineral traceability with immutable certification records (addresses regulatory requirement)</label>
+      <label class="opt" id="o21_3" onclick="pick(21,3,2)"><span class="opt-letter">D</span> Move all sourcing to domestic suppliers to eliminate conflict mineral risk, simplify ESG reporting, and improve supply chain responsiveness simultaneously</label>
+    </div>
+    <div class="feedback" id="fb21">
+      <div class="fb-result" id="fbr21"></div>
+      <div class="fb-exp"><strong>Key point:</strong> This integration question spans three different sections. Challenge 1 (demand volatility) → AI/ML forecasting processes far more variables than traditional methods, significantly improving accuracy for volatile, high-SKU electronics. Challenge 2 (ESG) → GRI framework provides standardized sustainability disclosure; science-based targets provide independently validated credibility for investor relations. Challenge 3 (conflict minerals) → Blockchain's immutability makes it practically impossible to falsify mineral origin records — once certified conflict-free sources are recorded on-chain, the chain of custody cannot be falsified. Options A and B don't credibly address all three. Option D oversimplifies: domestic sourcing doesn't eliminate ESG obligations or conflict mineral compliance requirements.</div>
+    </div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="q-block" id="qb22">
+    <div class="q-header">
+      <span class="q-num-badge">Q23</span>
+      <div>
+        <div class="q-topic">Business Process Reengineering</div>
+        <div class="q-text">Before implementing a new Order Management System (OMS), a consultant recommends mapping and redesigning the current order process — which currently has 14 sequential approval steps for standard customer orders. The advice to redesign BEFORE implementing technology reflects which principle?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o22_0" onclick="pick(22,0,3)"><span class="opt-letter">A</span> Technology ROI calculations must be completed and approved before any process changes can be authorized</label>
+      <label class="opt" id="o22_1" onclick="pick(22,1,3)"><span class="opt-letter">B</span> Most supply chain regulators require documented process maps before authorizing enterprise technology deployment</label>
+      <label class="opt" id="o22_2" onclick="pick(22,2,3)"><span class="opt-letter">C</span> Technology vendor contracts typically require completed process documentation before implementation can begin</label>
+      <label class="opt" id="o22_3" onclick="pick(22,3,3)"><span class="opt-letter">D</span> Automating an inefficient process only makes the inefficiency run faster — Business Process Reengineering (BPR) should precede technology implementation to avoid embedding existing waste and dysfunction into the new system</label>
+    </div>
+    <div class="feedback" id="fb22">
+      <div class="fb-result" id="fbr22"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>"Don't automate a broken process."</em> If 14 approval steps exist due to historical organizational politics or workarounds for poor data quality, implementing an OMS that automates those 14 steps delivers a faster but still unnecessarily bureaucratic process. The right sequence: (1) Map current state; (2) Identify non-value-added steps — why does a standard order need 14 approvals? (Most should need zero.); (3) Design improved future state (2–3 approvals max, exceptions auto-flagged); (4) Configure OMS to enable the <em>improved</em> process. BPR + technology = transformation. Technology without BPR = digitized dysfunction at higher speed and cost.</div>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="q-block" id="qb23">
+    <div class="q-header">
+      <span class="q-num-badge">Q24</span>
+      <div>
+        <div class="q-topic">Data Quality &amp; Technology</div>
+        <div class="q-text">A company migrates inventory records from a legacy ERP to a new cloud-based supply chain platform. Three months after go-live, the system generates replenishment orders for over-stocked items and fails to reorder items that are actually below safety stock. The ROOT CAUSE is MOST likely:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o23_0" onclick="pick(23,0,0)"><span class="opt-letter">A</span> Poor data quality — inventory records migrated from the legacy system contained errors (phantom inventory, incorrect quantities, wrong safety stock parameters) that were never cleansed before migration</label>
+      <label class="opt" id="o23_1" onclick="pick(23,1,0)"><span class="opt-letter">B</span> The cloud platform's replenishment algorithms are inherently less sophisticated than the legacy ERP's</label>
+      <label class="opt" id="o23_2" onclick="pick(23,2,0)"><span class="opt-letter">C</span> The implementation was completed too quickly without adequate system integration testing</label>
+      <label class="opt" id="o23_3" onclick="pick(23,3,0)"><span class="opt-letter">D</span> The company should have chosen an on-premise deployment where inventory data would remain under direct IT control</label>
+    </div>
+    <div class="feedback" id="fb23">
+      <div class="fb-result" id="fbr23"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Classic <em>"garbage in, garbage out"</em> scenario. Legacy ERP records commonly contain errors: unrecorded adjustments, theft/damage write-offs never entered, wrong unit-of-measure conversions, phantom inventory (consumed but not deducted), stale safety stock parameters from years-old planning. If these records are migrated unchanged, the new system makes rational decisions based on irrational data: thinks there are 500 units when there are 20 (won't reorder); thinks there are 50 units when there are 500 (triggers unnecessary replenishment). <em>Data cleansing before migration is critical</em>: reconcile system quantities to physical counts, update safety stock levels, remove stale records. Migrating bad data into a new system creates an expensive bad-data system.</div>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="q-block" id="qb24">
+    <div class="q-header">
+      <span class="q-num-badge">Q25</span>
+      <div>
+        <div class="q-topic">Integration — Capstone</div>
+        <div class="q-text">
+          <div style="background:#f0f7ff;border-left:4px solid #2e86de;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px;font-style:italic;font-size:.87rem;color:#1e3a5f">Scenario: MegaDistrib, a global industrial parts distributor, faces three simultaneous strategic decisions: (A) A new competitor offers 24-hour delivery vs. MegaDistrib's current 5-day lead time; (B) A major customer demands a GRI-aligned sustainability report and proof of no forced labor in their supply chain; (C) The board requires any technology investment to show measurable ROI within 18 months.</div>
+          What strategic approach BEST addresses all three challenges with the right tools and realistic timelines?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o24_0" onclick="pick(24,0,1)"><span class="opt-letter">A</span> Address ESG compliance (B) first to protect the customer relationship, then tackle lead time (A), then evaluate technology ROI (C) — sequential prioritization reduces implementation complexity</label>
+      <label class="opt" id="o24_1" onclick="pick(24,1,1)"><span class="opt-letter">B</span> Deploy cloud TMS/WMS to reduce lead times (A — freight optimization + picking efficiency, achievable in 8–12 weeks); require SMETA audits from suppliers and GRI-framework reporting (B); quantify TMS freight savings and WMS labor efficiency as the ROI case (C — both measurable within 12–18 months)</label>
+      <label class="opt" id="o24_2" onclick="pick(24,2,1)"><span class="opt-letter">C</span> Commission a comprehensive 2-year supply chain strategy review before committing to any initiative — insufficient upfront planning is the primary cause of supply chain transformation failures</label>
+      <label class="opt" id="o24_3" onclick="pick(24,3,1)"><span class="opt-letter">D</span> Outsource all supply chain operations to a 4PL to immediately reduce lead times, transfer ESG compliance responsibility to the 4PL, and convert fixed costs to variable costs</label>
+    </div>
+    <div class="feedback" id="fb24">
+      <div class="fb-result" id="fbr24"></div>
+      <div class="fb-exp"><strong>Key point:</strong> This capstone question tests whether you can integrate competitive strategy, sustainability, and technology ROI — as real supply chain leaders must. (A) Lead time gap → Cloud TMS optimizes carrier/route selection; cloud WMS improves pick efficiency. Cloud deployment goes live in 8–12 weeks, not years. TMS typically delivers 5–15% freight savings; WMS delivers 15–25% labor efficiency — both quantifiable within 18 months for challenge C. (B) SMETA provides the shared social audit evidence the customer requires; GRI provides the reporting framework. Option A's sequential approach leaves MegaDistrib uncompetitive during the ESG phase. Option C misunderstands urgency — competitors are already in the market. Option D transfers control but doesn't ensure service delivery on MegaDistrib's behalf. Option B correctly treats all three challenges as <em>simultaneous</em>, using the right tools for each.</div>
+    </div>
+  </div>
+
+  <!-- Final Score -->
+  <div style="background:var(--card);border-radius:12px;padding:24px;margin-top:28px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center">
+    <div style="font-size:1rem;color:#555;margin-bottom:6px">Final Score</div>
+    <div style="font-size:2.4rem;font-weight:700;color:var(--accent)" id="final-score">0 / 25</div>
+    <div style="font-size:.9rem;color:#777;margin-top:4px" id="final-pct">Answer all questions to see your result</div>
+    <div style="margin-top:16px;font-size:.85rem;color:#555" id="final-msg"></div>
+  </div>
+
+</div>
+
+<footer>Day 13 Quiz · CSCP Exam Prep · Christophe Goossens · August 2026</footer>
+
+<script>
+const TOTAL = 25;
+const ANSWERS = [1,2,3,0,1,2,3,0,1,2,3,0,1,2,3,0,2,3,3,0,1,2,3,0,1];
+let answered = new Array(TOTAL).fill(false);
+let correct = new Array(TOTAL).fill(false);
+let score = 0;
+
+function pick(qIdx, optIdx, correctOpt) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const isCorrect = (optIdx === correctOpt);
+  if (isCorrect) { score++; correct[qIdx] = true; }
+
+  // Style chosen option
+  const chosen = document.getElementById('o' + qIdx + '_' + optIdx);
+  chosen.classList.add(isCorrect ? 'correct' : 'wrong');
+  chosen.classList.add('disabled');
+
+  // If wrong, reveal the correct option
+  if (!isCorrect) {
+    const corEl = document.getElementById('o' + qIdx + '_' + correctOpt);
+    corEl.classList.add('correct');
+  }
+
+  // Disable all options
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById('o' + qIdx + '_' + i);
+    if (el) el.classList.add('disabled');
+  }
+
+  // Show feedback
+  const fb = document.getElementById('fb' + qIdx);
+  const fbr = document.getElementById('fbr' + qIdx);
+  fb.style.display = 'block';
+  fbr.textContent = isCorrect ? '✅ Correct!' : '❌ Incorrect';
+  fbr.className = 'fb-result ' + (isCorrect ? 'fb-correct' : 'fb-wrong');
+
+  updateUI();
+}
+
+function updateUI() {
+  const answeredCount = answered.filter(Boolean).length;
+  const pct = Math.round(answeredCount / TOTAL * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = answeredCount + ' of ' + TOTAL + ' answered';
+  document.getElementById('score-num').textContent = score + ' / ' + TOTAL;
+  document.getElementById('final-score').textContent = score + ' / ' + TOTAL;
+
+  if (answeredCount === TOTAL) {
+    const scorePct = Math.round(score / TOTAL * 100);
+    document.getElementById('final-pct').textContent = scorePct + '% (' + (scorePct >= 80 ? 'Target reached! ✅' : 'Below 80% target — review missed questions') + ')';
+    let msg = '';
+    if (scorePct >= 92) msg = '🏆 Outstanding! You have strong command of Module 8 — Strategy, Sustainability & Technology.';
+    else if (scorePct >= 80) msg = '✅ Good work! Review the questions you missed and revisit those topic files before the exam.';
+    else if (scorePct >= 64) msg = '⚠️ Review the sections where you struggled — particularly the Module 8 topic files for those areas.';
+    else msg = '🔄 Consider re-reading the Module 8 topic files and retaking this quiz before moving on.';
+    document.getElementById('final-msg').textContent = msg;
+  } else {
+    document.getElementById('final-pct').textContent = 'Answer all questions to see your result';
+  }
+}
+
+function resetQuiz() {
+  answered = new Array(TOTAL).fill(false);
+  correct = new Array(TOTAL).fill(false);
+  score = 0;
+  for (let q = 0; q < TOTAL; q++) {
+    for (let o = 0; o < 4; o++) {
+      const el = document.getElementById('o' + q + '_' + o);
+      if (el) { el.className = 'opt'; const inp = el.querySelector('input'); if(inp) inp.checked=false; }
+    }
+    const fb = document.getElementById('fb' + q);
+    if (fb) fb.style.display = 'none';
+  }
+  updateUI();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+updateUI();
+</script>
+</body>
+</html>

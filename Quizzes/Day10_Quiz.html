@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 10 Quiz — Module 5: Logistics Part 2</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f4f7fb;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;min-height:100vh}
+header{background:var(--blue);color:#fff;padding:22px 36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+header h1{font-size:1.4rem}
+header p{font-size:.85rem;opacity:.75;margin-top:3px}
+.badge{background:rgba(255,255,255,.18);padding:6px 16px;border-radius:20px;font-size:.9rem;font-weight:700;white-space:nowrap}
+.container{max-width:860px;margin:0 auto;padding:28px 18px}
+.quiz-meta{display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.meta-pill{background:var(--card);border-radius:8px;padding:10px 18px;font-size:.85rem;box-shadow:0 2px 6px rgba(0,0,0,.08);display:flex;align-items:center;gap:8px}
+.meta-pill strong{color:var(--accent)}
+.progress-wrap{background:var(--card);border-radius:10px;padding:16px 20px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07)}
+.progress-label{display:flex;justify-content:space-between;font-size:.83rem;color:#666;margin-bottom:8px}
+.progress-bar{height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:.4s}
+.score-summary{background:var(--card);border-radius:10px;padding:18px 22px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.score-num{font-size:1.6rem;font-weight:700;color:var(--accent)}
+.score-label{font-size:.85rem;color:#555}
+.btn-reset{background:#fee2e2;color:#991b1b;border:none;padding:9px 18px;border-radius:7px;font-size:.88rem;font-weight:600;cursor:pointer}
+.btn-reset:hover{background:#fecaca}
+.q-block{background:var(--card);border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:.2s}
+.q-block.answered{opacity:.92}
+.q-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.q-num-badge{background:var(--blue);color:#fff;border-radius:8px;padding:4px 10px;font-size:.8rem;font-weight:700;white-space:nowrap;margin-top:1px}
+.q-topic{font-size:.75rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.q-text{font-size:.94rem;font-weight:600;line-height:1.55;color:#1a1a2e}
+.q-scenario{background:#f0f7ff;border-left:4px solid var(--accent);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:14px;font-size:.87rem;line-height:1.5;color:#1e3a5f;font-style:italic}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.88rem;line-height:1.45;transition:.15s;user-select:none}
+.opt:hover:not(.correct):not(.wrong):not(.disabled){background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46;font-weight:500}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.opt.disabled{cursor:default}
+.opt-letter{background:#f3f4f6;color:#374151;border-radius:5px;padding:2px 7px;font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.opt.correct .opt-letter{background:#059669;color:#fff}
+.opt.wrong .opt-letter{background:#dc2626;color:#fff}
+.feedback{margin-top:14px;border-radius:8px;overflow:hidden;display:none}
+.fb-result{padding:8px 14px;font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:7px}
+.fb-correct{background:#d1fae5;color:#065f46}
+.fb-wrong{background:#fee2e2;color:#991b1b}
+.fb-exp{padding:10px 14px;font-size:.85rem;line-height:1.55;background:#f9fafb;border-top:1px solid #f0f0f0;color:#374151}
+.fb-exp strong{color:var(--blue)}
+.section-header{font-size:1rem;font-weight:700;color:var(--blue);margin:28px 0 12px;padding-left:12px;border-left:4px solid var(--orange)}
+footer{text-align:center;padding:30px;color:#9ca3af;font-size:.8rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../Topics/00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div>
+    <p>Day 10 End-of-Day Quiz · CSCP Exam Prep</p>
+    <h1>Module 5: Logistics Part 2 — Transport, Trade &amp; Reverse Logistics</h1>
+  </div>
+  <div class="badge">25 Questions</div>
+</header>
+
+<div class="container">
+
+  <div class="quiz-meta">
+    <div class="meta-pill">📅 Day 10 — Wednesday 29 July 2026</div>
+    <div class="meta-pill">📖 Module 5 coverage: <strong>5.2.2 · 5.3.1 · 5.3.2 · 5.3.3 · 5.4.1 · 5.4.2</strong></div>
+    <div class="meta-pill">🎯 Target score: <strong>80%+ (20/25)</strong></div>
+    <div class="meta-pill">⏱ Estimated: <strong>30–35 min</strong></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress</span><span id="prog-text">0 of 25 answered</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="score-summary">
+    <div><div class="score-num" id="score-num">0 / 25</div><div class="score-label">Current Score</div></div>
+    <button class="btn-reset" onclick="resetQuiz()">🔄 Reset Quiz</button>
+  </div>
+
+  <!-- SECTION 1: Transport Modes & Carriers -->
+  <div class="section-header">Section 1 · Transport Modes &amp; Carrier Management (Q1–Q6)</div>
+
+  <!-- Q1 -->
+  <div class="q-block" id="qb0">
+    <div class="q-header">
+      <span class="q-num-badge">Q1</span>
+      <div>
+        <div class="q-topic">Carrier Types</div>
+        <div class="q-text">A company that offers transportation services to any shipper at published tariff rates, with no exclusivity, is BEST classified as a:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o0_0" onclick="pick(0,0,2)"><span class="opt-letter">A</span> Private carrier</label>
+      <label class="opt" id="o0_1" onclick="pick(0,1,2)"><span class="opt-letter">B</span> Contract carrier</label>
+      <label class="opt" id="o0_2" onclick="pick(0,2,2)"><span class="opt-letter">C</span> Common carrier</label>
+      <label class="opt" id="o0_3" onclick="pick(0,3,2)"><span class="opt-letter">D</span> Freight broker</label>
+    </div>
+    <div class="feedback" id="fb0">
+      <div class="fb-result" id="fbr0"></div>
+      <div class="fb-exp"><strong>Key point:</strong> A <em>common carrier</em> serves any shipper at published (tariff) rates — no exclusivity, regulated service (e.g., UPS, FedEx, major railroads). A <em>contract carrier</em> serves specific shippers under a negotiated contract with dedicated capacity. A <em>private carrier</em> is a company-owned fleet. A <em>freight broker</em> is a non-asset intermediary that matches shippers with carriers.</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block" id="qb1">
+    <div class="q-header">
+      <span class="q-num-badge">Q2</span>
+      <div>
+        <div class="q-topic">Rate Strategy</div>
+        <div class="q-text">A shipper negotiates rates with a carrier for a 12-month period, with the carrier committing to capacity on specific lanes in exchange for guaranteed volume. This arrangement is BEST described as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o1_0" onclick="pick(1,0,1)"><span class="opt-letter">A</span> Spot market pricing</label>
+      <label class="opt" id="o1_1" onclick="pick(1,1,1)"><span class="opt-letter">B</span> A contract rate arrangement</label>
+      <label class="opt" id="o1_2" onclick="pick(1,2,1)"><span class="opt-letter">C</span> A freight brokerage transaction</label>
+      <label class="opt" id="o1_3" onclick="pick(1,3,1)"><span class="opt-letter">D</span> Private carriage</label>
+    </div>
+    <div class="feedback" id="fb1">
+      <div class="fb-result" id="fbr1"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Contract rates</em> are negotiated for a defined period (typically one year) — the shipper gets price stability and committed capacity; the carrier gets guaranteed volume. This is superior to spot market for high-volume recurring lanes. <em>Spot market</em> pricing is transacted one shipment at a time and is volatile — it can be 50% cheaper or 100% more expensive than contract rates depending on market conditions. Strategy: contracts for base volume, spot/broker for surge.</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block" id="qb2">
+    <div class="q-header">
+      <span class="q-num-badge">Q3</span>
+      <div>
+        <div class="q-topic">Carrier Management</div>
+        <div class="q-text">A routing guide lists three carriers for a given shipping lane in priority order. Which of the following BEST describes the primary purpose of a routing guide?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o2_0" onclick="pick(2,0,2)"><span class="opt-letter">A</span> To negotiate rates with carriers on a spot market basis for each shipment</label>
+      <label class="opt" id="o2_1" onclick="pick(2,1,2)"><span class="opt-letter">B</span> To authorize freight brokers to set carrier rates on behalf of the shipper</label>
+      <label class="opt" id="o2_2" onclick="pick(2,2,2)"><span class="opt-letter">C</span> To ensure consistent use of pre-negotiated rates and preferred carriers, with ranked fallback options for when the primary carrier declines</label>
+      <label class="opt" id="o2_3" onclick="pick(2,3,2)"><span class="opt-letter">D</span> To track and measure carrier delivery performance over time</label>
+    </div>
+    <div class="feedback" id="fb2">
+      <div class="fb-result" id="fbr2"></div>
+      <div class="fb-exp"><strong>Key point:</strong> A <em>routing guide</em> specifies, for each origin-destination lane, which carrier to use (Carrier 1 = preferred, Carrier 2 = backup, Carrier 3 = last resort/spot). This protects pre-negotiated contract rates, ensures preferred carrier relationships are honored, and provides a systematic process for re-tendering when a carrier declines. Without a routing guide, shippers may accidentally use expensive carriers or bypass preferred arrangements.</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block" id="qb3">
+    <div class="q-header">
+      <span class="q-num-badge">Q4</span>
+      <div>
+        <div class="q-topic">Carrier Performance</div>
+        <div class="q-text">
+          <div style="background:#f0f7ff;border-left:4px solid #2e86de;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px;font-style:italic;font-size:.87rem;color:#1e3a5f">Scenario: A shipper's routing guide lists Carrier A as the preferred provider for a high-volume lane. Over the past quarter, Carrier A accepted only 55% of load tenders, forcing the shipper to use expensive spot market carriers for the remainder at significantly higher cost.</div>
+          Which carrier KPI is MOST directly reflected by the 55% acceptance figure?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o3_0" onclick="pick(3,0,3)"><span class="opt-letter">A</span> Cargo claims ratio</label>
+      <label class="opt" id="o3_1" onclick="pick(3,1,3)"><span class="opt-letter">B</span> Invoice accuracy rate</label>
+      <label class="opt" id="o3_2" onclick="pick(3,2,3)"><span class="opt-letter">C</span> On-time delivery percentage</label>
+      <label class="opt" id="o3_3" onclick="pick(3,3,3)"><span class="opt-letter">D</span> Load acceptance rate</label>
+    </div>
+    <div class="feedback" id="fb3">
+      <div class="fb-result" id="fbr3"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Load acceptance rate</em> = the percentage of shipment tenders the carrier actually accepts. A 55% acceptance rate means the carrier refuses nearly half of all loads — unreliable capacity. Preferred carriers should have high acceptance rates (85%+), which is the core value of a contract relationship (the carrier commits capacity to the shipper). Low acceptance forces re-tendering at spot market rates, driving up freight cost. This metric drives routing guide prioritization and annual carrier renewals.</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block" id="qb4">
+    <div class="q-header">
+      <span class="q-num-badge">Q5</span>
+      <div>
+        <div class="q-topic">Mode Selection</div>
+        <div class="q-text">A company needs to ship time-sensitive, high-value electronics from Asia to Europe within 48 hours. Which transport mode is most appropriate, even though it is the most expensive option per kilogram?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o4_0" onclick="pick(4,0,2)"><span class="opt-letter">A</span> Ocean freight via container ship</label>
+      <label class="opt" id="o4_1" onclick="pick(4,1,2)"><span class="opt-letter">B</span> Rail freight via Trans-Siberian route</label>
+      <label class="opt" id="o4_2" onclick="pick(4,2,2)"><span class="opt-letter">C</span> Air freight</label>
+      <label class="opt" id="o4_3" onclick="pick(4,3,2)"><span class="opt-letter">D</span> Road freight through multiple countries</label>
+    </div>
+    <div class="feedback" id="fb4">
+      <div class="fb-result" id="fbr4"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Mode selection balances cost, transit time, reliability, and cargo characteristics. For time-sensitive, high-value goods requiring a 48-hour Asia-to-Europe transit, only <em>air freight</em> is feasible — ocean takes 3–5 weeks, Trans-Siberian rail 10–14 days, and road is impractical across continents. The high cost of air is offset by: (1) urgency requirement, (2) high value-to-weight ratio (electronics), and (3) reduced inventory carrying cost during transit. No mode wins on all dimensions — match mode to the dominant selection criterion.</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block" id="qb5">
+    <div class="q-header">
+      <span class="q-num-badge">Q6</span>
+      <div>
+        <div class="q-topic">Carrier Types</div>
+        <div class="q-text">A grocery chain operates its own fleet of refrigerated trucks for daily store deliveries on consistent, high-volume routes. The PRIMARY advantage the company seeks by operating a private fleet (rather than using a third-party carrier) is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o5_0" onclick="pick(5,0,2)"><span class="opt-letter">A</span> Elimination of all fuel and maintenance costs</label>
+      <label class="opt" id="o5_1" onclick="pick(5,1,2)"><span class="opt-letter">B</span> Access to spot market capacity at competitive rates</label>
+      <label class="opt" id="o5_2" onclick="pick(5,2,2)"><span class="opt-letter">C</span> Full control over delivery schedules, service levels, and cold chain standards</label>
+      <label class="opt" id="o5_3" onclick="pick(5,3,2)"><span class="opt-letter">D</span> Reduced regulatory compliance requirements for refrigerated transport</label>
+    </div>
+    <div class="feedback" id="fb5">
+      <div class="fb-result" id="fbr5"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The PRIMARY benefit of a <em>private carrier</em> (company-owned fleet) is <strong>control</strong> — over schedules, service levels, cargo handling, and for refrigerated goods, cold chain integrity. Private fleet is justified when: volume is high and consistent, specialized handling is required, or delivery is a competitive differentiator. Drawbacks: high fixed costs, fleet management complexity, capital tied up in equipment. Common carriers offer lower fixed cost and scalability, but less control — especially critical for perishables where cold chain compliance is non-negotiable.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Legal, Security & Regulatory -->
+  <div class="section-header">Section 2 · Legal, Security &amp; Regulatory (Q7–Q13)</div>
+
+  <!-- Q7 -->
+  <div class="q-block" id="qb6">
+    <div class="q-header">
+      <span class="q-num-badge">Q7</span>
+      <div>
+        <div class="q-topic">Legal Documents</div>
+        <div class="q-text">A Bill of Lading (BOL) serves THREE distinct legal functions in a shipment. Which answer CORRECTLY identifies all three?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o6_0" onclick="pick(6,0,1)"><span class="opt-letter">A</span> Carrier rate quote, insurance policy, and delivery confirmation</label>
+      <label class="opt" id="o6_1" onclick="pick(6,1,1)"><span class="opt-letter">B</span> Receipt for goods, contract of carriage, and (if negotiable) document of title</label>
+      <label class="opt" id="o6_2" onclick="pick(6,2,1)"><span class="opt-letter">C</span> Customs entry declaration, packing list, and delivery receipt</label>
+      <label class="opt" id="o6_3" onclick="pick(6,3,1)"><span class="opt-letter">D</span> Export license, commercial invoice, and certificate of origin</label>
+    </div>
+    <div class="feedback" id="fb6">
+      <div class="fb-result" id="fbr6"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The BOL has three functions: (1) <strong>Receipt</strong> — carrier acknowledges receiving goods in stated quantity and condition; (2) <strong>Contract of carriage</strong> — specifies transport terms, routing, rate, and liability; (3) <strong>Title document</strong> (negotiable BOL only) — whoever holds the endorsed original has legal claim to the goods. The third function is critical for international trade finance (Letters of Credit). A <em>straight BOL</em> is non-negotiable (names a specific consignee). A <em>negotiable BOL</em> can be endorsed and transferred like a check.</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="q-block" id="qb7">
+    <div class="q-header">
+      <span class="q-num-badge">Q8</span>
+      <div>
+        <div class="q-topic">Legal Documents</div>
+        <div class="q-text">A seller ships goods internationally under a Letter of Credit. The bank requires a negotiable (order) bill of lading rather than a straight bill of lading. The PRIMARY reason is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o7_0" onclick="pick(7,0,2)"><span class="opt-letter">A</span> A negotiable BOL eliminates the need for customs clearance on arrival</label>
+      <label class="opt" id="o7_1" onclick="pick(7,1,2)"><span class="opt-letter">B</span> A negotiable BOL allows the carrier to set its own delivery terms independently</label>
+      <label class="opt" id="o7_2" onclick="pick(7,2,2)"><span class="opt-letter">C</span> A negotiable BOL can be endorsed and transferred — enabling the bank to hold title to the goods as security until the buyer pays</label>
+      <label class="opt" id="o7_3" onclick="pick(7,3,2)"><span class="opt-letter">D</span> A negotiable BOL reduces the carrier's liability for damage in transit</label>
+    </div>
+    <div class="feedback" id="fb7">
+      <div class="fb-result" id="fbr7"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Under a Letter of Credit: (1) seller ships goods and receives the original negotiable BOL from the carrier; (2) seller presents the BOL and other complying documents to the bank; (3) bank releases payment to the seller; (4) bank holds the original BOL (= title to goods); (5) buyer pays the bank and receives the BOL; (6) buyer presents the BOL at destination to take delivery. The negotiable BOL is the bank's security — without it, the bank cannot control the goods. A straight BOL names a specific consignee and cannot be transferred.</div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-block" id="qb8">
+    <div class="q-header">
+      <span class="q-num-badge">Q9</span>
+      <div>
+        <div class="q-topic">Supply Chain Security</div>
+        <div class="q-text">The C-TPAT program (Customs-Trade Partnership Against Terrorism) offers companies expedited customs processing and fewer inspections. In exchange, member companies must:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o8_0" onclick="pick(8,0,2)"><span class="opt-letter">A</span> Pay an annual fee to US Customs and Border Protection</label>
+      <label class="opt" id="o8_1" onclick="pick(8,1,2)"><span class="opt-letter">B</span> Use only US-flag carriers for all ocean shipments to the US</label>
+      <label class="opt" id="o8_2" onclick="pick(8,2,2)"><span class="opt-letter">C</span> Implement strong security practices across their supply chain AND vet and certify their supply chain partners meet security standards</label>
+      <label class="opt" id="o8_3" onclick="pick(8,3,2)"><span class="opt-letter">D</span> Limit imports to countries with bilateral US trade agreements</label>
+    </div>
+    <div class="feedback" id="fb8">
+      <div class="fb-result" id="fbr8"></div>
+      <div class="fb-exp"><strong>Key point:</strong> C-TPAT is a US CBP voluntary program with a risk-based logic: companies that implement CBP-approved security measures (facilities, IT systems, personnel) and extend those standards to their partners (suppliers, carriers, warehouses) get expedited clearance — Green Lane priority, fewer physical inspections. CBP redirects inspection resources to non-vetted companies. The EU/international equivalent is <em>AEO (Authorized Economic Operator)</em>. The partner vetting requirement is key — you can't be C-TPAT-compliant if your suppliers aren't secured too.</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-block" id="qb9">
+    <div class="q-header">
+      <span class="q-num-badge">Q10</span>
+      <div>
+        <div class="q-topic">Regulatory Compliance</div>
+        <div class="q-text">
+          <div style="background:#f0f7ff;border-left:4px solid #2e86de;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px;font-style:italic;font-size:.87rem;color:#1e3a5f">Scenario: A truck driver's 14-hour on-duty window began at 6:00 AM when he arrived at a shipper's facility. After 9 hours of waiting at the loading dock (detention), the driver finally departs at 3:00 PM, leaving only 2 hours of driving allowed within the legal window.</div>
+          Under US Hours of Service (HOS) regulations, what is the supply chain implication of this situation?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o9_0" onclick="pick(9,0,2)"><span class="opt-letter">A</span> The driver can extend driving hours to compensate for dock time since it was the shipper's fault</label>
+      <label class="opt" id="o9_1" onclick="pick(9,1,2)"><span class="opt-letter">B</span> HOS regulations do not apply when detention is caused by the shipper</label>
+      <label class="opt" id="o9_2" onclick="pick(9,2,2)"><span class="opt-letter">C</span> Excessive shipper detention burns the driver's available HOS window — the 14-hour on-duty limit is absolute regardless of how time was spent, preventing on-time delivery</label>
+      <label class="opt" id="o9_3" onclick="pick(9,3,2)"><span class="opt-letter">D</span> The driver must return to origin and restart the 10-hour off-duty rest period</label>
+    </div>
+    <div class="feedback" id="fb9">
+      <div class="fb-result" id="fbr9"></div>
+      <div class="fb-exp"><strong>Key point:</strong> FMCSA HOS: 11-hour driving limit after 10 hours off-duty; must complete driving within a 14-hour on-duty window — no extension for delays. Excessive <em>detention time</em> (waiting at shipper or receiver docks) is a major HOS problem: time waiting counts against the 14-hour window, leaving fewer hours to drive. This causes: missed delivery appointments, lower driver productivity, and effectively higher shipping costs (shipper may pay detention fees). Supply chain impact: shippers must schedule dock appointments efficiently and minimize driver wait time to protect HOS hours.</div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-block" id="qb10">
+    <div class="q-header">
+      <span class="q-num-badge">Q11</span>
+      <div>
+        <div class="q-topic">Regulatory Compliance</div>
+        <div class="q-text">A company ships lithium batteries by international air freight. Which regulatory body's rules PRIMARILY govern the hazardous materials requirements for this shipment?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o10_0" onclick="pick(10,0,1)"><span class="opt-letter">A</span> US DOT (Department of Transportation) — which governs all transport modes globally</label>
+      <label class="opt" id="o10_1" onclick="pick(10,1,1)"><span class="opt-letter">B</span> IATA (International Air Transport Association) — Dangerous Goods Regulations (DGR)</label>
+      <label class="opt" id="o10_2" onclick="pick(10,2,1)"><span class="opt-letter">C</span> IMDG Code (International Maritime Dangerous Goods Code)</label>
+      <label class="opt" id="o10_3" onclick="pick(10,3,1)"><span class="opt-letter">D</span> US CBP (Customs and Border Protection)</label>
+    </div>
+    <div class="feedback" id="fb10">
+      <div class="fb-result" id="fbr10"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Each transport mode has its own dangerous goods authority: <em>Air</em> = IATA Dangerous Goods Regulations (DGR); <em>Ocean</em> = IMDG Code (IMO); <em>US domestic surface</em> = US DOT. Lithium batteries are specifically restricted under IATA DGR because of fire risk at altitude, pressurization, and temperature extremes. US DOT rules apply to ground transportation within the US only. The differentiation by mode reflects genuinely different risk profiles — air shipments face hazards that don't apply to road or sea transport.</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-block" id="qb11">
+    <div class="q-header">
+      <span class="q-num-badge">Q12</span>
+      <div>
+        <div class="q-topic">Legal Framework</div>
+        <div class="q-text">A shipper receives a delivery with visible pallet damage. To preserve the right to file a valid freight claim against the carrier, what must the shipper do FIRST?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o11_0" onclick="pick(11,0,2)"><span class="opt-letter">A</span> Return all damaged goods to the carrier before filing any claim</label>
+      <label class="opt" id="o11_1" onclick="pick(11,1,2)"><span class="opt-letter">B</span> Wait until the entire order is received before noting the exception</label>
+      <label class="opt" id="o11_2" onclick="pick(11,2,2)"><span class="opt-letter">C</span> Note the damage exception on the delivery receipt at the time of delivery, take photos, and file the formal claim within statutory time limits (typically 9 months for domestic loss/damage) with supporting documentation</label>
+      <label class="opt" id="o11_3" onclick="pick(11,3,2)"><span class="opt-letter">D</span> File the claim exclusively through the freight broker who arranged the shipment</label>
+    </div>
+    <div class="feedback" id="fb11">
+      <div class="fb-result" id="fbr11"></div>
+      <div class="fb-exp"><strong>Key point:</strong> A freight claim must be supported by: (1) a <em>delivery receipt with the damage exception noted at time of delivery</em> — if you sign "clear" for a damaged delivery, you surrender your right to claim; (2) photos documenting the damage; (3) the original BOL; (4) the commercial invoice (proof of value). The claim must then be filed within statutory limits (9 months for US domestic loss/damage). Failure to note exceptions at delivery is the most common reason legitimate claims are denied. The statutory filing deadline is an absolute cutoff — claims filed late are rejected.</div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="q-block" id="qb12">
+    <div class="q-header">
+      <span class="q-num-badge">Q13</span>
+      <div>
+        <div class="q-topic">Export Controls</div>
+        <div class="q-text">Before exporting goods to a foreign buyer, a company must screen the buyer against government denied parties and sanctioned entities lists. This screening requirement applies:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o12_0" onclick="pick(12,0,3)"><span class="opt-letter">A</span> Only to shipments valued over $500,000</label>
+      <label class="opt" id="o12_1" onclick="pick(12,1,3)"><span class="opt-letter">B</span> Only when shipping military or defense-related items</label>
+      <label class="opt" id="o12_2" onclick="pick(12,2,3)"><span class="opt-letter">C</span> Only when shipping to countries identified as high-risk by the US State Department</label>
+      <label class="opt" id="o12_3" onclick="pick(12,3,3)"><span class="opt-letter">D</span> To ALL exports, regardless of value, product type, or destination — 'I did not know' is not a valid legal defense</label>
+    </div>
+    <div class="feedback" id="fb12">
+      <div class="fb-result" id="fbr12"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Denied party/sanctioned entity screening is mandatory for <em>every</em> export transaction. Key lists: OFAC SDN (Specially Designated Nationals), BIS Entity List, State Dept Debarred List. The legal standard is 'knew or <em>should have known</em>' — ignorance is not a defense. Penalties: criminal prosecution of individuals, multi-million dollar fines, permanent loss of export privileges. There is no minimum value threshold and no product category exemption. This is a non-negotiable compliance step in any export compliance program.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Trade Zones & Import/Export -->
+  <div class="section-header">Section 3 · Trade Zones, Import/Export &amp; Incoterms (Q14–Q19)</div>
+
+  <!-- Q14 -->
+  <div class="q-block" id="qb13">
+    <div class="q-header">
+      <span class="q-num-badge">Q14</span>
+      <div>
+        <div class="q-topic">Trade Documentation</div>
+        <div class="q-text">The Harmonized System (HS) code is a 6-digit standardized classification used in 200+ countries. Its PRIMARY function in international trade is to:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o13_0" onclick="pick(13,0,1)"><span class="opt-letter">A</span> Identify the country of manufacture on the shipping label</label>
+      <label class="opt" id="o13_1" onclick="pick(13,1,1)"><span class="opt-letter">B</span> Classify products to determine the applicable tariff rate and trigger non-tariff requirements at customs</label>
+      <label class="opt" id="o13_2" onclick="pick(13,2,1)"><span class="opt-letter">C</span> Calculate the landed cost of goods including freight and insurance charges</label>
+      <label class="opt" id="o13_3" onclick="pick(13,3,1)"><span class="opt-letter">D</span> Specify which trade agreement governs each individual shipment</label>
+    </div>
+    <div class="feedback" id="fb13">
+      <div class="fb-result" id="fbr13"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The HS code (first 6 digits globally standardized) determines: (1) the tariff rate applied at import, (2) whether non-tariff requirements apply (import permits, certifications, inspections), and (3) trade statistics. Misclassification = wrong duty rate — underpayment creates penalty risk; overpayment hurts profitability. The US uses a 10-digit HTS code (adds 4 digits for national specificity); the EU uses 8 digits. The first 6 are always universal. A licensed <em>customs broker</em> typically handles correct HS classification because errors are both common and costly.</div>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="q-block" id="qb14">
+    <div class="q-header">
+      <span class="q-num-badge">Q15</span>
+      <div>
+        <div class="q-topic">Trade Documentation</div>
+        <div class="q-text">Under USMCA, a US importer claims preferential (zero) tariff rates on goods manufactured in Mexico. The document that PROVES the goods qualify for USMCA preferential rates is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o14_0" onclick="pick(14,0,1)"><span class="opt-letter">A</span> A commercial invoice showing the Mexican supplier's address</label>
+      <label class="opt" id="o14_1" onclick="pick(14,1,1)"><span class="opt-letter">B</span> A certificate of origin certifying that the product meets USMCA rules of origin requirements</label>
+      <label class="opt" id="o14_2" onclick="pick(14,2,1)"><span class="opt-letter">C</span> A packing list showing the goods shipped from a Mexican location</label>
+      <label class="opt" id="o14_3" onclick="pick(14,3,1)"><span class="opt-letter">D</span> A straight bill of lading from a Mexican port of origin</label>
+    </div>
+    <div class="feedback" id="fb14">
+      <div class="fb-result" id="fbr14"></div>
+      <div class="fb-exp"><strong>Key point:</strong> A <em>Certificate of Origin (COO)</em> certifies where goods were manufactured or substantially transformed — and that they meet the applicable FTA rules of origin. This is the document customs authorities require to grant preferential tariff rates. A Mexican supplier address on an invoice only shows where the seller is located, not where goods were manufactured or whether they contain sufficient North American content to qualify for USMCA rates. Without a valid COO, the importer must pay the standard (MFN) tariff rate, not the preferential FTA rate.</div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="q-block" id="qb15">
+    <div class="q-header">
+      <span class="q-num-badge">Q16</span>
+      <div>
+        <div class="q-topic">Trade Zones</div>
+        <div class="q-text">A manufacturer imports components into a US Foreign Trade Zone (FTZ), assembles finished electronics, and sells them into the domestic US market. The PRIMARY customs duty benefit of this FTZ strategy is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o15_0" onclick="pick(15,0,2)"><span class="opt-letter">A</span> No customs duties are ever paid on goods that are processed in an FTZ</label>
+      <label class="opt" id="o15_1" onclick="pick(15,1,2)"><span class="opt-letter">B</span> Duties are paid immediately on each component at the full component tariff rate</label>
+      <label class="opt" id="o15_2" onclick="pick(15,2,2)"><span class="opt-letter">C</span> Duties are paid on the finished goods rate when they exit the FTZ for domestic sale — which may be lower than the combined component duty rates (inverted tariff benefit)</label>
+      <label class="opt" id="o15_3" onclick="pick(15,3,2)"><span class="opt-letter">D</span> Components stored in an FTZ are exempt from all customs regulations and documentation</label>
+    </div>
+    <div class="feedback" id="fb15">
+      <div class="fb-result" id="fbr15"></div>
+      <div class="fb-exp"><strong>Key point:</strong> FTZ benefits: (1) <strong>Duty deferral</strong> — no duty paid until goods leave the zone and enter domestic commerce; (2) <strong>Inverted tariff benefit</strong> — if individual components carry higher tariff rates than the finished product, assembling in an FTZ and paying duty on finished goods is cheaper; (3) <strong>Re-export duty-free</strong> — goods exported from the FTZ never pay US import duties; (4) <strong>Duty reduction on scrap/waste</strong> — only pay duty on what enters commerce, not on production waste. Goods sold domestically pay duty when exiting the FTZ — duty is never permanently eliminated for goods entering US commerce.</div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="q-block" id="qb16">
+    <div class="q-header">
+      <span class="q-num-badge">Q17</span>
+      <div>
+        <div class="q-topic">Export Controls</div>
+        <div class="q-text">
+          <div style="background:#f0f7ff;border-left:4px solid #2e86de;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px;font-style:italic;font-size:.87rem;color:#1e3a5f">Scenario: A US defense contractor's engineer shares detailed technical drawings of a missile guidance system with a foreign colleague during an in-person meeting held at the company's US headquarters. No physical goods cross any border.</div>
+          Under ITAR (International Traffic in Arms Regulations), this action:
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o16_0" onclick="pick(16,0,1)"><span class="opt-letter">A</span> Is permitted because the foreign colleague holds a valid US work visa</label>
+      <label class="opt" id="o16_1" onclick="pick(16,1,1)"><span class="opt-letter">B</span> Constitutes a 'deemed export' — sharing ITAR-controlled technical data with a foreign national anywhere in the US requires prior US government authorization</label>
+      <label class="opt" id="o16_2" onclick="pick(16,2,1)"><span class="opt-letter">C</span> Is only regulated if the technical data is transmitted electronically across a border</label>
+      <label class="opt" id="o16_3" onclick="pick(16,3,1)"><span class="opt-letter">D</span> Is exempt from ITAR as long as no physical defense article crosses an international border</label>
+    </div>
+    <div class="feedback" id="fb16">
+      <div class="fb-result" id="fbr16"></div>
+      <div class="fb-exp"><strong>Key point:</strong> ITAR's '<em>deemed export</em>' rule: releasing ITAR-controlled technical data or technology to a foreign national in the US is treated as an export to that person's home country — requiring prior State Department approval. This applies regardless of whether: the person holds a US visa, the meeting is on US soil, or no physical goods move. ITAR (State Dept, covers defense articles) is far stricter than EAR (Commerce Dept, covers commercial and dual-use goods). ITAR violations are treated as national security matters — penalties include criminal prosecution and multi-million dollar fines.</div>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="q-block" id="qb17">
+    <div class="q-header">
+      <span class="q-num-badge">Q18</span>
+      <div>
+        <div class="q-topic">Trade Zones</div>
+        <div class="q-text">A bonded warehouse and a Free Trade Zone (FTZ) both allow imported goods to be held without paying customs duties. What is the KEY operational difference between them?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o17_0" onclick="pick(17,0,1)"><span class="opt-letter">A</span> FTZs are government-operated; bonded warehouses are privately operated</label>
+      <label class="opt" id="o17_1" onclick="pick(17,1,1)"><span class="opt-letter">B</span> Bonded warehouses allow storage only; FTZs allow manufacturing, assembly, processing, and repackaging in addition to storage</label>
+      <label class="opt" id="o17_2" onclick="pick(17,2,1)"><span class="opt-letter">C</span> Goods in an FTZ must eventually pay duties; goods in a bonded warehouse never pay duties</label>
+      <label class="opt" id="o17_3" onclick="pick(17,3,1)"><span class="opt-letter">D</span> Bonded warehouses require full customs clearance at the time goods enter the facility</label>
+    </div>
+    <div class="feedback" id="fb17">
+      <div class="fb-result" id="fbr17"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The critical distinction: a <em>bonded warehouse</em> is a storage-only facility — goods can be held duty-deferred but cannot be processed, manufactured, or transformed there. A <em>Free Trade Zone (FTZ)</em> allows manufacturing, assembly, processing, repackaging, and other value-adding activities in addition to storage. This makes FTZs far more strategically valuable — enabling the inverted tariff benefit and duty-free re-export of manufactured goods. Both allow duty deferral, but only FTZs enable production activity without triggering duties.</div>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="q-block" id="qb18">
+    <div class="q-header">
+      <span class="q-num-badge">Q19</span>
+      <div>
+        <div class="q-topic">Trade Agreements</div>
+        <div class="q-text">
+          <div style="background:#f0f7ff;border-left:4px solid #2e86de;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px;font-style:italic;font-size:.87rem;color:#1e3a5f">Scenario: A Chinese manufacturer routes its finished products through a Mexican distribution center, re-labels them with a Mexican origin mark, and claims USMCA preferential (zero) tariff rates when exporting to the US.</div>
+          Why would US Customs REJECT this USMCA tariff claim?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o18_0" onclick="pick(18,0,1)"><span class="opt-letter">A</span> USMCA does not cover goods that pass through distribution centers</label>
+      <label class="opt" id="o18_1" onclick="pick(18,1,1)"><span class="opt-letter">B</span> USMCA rules of origin require sufficient North American manufacturing or value addition — mere transshipment through Mexico and re-labeling does not qualify</label>
+      <label class="opt" id="o18_2" onclick="pick(18,2,1)"><span class="opt-letter">C</span> China is legally prohibited from shipping any goods through USMCA member countries</label>
+      <label class="opt" id="o18_3" onclick="pick(18,3,1)"><span class="opt-letter">D</span> Re-labeling any product automatically voids all trade agreement preferential claims</label>
+    </div>
+    <div class="feedback" id="fb18">
+      <div class="fb-result" id="fbr18"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Rules of origin</em> exist precisely to prevent 'tariff shopping' — routing goods through an FTA country to fraudulently claim preferential rates. USMCA requires that goods be substantially manufactured (or have a minimum percentage of value added) within North America. Simple transshipment, re-labeling, or minimal processing does not constitute sufficient origin change. CBP can investigate the production history and supply chain of any goods claiming USMCA rates. Penalties for false origin claims include duties, fines, and import ban. This is why supply chain design decisions (where to source, where to manufacture) are inseparable from trade compliance strategy.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Reverse Logistics & Waste -->
+  <div class="section-header">Section 4 · Reverse Logistics &amp; Waste/Sustainability (Q20–Q25)</div>
+
+  <!-- Q20 -->
+  <div class="q-block" id="qb19">
+    <div class="q-header">
+      <span class="q-num-badge">Q20</span>
+      <div>
+        <div class="q-topic">Reverse Logistics</div>
+        <div class="q-text">According to ASCM, the logistics definition includes BOTH forward AND reverse flows. Which of the following activities is BEST classified as reverse logistics?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o19_0" onclick="pick(19,0,2)"><span class="opt-letter">A</span> Shipping finished goods from a manufacturer's warehouse to a retail store</label>
+      <label class="opt" id="o19_1" onclick="pick(19,1,2)"><span class="opt-letter">B</span> Transporting purchased components from a supplier to a manufacturing plant</label>
+      <label class="opt" id="o19_2" onclick="pick(19,2,2)"><span class="opt-letter">C</span> Collecting returned products from customers, sorting by condition, and routing to refurbishment or disposal</label>
+      <label class="opt" id="o19_3" onclick="pick(19,3,2)"><span class="opt-letter">D</span> Moving goods from a seaport to an inland distribution center via intermodal rail</label>
+    </div>
+    <div class="feedback" id="fb19">
+      <div class="fb-result" id="fbr19"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Reverse logistics</em> = moving goods FROM their typical final destination BACK UP the supply chain to capture value, ensure proper disposal, or comply with regulations. It includes: customer returns, product recalls, end-of-lease returns, warranty repairs, end-of-life recycling, and commercial returns. It is a <em>designed</em> supply chain process — not an afterthought. Drivers of reverse logistics growth: e-commerce (high return rates of 15–30%), Extended Producer Responsibility regulations, consumer expectations for easy returns, and remanufacturing economics.</div>
+    </div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="q-block" id="qb20">
+    <div class="q-header">
+      <span class="q-num-badge">Q21</span>
+      <div>
+        <div class="q-topic">Reverse Logistics</div>
+        <div class="q-text">In a reverse logistics operation, 'gate-keeping' refers to:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o20_0" onclick="pick(20,0,1)"><span class="opt-letter">A</span> Physical access control to the returns processing facility</label>
+      <label class="opt" id="o20_1" onclick="pick(20,1,1)"><span class="opt-letter">B</span> The evaluation point where returned goods are accepted or rejected and routed to the highest-value disposition — maximizing recovery and minimizing processing cost</label>
+      <label class="opt" id="o20_2" onclick="pick(20,2,1)"><span class="opt-letter">C</span> The process of obtaining a Return Authorization number from the customer before accepting returns</label>
+      <label class="opt" id="o20_3" onclick="pick(20,3,1)"><span class="opt-letter">D</span> The final quality inspection gate before refurbished products are returned to sale</label>
+    </div>
+    <div class="feedback" id="fb20">
+      <div class="fb-result" id="fbr20"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Gate-keeping</em> is the most critical step in the reverse pipeline — it's the decision point that determines: (1) Is this a valid return? (reject ineligible returns = saves processing cost); (2) What condition is the item in? (routes to right facility); (3) What disposition maximizes value recovery? (resell new → refurbish → remanufacture → cannibalize → donate → recycle → dispose). Poor gate-keeping is costly in two directions: accepting invalid returns wastes processing cost; sending recoverable goods to landfill wastes value. A well-designed gate-keeping process can significantly improve reverse logistics profitability.</div>
+    </div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="q-block" id="qb21">
+    <div class="q-header">
+      <span class="q-num-badge">Q22</span>
+      <div>
+        <div class="q-topic">Reverse Logistics</div>
+        <div class="q-text">An automotive parts company takes in used alternators, fully disassembles them, inspects every component, replaces worn or failed parts with new or reconditioned equivalents, reassembles, and tests them to original OEM specifications. This process is BEST described as:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o21_0" onclick="pick(21,0,2)"><span class="opt-letter">A</span> Refurbishment</label>
+      <label class="opt" id="o21_1" onclick="pick(21,1,2)"><span class="opt-letter">B</span> Recycling</label>
+      <label class="opt" id="o21_2" onclick="pick(21,2,2)"><span class="opt-letter">C</span> Remanufacturing</label>
+      <label class="opt" id="o21_3" onclick="pick(21,3,2)"><span class="opt-letter">D</span> Cannibalization</label>
+    </div>
+    <div class="feedback" id="fb21">
+      <div class="fb-result" id="fbr21"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Remanufacturing</em> = complete rebuild to original specifications (full disassembly, component inspection, replacement of worn parts, reassembly, full testing). Result: product sold as equivalent to new. Common in: auto parts, industrial equipment, electronics (printers, copiers, medical devices). <em>Refurbishment</em> = restore to like-new appearance and function (cleaning, testing, repackaging) without full disassembly — less intensive, sold at a discount as 'certified pre-owned.' <em>Recycling</em> = break down to raw materials. <em>Cannibalization</em> = use working parts from one unit to repair another. Full disassembly + replacement to original spec = remanufacturing.</div>
+    </div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="q-block" id="qb22">
+    <div class="q-header">
+      <span class="q-num-badge">Q23</span>
+      <div>
+        <div class="q-topic">Waste / Circular Economy</div>
+        <div class="q-text">A consumer electronics company has excess unsold inventory. It considers four disposal options: (1) refurbishing and selling as certified pre-owned; (2) donating to schools; (3) recycling for raw material recovery; (4) landfilling. According to the circular economy value-preservation hierarchy, ranked from HIGHEST to LOWEST, the correct order is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o22_0" onclick="pick(22,0,2)"><span class="opt-letter">A</span> Landfill → Recycle → Donate → Refurbish</label>
+      <label class="opt" id="o22_1" onclick="pick(22,1,2)"><span class="opt-letter">B</span> Recycle → Refurbish → Donate → Landfill</label>
+      <label class="opt" id="o22_2" onclick="pick(22,2,2)"><span class="opt-letter">C</span> Refurbish → Donate → Recycle → Landfill</label>
+      <label class="opt" id="o22_3" onclick="pick(22,3,2)"><span class="opt-letter">D</span> Donate → Refurbish → Recycle → Landfill</label>
+    </div>
+    <div class="feedback" id="fb22">
+      <div class="fb-result" id="fbr22"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The circular economy hierarchy (highest to lowest value preservation): Refuse → Reduce → <strong>Reuse → Repair → Remanufacture → Refurbish → Donate → Recycle → Recover energy → Dispose (landfill)</strong>. The principle: keep materials at the highest possible level of use for as long as possible. Refurbishing preserves the product's structure and embedded manufacturing value. Donating provides social value while avoiding disposal cost. Recycling breaks the product back to raw materials — losing the energy and processing that went into making it. Landfill is the last resort — zero value recovery, maximum environmental impact.</div>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="q-block" id="qb23">
+    <div class="q-header">
+      <span class="q-num-badge">Q24</span>
+      <div>
+        <div class="q-topic">Waste / Sustainability</div>
+        <div class="q-text">Under Extended Producer Responsibility (EPR) regulations — such as the EU's WEEE Directive for electronics and e-waste — manufacturers are required to:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o23_0" onclick="pick(23,0,2)"><span class="opt-letter">A</span> Reduce product prices to encourage higher purchase volumes and faster product turnover</label>
+      <label class="opt" id="o23_1" onclick="pick(23,1,2)"><span class="opt-letter">B</span> Outsource all production to countries with less stringent environmental standards</label>
+      <label class="opt" id="o23_2" onclick="pick(23,2,2)"><span class="opt-letter">C</span> Fund and manage product take-back and end-of-life processing — creating reverse logistics obligations and incentivizing eco-design for recyclability</label>
+      <label class="opt" id="o23_3" onclick="pick(23,3,2)"><span class="opt-letter">D</span> Report all product waste to a government recycling registry but bear no financial responsibility for disposal</label>
+    </div>
+    <div class="feedback" id="fb23">
+      <div class="fb-result" id="fbr23"></div>
+      <div class="fb-exp"><strong>Key point:</strong> EPR = 'you made it, you're responsible for it at end of life.' Manufacturers must plan, fund, and often operate product recovery/recycling programs. This shifts end-of-life cost from government (taxpayer) or consumer to the producer. Key supply chain effects: (1) <em>Reverse logistics obligation</em> — must build or outsource a take-back system; (2) <em>Design incentive</em> — modular design, recyclable materials, fewer hazardous substances reduce compliance cost; (3) <em>Cost pressure</em> — non-recyclable products become expensive to dispose of, making eco-design economically rational. EU WEEE covers electronics; battery EPR covers batteries; packaging EPR covers packaging waste.</div>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="q-block" id="qb24">
+    <div class="q-header">
+      <span class="q-num-badge">Q25</span>
+      <div>
+        <div class="q-topic">Waste / Sustainability</div>
+        <div class="q-text">
+          <div style="background:#f0f7ff;border-left:4px solid #2e86de;padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:10px;font-style:italic;font-size:.87rem;color:#1e3a5f">Scenario: A consumer goods company manufactures products in Asia, ships them by ocean freight to Europe, and distributes to customers via truck. The CEO states the company has "zero direct emissions" from its head office operations. A sustainability analyst argues this statement is misleading from a carbon footprint perspective.</div>
+          Which concept BEST explains the analyst's concern?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o24_0" onclick="pick(24,0,2)"><span class="opt-letter">A</span> Scope 1 emissions from overseas manufacturing plants are the supplier's responsibility, not the company's</label>
+      <label class="opt" id="o24_1" onclick="pick(24,1,2)"><span class="opt-letter">B</span> Scope 2 emissions from purchased electricity represent the company's largest environmental impact</label>
+      <label class="opt" id="o24_2" onclick="pick(24,2,2)"><span class="opt-letter">C</span> Scope 3 emissions — including upstream supplier production, ocean freight, and distribution — represent 70–90% of the company's total carbon footprint and are not captured by "direct emissions"</label>
+      <label class="opt" id="o24_3" onclick="pick(24,3,2)"><span class="opt-letter">D</span> The company is exempt from emissions reporting obligations if it exclusively uses ocean freight for international transport</label>
+    </div>
+    <div class="feedback" id="fb24">
+      <div class="fb-result" id="fbr24"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Emissions scopes: <em>Scope 1</em> = direct emissions from company-owned operations; <em>Scope 2</em> = indirect emissions from purchased energy; <em>Scope 3</em> = all other indirect value chain emissions (supplier production, inbound/outbound logistics, customer use, end-of-life disposal). Scope 3 typically represents <strong>70–90% of a company's total carbon footprint</strong> — making it the dominant lever for corporate decarbonization. "Zero direct emissions" (Scope 1) describes only a tiny fraction of total impact. Under ESG reporting frameworks (GHG Protocol, CDP), companies are increasingly required to disclose Scope 3 emissions. Supply chain decarbonization — choosing suppliers with lower emissions, shifting from air to ocean/rail freight, load optimization — is the most impactful action available.</div>
+    </div>
+  </div>
+
+  <!-- Final Score -->
+  <div style="background:var(--card);border-radius:12px;padding:24px;margin-top:28px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center">
+    <div style="font-size:1rem;color:#555;margin-bottom:6px">Final Score</div>
+    <div style="font-size:2.4rem;font-weight:700;color:var(--accent)" id="final-score">0 / 25</div>
+    <div style="font-size:.9rem;color:#777;margin-top:4px" id="final-pct">Answer all questions to see your result</div>
+    <div style="margin-top:16px;font-size:.85rem;color:#555" id="final-msg"></div>
+  </div>
+
+</div>
+
+<footer>Day 10 Quiz · CSCP Exam Prep · Christophe Goossens · July 2026</footer>
+
+<script>
+const TOTAL = 25;
+const ANSWERS = [2,1,2,3,2,2,1,2,2,2,1,2,3,1,1,2,1,1,1,2,1,2,2,2,2];
+let answered = new Array(TOTAL).fill(false);
+let correct = new Array(TOTAL).fill(false);
+let score = 0;
+
+function pick(qIdx, optIdx, correctOpt) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const isCorrect = (optIdx === correctOpt);
+  if (isCorrect) { score++; correct[qIdx] = true; }
+
+  // Style chosen option
+  const chosen = document.getElementById('o' + qIdx + '_' + optIdx);
+  chosen.classList.add(isCorrect ? 'correct' : 'wrong');
+  chosen.classList.add('disabled');
+
+  // If wrong, reveal the correct option
+  if (!isCorrect) {
+    const corEl = document.getElementById('o' + qIdx + '_' + correctOpt);
+    corEl.classList.add('correct');
+  }
+
+  // Disable all options
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById('o' + qIdx + '_' + i);
+    if (el) el.classList.add('disabled');
+  }
+
+  // Show feedback
+  const fb = document.getElementById('fb' + qIdx);
+  const fbr = document.getElementById('fbr' + qIdx);
+  fb.style.display = 'block';
+  fbr.textContent = isCorrect ? '✅ Correct!' : '❌ Incorrect';
+  fbr.className = 'fb-result ' + (isCorrect ? 'fb-correct' : 'fb-wrong');
+
+  updateUI();
+}
+
+function updateUI() {
+  const answeredCount = answered.filter(Boolean).length;
+  const pct = Math.round(answeredCount / TOTAL * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = answeredCount + ' of ' + TOTAL + ' answered';
+  document.getElementById('score-num').textContent = score + ' / ' + TOTAL;
+  document.getElementById('final-score').textContent = score + ' / ' + TOTAL;
+
+  if (answeredCount === TOTAL) {
+    const scorePct = Math.round(score / TOTAL * 100);
+    document.getElementById('final-pct').textContent = scorePct + '% (' + (scorePct >= 80 ? 'Target reached! ✅' : 'Below 80% target — review missed questions') + ')';
+    let msg = '';
+    if (scorePct >= 92) msg = '🏆 Outstanding! Strong command of Module 5 Logistics Part 2.';
+    else if (scorePct >= 80) msg = '✅ Good work! Review the questions you missed before Day 11.';
+    else if (scorePct >= 64) msg = '⚠️ Review the sections where you struggled — focus on trade compliance and reverse logistics.';
+    else msg = '🔄 Consider re-reading the Module 5 topic files and retaking this quiz before Day 11.';
+    document.getElementById('final-msg').textContent = msg;
+  } else {
+    document.getElementById('final-pct').textContent = 'Answer all questions to see your result';
+  }
+}
+
+function resetQuiz() {
+  answered = new Array(TOTAL).fill(false);
+  correct = new Array(TOTAL).fill(false);
+  score = 0;
+  for (let q = 0; q < TOTAL; q++) {
+    for (let o = 0; o < 4; o++) {
+      const el = document.getElementById('o' + q + '_' + o);
+      if (el) { el.className = 'opt'; const inp = el.querySelector('input'); if(inp) inp.checked=false; }
+    }
+    const fb = document.getElementById('fb' + q);
+    if (fb) fb.style.display = 'none';
+  }
+  updateUI();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+updateUI();
+</script>
+</body>
+</html>

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 6 Quiz — Weekend Review: Modules 1 &amp; 2</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f4f7fb;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;min-height:100vh}
+header{background:var(--blue);color:#fff;padding:22px 36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+header h1{font-size:1.4rem}
+header p{font-size:.85rem;opacity:.75;margin-top:3px}
+.badge{background:rgba(255,255,255,.18);padding:6px 16px;border-radius:20px;font-size:.9rem;font-weight:700;white-space:nowrap}
+.container{max-width:860px;margin:0 auto;padding:28px 18px}
+.quiz-meta{display:flex;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.meta-pill{background:var(--card);border-radius:8px;padding:10px 18px;font-size:.85rem;box-shadow:0 2px 6px rgba(0,0,0,.08);display:flex;align-items:center;gap:8px}
+.meta-pill strong{color:var(--accent)}
+.progress-wrap{background:var(--card);border-radius:10px;padding:16px 20px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07)}
+.progress-label{display:flex;justify-content:space-between;font-size:.83rem;color:#666;margin-bottom:8px}
+.progress-bar{height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:4px;transition:.4s}
+.score-summary{background:var(--card);border-radius:10px;padding:18px 22px;margin-bottom:22px;box-shadow:0 2px 6px rgba(0,0,0,.07);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.score-num{font-size:1.6rem;font-weight:700;color:var(--accent)}
+.score-label{font-size:.85rem;color:#555}
+.btn-reset{background:#fee2e2;color:#991b1b;border:none;padding:9px 18px;border-radius:7px;font-size:.88rem;font-weight:600;cursor:pointer}
+.btn-reset:hover{background:#fecaca}
+.q-block{background:var(--card);border-radius:12px;padding:22px 24px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);transition:.2s}
+.q-block.answered{opacity:.92}
+.q-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.q-num-badge{background:var(--blue);color:#fff;border-radius:8px;padding:4px 10px;font-size:.8rem;font-weight:700;white-space:nowrap;margin-top:1px}
+.q-topic{font-size:.75rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.q-text{font-size:.94rem;font-weight:600;line-height:1.55;color:#1a1a2e}
+.q-scenario{background:#f0f7ff;border-left:4px solid var(--accent);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:14px;font-size:.87rem;line-height:1.5;color:#1e3a5f;font-style:italic}
+.q-calc{background:#fef9ec;border-left:4px solid var(--orange);padding:10px 14px;border-radius:0 8px 8px 0;margin-bottom:14px;font-size:.87rem;line-height:1.6;color:#7c4a00;font-family:monospace}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:8px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.88rem;line-height:1.45;transition:.15s;user-select:none}
+.opt:hover:not(.correct):not(.wrong):not(.disabled){background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46;font-weight:500}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.opt.disabled{cursor:default}
+.opt-letter{background:#f3f4f6;color:#374151;border-radius:5px;padding:2px 7px;font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.opt.correct .opt-letter{background:#059669;color:#fff}
+.opt.wrong .opt-letter{background:#dc2626;color:#fff}
+.feedback{margin-top:14px;border-radius:8px;overflow:hidden;display:none}
+.fb-result{padding:8px 14px;font-weight:700;font-size:.88rem;display:flex;align-items:center;gap:7px}
+.fb-correct{background:#d1fae5;color:#065f46}
+.fb-wrong{background:#fee2e2;color:#991b1b}
+.fb-exp{padding:10px 14px;font-size:.85rem;line-height:1.55;background:#f9fafb;border-top:1px solid #f0f0f0;color:#374151}
+.fb-exp strong{color:var(--blue)}
+.section-header{font-size:1rem;font-weight:700;color:var(--blue);margin:28px 0 12px;padding-left:12px;border-left:4px solid var(--orange)}
+footer{text-align:center;padding:30px;color:#9ca3af;font-size:.8rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="../Topics/00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div>
+    <p>Day 6 Weekend Review Quiz · CSCP Exam Prep</p>
+    <h1>Weekend Review: Modules 1 &amp; 2 — Integration &amp; Application</h1>
+  </div>
+  <div class="badge">25 Questions</div>
+</header>
+
+<div class="container">
+
+  <div class="quiz-meta">
+    <div class="meta-pill">📅 Day 6 — Saturday 25 July 2026</div>
+    <div class="meta-pill">📖 Modules 1 &amp; 2 Review: <strong>100%</strong></div>
+    <div class="meta-pill">🎯 Target score: <strong>80%+ (20/25)</strong></div>
+    <div class="meta-pill">⏱ Estimated: <strong>30–35 min</strong></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress</span><span id="prog-text">0 of 25 answered</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="score-summary">
+    <div><div class="score-num" id="score-num">0 / 25</div><div class="score-label">Current Score</div></div>
+    <button class="btn-reset" onclick="resetQuiz()">🔄 Reset Quiz</button>
+  </div>
+
+  <!-- SECTION 1: Module 1 Review -->
+  <div class="section-header">Section 1 · Module 1 Review — SC Foundations, Demand &amp; Forecasting (Q1–Q7)</div>
+
+  <!-- Q1 -->
+  <div class="q-block" id="qb0">
+    <div class="q-header">
+      <span class="q-num-badge">Q1</span>
+      <div>
+        <div class="q-topic">Make-vs-Buy / Vertical Integration</div>
+        <div class="q-text">A manufacturing company is deciding whether to continue making a component in-house or outsource it to a specialist supplier. In which situation is OUTSOURCING the MOST strategically appropriate choice?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o0_0" onclick="pick(0,0,1)"><span class="opt-letter">A</span> The component is a core differentiator of the final product and no outside supplier can replicate the quality</label>
+      <label class="opt" id="o0_1" onclick="pick(0,1,1)"><span class="opt-letter">B</span> The component is non-core, a specialist supplier can produce it at lower cost with equal quality, and internal capacity is better used elsewhere</label>
+      <label class="opt" id="o0_2" onclick="pick(0,2,1)"><span class="opt-letter">C</span> The company wants maximum control over every tier of its supply chain to prevent any disruption</label>
+      <label class="opt" id="o0_3" onclick="pick(0,3,1)"><span class="opt-letter">D</span> The company has excess manufacturing capacity that could absorb the production volume at minimal incremental cost</label>
+    </div>
+    <div class="feedback" id="fb0">
+      <div class="fb-result" id="fbr0"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Outsourcing is strategically justified when (1) the activity is <em>non-core</em> — it doesn't differentiate the company competitively, and (2) a specialist can do it better or cheaper. The primary reason to keep an activity in-house (vertical integration) is when it IS a core competency or when control is critical. Excess internal capacity (option D) is an argument to insource, not outsource.</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="q-block" id="qb1">
+    <div class="q-header">
+      <span class="q-num-badge">Q2</span>
+      <div>
+        <div class="q-topic">Demand Signals &amp; Bullwhip Effect</div>
+        <div class="q-text">A retailer begins sharing its daily point-of-sale (POS) data directly with its upstream manufacturer, instead of communicating only through weekly purchase orders. What is the PRIMARY benefit of this change?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o1_0" onclick="pick(1,0,2)"><span class="opt-letter">A</span> It allows the manufacturer to plan based on invoice quantities and streamline accounts receivable</label>
+      <label class="opt" id="o1_1" onclick="pick(1,1,2)"><span class="opt-letter">B</span> It eliminates the need for the retailer to maintain a formal demand planning function</label>
+      <label class="opt" id="o1_2" onclick="pick(1,2,2)"><span class="opt-letter">C</span> It reduces the Bullwhip Effect by giving the manufacturer access to true consumer demand rather than order signals amplified by inventory decisions</label>
+      <label class="opt" id="o1_3" onclick="pick(1,3,2)"><span class="opt-letter">D</span> It automatically transfers replenishment responsibility from the retailer to the manufacturer under a VMI agreement</label>
+    </div>
+    <div class="feedback" id="fb1">
+      <div class="fb-result" id="fbr1"></div>
+      <div class="fb-exp"><strong>Key point:</strong> One of the four main causes of the Bullwhip Effect is <em>demand signal distortion</em> — each tier orders based on what the tier below it orders rather than actual end-consumer demand. By sharing POS data, the manufacturer sees true demand and can plan accordingly. This is one of the most effective remedies for the Bullwhip Effect, and forms the basis of CPFR. Note: POS sharing alone does not create VMI — VMI is a formal replenishment responsibility transfer.</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="q-block" id="qb2">
+    <div class="q-header">
+      <span class="q-num-badge">Q3</span>
+      <div>
+        <div class="q-topic">Aggregate Planning — Level Strategy</div>
+        <div class="q-text">A toy manufacturer faces near-zero demand in January–April and peak demand in November–December each year. A LEVEL aggregate planning strategy would MOST LIKELY result in:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o2_0" onclick="pick(2,0,3)"><span class="opt-letter">A</span> Hiring temporary workers in October and laying them off in January each year to match output to demand</label>
+      <label class="opt" id="o2_1" onclick="pick(2,1,3)"><span class="opt-letter">B</span> Using overtime in peak months and short shifts in slow months to flex production output</label>
+      <label class="opt" id="o2_2" onclick="pick(2,2,3)"><span class="opt-letter">C</span> Outsourcing all peak-season production to a contract manufacturer to avoid capacity investment</label>
+      <label class="opt" id="o2_3" onclick="pick(2,3,3)"><span class="opt-letter">D</span> Maintaining a constant workforce and production rate all year, building finished goods inventory during slow months to cover peak demand</label>
+    </div>
+    <div class="feedback" id="fb2">
+      <div class="fb-result" id="fbr2"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Level strategy</em> = constant output rate, stable workforce, inventory absorbs the gap. The trade-off: lower labor costs (no hiring/firing) but higher inventory carrying costs. <em>Chase strategy</em> = adjust workforce/output to match demand — lower inventory but higher labor flexibility costs. Option A describes chase. Option B describes a mixed approach with overtime. Level strategy favors industries where hiring/firing is very expensive or workforce stability is critical.</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="q-block" id="qb3">
+    <div class="q-header">
+      <span class="q-num-badge">Q4</span>
+      <div>
+        <div class="q-topic">Forecasting Principles</div>
+        <div class="q-text">Which of the following statements about forecasting is INCORRECT according to ASCM principles?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o3_0" onclick="pick(3,0,0)"><span class="opt-letter">A</span> Forecasts based on actual customer orders received are more accurate than forecasts based on observed market demand</label>
+      <label class="opt" id="o3_1" onclick="pick(3,1,0)"><span class="opt-letter">B</span> Short-term forecasts are generally more accurate than long-term forecasts</label>
+      <label class="opt" id="o3_2" onclick="pick(3,2,0)"><span class="opt-letter">C</span> Aggregate product family forecasts tend to be more accurate than individual SKU-level forecasts</label>
+      <label class="opt" id="o3_3" onclick="pick(3,3,0)"><span class="opt-letter">D</span> Every forecast should include an estimate of forecast error to support safety stock planning</label>
+    </div>
+    <div class="feedback" id="fb3">
+      <div class="fb-result" id="fbr3"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Option A is the <em>incorrect</em> statement. ASCM explicitly warns against basing forecasts on purchase orders rather than market demand — orders are a distorted signal (Bullwhip Effect). Forecasts should be based on <em>demand</em>, not orders. The other three statements are correct ASCM principles: (B) shorter horizon = more accurate; (C) aggregate = more accurate due to error cancellation; (D) always include an error estimate.</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="q-block" id="qb4">
+    <div class="q-header">
+      <span class="q-num-badge">Q5</span>
+      <div>
+        <div class="q-topic">Bullwhip Effect — Remedies</div>
+        <div class="q-text">A 4-tier supply chain (retailer → distributor → manufacturer → raw material supplier) is experiencing severe demand amplification. Which single action would MOST effectively reduce the Bullwhip Effect across ALL tiers simultaneously?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o4_0" onclick="pick(4,0,1)"><span class="opt-letter">A</span> Increasing safety stock at every echelon to provide a buffer against demand swings</label>
+      <label class="opt" id="o4_1" onclick="pick(4,1,1)"><span class="opt-letter">B</span> Sharing actual end-consumer demand data with all supply chain partners in real time so each tier plans from the same signal</label>
+      <label class="opt" id="o4_2" onclick="pick(4,2,1)"><span class="opt-letter">C</span> Switching from weekly to monthly ordering to reduce ordering frequency and transaction costs</label>
+      <label class="opt" id="o4_3" onclick="pick(4,3,1)"><span class="opt-letter">D</span> Offering periodic price promotions to smooth out consumer purchasing and reduce demand spikes</label>
+    </div>
+    <div class="feedback" id="fb4">
+      <div class="fb-result" id="fbr4"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The four main Bullwhip causes are: demand signal distortion, order batching, price fluctuations, and the rationing game. Option B directly attacks the root cause — demand signal distortion. Options A and C actually <em>worsen</em> the Bullwhip: more safety stock amplifies the signal, and less frequent ordering creates bigger batch spikes. Option D (price promotions) is actually one of the <em>causes</em> of the Bullwhip — promotions trigger forward buying and demand spikes.</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="q-block" id="qb5">
+    <div class="q-header">
+      <span class="q-num-badge">Q6</span>
+      <div>
+        <div class="q-topic">Tracking Signal — Calculation &amp; Interpretation</div>
+        <div class="q-text">Over 5 consecutive periods, the forecast errors (Actual − Forecast) were: +10, +8, +12, +6, +4. The MAD is 8. What is the tracking signal, and what action should the planner take?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o5_0" onclick="pick(5,0,0)"><span class="opt-letter">A</span> TS = +5.0; the forecast is consistently underestimating demand — the model should be reviewed and revised upward</label>
+      <label class="opt" id="o5_1" onclick="pick(5,1,0)"><span class="opt-letter">B</span> TS = +2.5; the tracking signal is within acceptable range — no action needed</label>
+      <label class="opt" id="o5_2" onclick="pick(5,2,0)"><span class="opt-letter">C</span> TS = +8.0; this is the MAD value, indicating high forecast variability</label>
+      <label class="opt" id="o5_3" onclick="pick(5,3,0)"><span class="opt-letter">D</span> TS = −5.0; the forecast is consistently overestimating demand</label>
+    </div>
+    <div class="feedback" id="fb5">
+      <div class="fb-result" id="fbr5"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> Cumulative Error = +10 + 8 + 12 + 6 + 4 = <strong>+40</strong>. Tracking Signal = Cumulative Error ÷ MAD = 40 ÷ 8 = <strong>+5.0</strong>. A positive TS means actuals consistently exceed the forecast (underestimating). At +5.0, this is approaching the ±4 to ±6 alert threshold AND all 5 errors are positive — no oscillation — which independently signals systematic positive bias. The planner should revise the forecast upward. Note: MAD = (10+8+12+6+4)/5 = 40/5 = 8 — confirming the given value.</div>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="q-block" id="qb6">
+    <div class="q-header">
+      <span class="q-num-badge">Q7</span>
+      <div>
+        <div class="q-topic">Planning Hierarchy — DRP vs MRP</div>
+        <div class="q-text">A regional distribution center manager wants to determine <em>how much</em> finished product to replenish from the central warehouse over the next 8 weeks, accounting for current stock, safety stock targets, forecast demand, and replenishment lead times. Which planning tool is MOST appropriate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o6_0" onclick="pick(6,0,0)"><span class="opt-letter">A</span> DRP (Distribution Requirements Planning) — specifically designed to time and size replenishment orders across the distribution network</label>
+      <label class="opt" id="o6_1" onclick="pick(6,1,0)"><span class="opt-letter">B</span> MRP (Material Requirements Planning) — to calculate component material requirements from the bill of materials</label>
+      <label class="opt" id="o6_2" onclick="pick(6,2,0)"><span class="opt-letter">C</span> RCCP (Rough-Cut Capacity Planning) — to validate available capacity against the production plan</label>
+      <label class="opt" id="o6_3" onclick="pick(6,3,0)"><span class="opt-letter">D</span> S&OP — to align sales and operations at the product family level on a monthly basis</label>
+    </div>
+    <div class="feedback" id="fb6">
+      <div class="fb-result" id="fbr6"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>DRP</em> is the distribution equivalent of MRP — it calculates <em>when and how much</em> to replenish at each DC node, factoring in demand forecasts, safety stock, and lead times. MRP calculates material component requirements using the BOM for manufacturing. RCCP validates the MPS against key resources. S&OP operates at product family level. The planning flow: S&OP → MPS → MRP (manufacturing side) / DRP (distribution side).</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Module 2 Review -->
+  <div class="section-header">Section 2 · Module 2 Review — Global Networks, IT, Metrics &amp; SCOR (Q8–Q14)</div>
+
+  <!-- Q8 -->
+  <div class="q-block" id="qb7">
+    <div class="q-header">
+      <span class="q-num-badge">Q8</span>
+      <div>
+        <div class="q-topic">Efficient vs Responsive Supply Chain</div>
+        <div class="q-text">A generic pharmaceutical company produces aspirin and ibuprofen for major retail pharmacy chains under long-term private-label contracts. Demand is highly predictable, products are standardized, and competition is primarily on price per tablet. Which supply chain design is MOST appropriate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o7_0" onclick="pick(7,0,2)"><span class="opt-letter">A</span> Agile — to quickly respond to volatile demand and frequent product line changes</label>
+      <label class="opt" id="o7_1" onclick="pick(7,1,2)"><span class="opt-letter">B</span> Leagile — lean upstream, agile downstream of the customer order decoupling point</label>
+      <label class="opt" id="o7_2" onclick="pick(7,2,2)"><span class="opt-letter">C</span> Efficient — optimized for lowest cost with high capacity utilization, lean inventory, and stable production</label>
+      <label class="opt" id="o7_3" onclick="pick(7,3,2)"><span class="opt-letter">D</span> Resilient — with dual-source suppliers and high safety stock to protect against API shortages</label>
+    </div>
+    <div class="feedback" id="fb7">
+      <div class="fb-result" id="fbr7"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The efficient vs. responsive decision is driven by <em>demand uncertainty</em> and <em>required inventory volume</em>. Generic pharmaceuticals have stable, predictable demand and compete on cost — a textbook case for an <em>efficient supply chain</em> (high capacity utilization, lean inventory, minimal waste). Agile and leagile suit volatile demand and short product lifecycles. Resilience is a separate strategic dimension — valid for supply risk management but doesn't change the fundamental efficiency orientation.</div>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="q-block" id="qb8">
+    <div class="q-header">
+      <span class="q-num-badge">Q9</span>
+      <div>
+        <div class="q-topic">IT Systems — APS</div>
+        <div class="q-text">A complex discrete manufacturer needs to simultaneously optimize production scheduling across 6 facilities, respecting material constraints, machine capacity limits, and customer due-date priorities. Standard ERP scheduling modules cannot solve this multi-constraint problem efficiently. Which system is MOST appropriate?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o8_0" onclick="pick(8,0,3)"><span class="opt-letter">A</span> WMS (Warehouse Management System) — to optimize put-away, picking sequences, and warehouse slotting</label>
+      <label class="opt" id="o8_1" onclick="pick(8,1,3)"><span class="opt-letter">B</span> TMS (Transportation Management System) — to route and consolidate outbound freight across all facilities</label>
+      <label class="opt" id="o8_2" onclick="pick(8,2,3)"><span class="opt-letter">C</span> CRM (Customer Relationship Management) — to integrate customer order history and improve demand sensing</label>
+      <label class="opt" id="o8_3" onclick="pick(8,3,3)"><span class="opt-letter">D</span> APS (Advanced Planning and Scheduling) — uses optimization algorithms to solve multi-constraint scheduling problems that ERP cannot handle</label>
+    </div>
+    <div class="feedback" id="fb8">
+      <div class="fb-result" id="fbr8"></div>
+      <div class="fb-exp"><strong>Key point — system map:</strong> <em>APS</em> sits on top of ERP to add optimization capabilities — it uses algorithms (constraint-based, linear programming) to generate feasible, optimized schedules across complex multi-facility environments. ERP has good transaction management but limited optimization. WMS manages warehouse operations. TMS manages transportation. This distinction — ERP for transactions vs. APS for optimization — is frequently tested on the CSCP exam.</div>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="q-block" id="qb9">
+    <div class="q-header">
+      <span class="q-num-badge">Q10</span>
+      <div>
+        <div class="q-topic">SCOR Performance Attributes</div>
+        <div class="q-text">A supply chain team measures "upside supply chain flexibility" — defined as the number of days required to achieve an unplanned 20% increase in production output from current levels. Which SCOR performance attribute does this metric PRIMARILY measure?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o9_0" onclick="pick(9,0,1)"><span class="opt-letter">A</span> Reliability — delivering the right product at the right time, place, and condition</label>
+      <label class="opt" id="o9_1" onclick="pick(9,1,1)"><span class="opt-letter">B</span> Agility — the ability to respond to unplanned changes in market demand or supply disruptions</label>
+      <label class="opt" id="o9_2" onclick="pick(9,2,1)"><span class="opt-letter">C</span> Responsiveness — the speed at which the supply chain fulfills a standard customer order</label>
+      <label class="opt" id="o9_3" onclick="pick(9,3,1)"><span class="opt-letter">D</span> Asset Management — the efficiency with which fixed and working capital assets are being used</label>
+    </div>
+    <div class="feedback" id="fb9">
+      <div class="fb-result" id="fbr9"></div>
+      <div class="fb-exp"><strong>Key point — SCOR 5 attributes:</strong> (1) <em>Reliability</em> = Perfect Order Fulfillment. (2) <em>Responsiveness</em> = Order Fulfillment Cycle Time (speed for a standard order). (3) <em>Agility</em> = ability to respond to unplanned/unusual changes — upside flexibility and downside adaptability. (4) <em>Costs</em> = SC cost as % of revenue. (5) <em>Asset Management</em> = C2C, inventory turns, ROA. "Upside flexibility" is a classic SCOR agility metric — it measures how adaptable (not just how fast) the supply chain is.</div>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="q-block" id="qb10">
+    <div class="q-header">
+      <span class="q-num-badge">Q11</span>
+      <div>
+        <div class="q-topic">SCOR — Enable Process</div>
+        <div class="q-text">In the SCOR model, which of the following activities BEST represents the "Enable" process?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o10_0" onclick="pick(10,0,0)"><span class="opt-letter">A</span> Managing supply chain data governance, business rules, contracts, IT infrastructure, talent, and compliance — the foundational capabilities that support Plan, Source, Make, Deliver, and Return</label>
+      <label class="opt" id="o10_1" onclick="pick(10,1,0)"><span class="opt-letter">B</span> Coordinating finished goods inventory replenishment needs across regional distribution centers</label>
+      <label class="opt" id="o10_2" onclick="pick(10,2,0)"><span class="opt-letter">C</span> Scheduling production orders, releasing work to the factory floor, and testing finished assemblies</label>
+      <label class="opt" id="o10_3" onclick="pick(10,3,0)"><span class="opt-letter">D</span> Processing customer returns, authorizing replacements, and managing reverse logistics flows</label>
+    </div>
+    <div class="feedback" id="fb10">
+      <div class="fb-result" id="fbr10"></div>
+      <div class="fb-exp"><strong>Key point — SCOR process map:</strong> <em>Plan</em> = demand/supply balancing. <em>Source</em> = supplier mgmt, purchasing. <em>Make</em> = manufacturing, testing, release (Option C). <em>Deliver</em> = order mgmt, outbound, last mile. <em>Return</em> = reverse logistics (Option D). <em>Enable</em> = the foundational layer — governance, IT systems, data standards, people, contracts, and policies that make all other processes possible. It "enables" the rest of the model. Option B describes DRP, which falls under Deliver/Plan.</div>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="q-block" id="qb11">
+    <div class="q-header">
+      <span class="q-num-badge">Q12</span>
+      <div>
+        <div class="q-topic">Financial Metrics — Gross Margin</div>
+        <div class="q-text">A company reports annual Revenue of $5,000,000 and Cost of Goods Sold (COGS) of $3,500,000. What is the gross margin?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o11_0" onclick="pick(11,0,1)"><span class="opt-letter">A</span> 70% (COGS as a percentage of Revenue)</label>
+      <label class="opt" id="o11_1" onclick="pick(11,1,1)"><span class="opt-letter">B</span> 30% — Gross Profit ÷ Revenue = ($5M − $3.5M) ÷ $5M</label>
+      <label class="opt" id="o11_2" onclick="pick(11,2,1)"><span class="opt-letter">C</span> 43% — Revenue ÷ COGS expressed as a percentage premium</label>
+      <label class="opt" id="o11_3" onclick="pick(11,3,1)"><span class="opt-letter">D</span> $1,500,000 — gross margin is always expressed in dollars, not percentages</label>
+    </div>
+    <div class="feedback" id="fb11">
+      <div class="fb-result" id="fbr11"></div>
+      <div class="fb-exp"><strong>Calculation:</strong> Gross Margin = (Revenue − COGS) ÷ Revenue × 100 = ($5M − $3.5M) ÷ $5M = $1.5M ÷ $5M = <strong>30%</strong>. Option A (70%) is COGS as a % of revenue — the inverse. Option D is the gross <em>profit</em> in dollars, not the gross <em>margin</em> percentage. Supply chain managers must connect COGS-reduction initiatives to gross margin improvement — every dollar saved in direct materials or production costs flows directly to gross profit.</div>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="q-block" id="qb12">
+    <div class="q-header">
+      <span class="q-num-badge">Q13</span>
+      <div>
+        <div class="q-topic">Cash-to-Cash Improvement</div>
+        <div class="q-text">A supply chain team wants to improve its Cash-to-Cash Cycle Time (currently 90 days). They are evaluating three separate actions, each requiring equal effort. Which action produces the LARGEST reduction in C2C?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o12_0" onclick="pick(12,0,2)"><span class="opt-letter">A</span> Reducing Days Sales Outstanding (DSO) by 10 days through an early payment discount program for customers</label>
+      <label class="opt" id="o12_1" onclick="pick(12,1,2)"><span class="opt-letter">B</span> Reducing Days Inventory Outstanding (DIO) by 15 days through lean inventory initiatives</label>
+      <label class="opt" id="o12_2" onclick="pick(12,2,2)"><span class="opt-letter">C</span> Extending Days Payable Outstanding (DPO) by 30 days through renegotiated supplier payment terms</label>
+      <label class="opt" id="o12_3" onclick="pick(12,3,2)"><span class="opt-letter">D</span> Increasing safety stock at all distribution centers to reduce stockouts and improve service levels</label>
+    </div>
+    <div class="feedback" id="fb12">
+      <div class="fb-result" id="fbr12"></div>
+      <div class="fb-exp"><strong>Key point:</strong> C2C = DIO + DSO − DPO. Each action's impact: (A) Reduce DSO by 10 → C2C improves by 10 days. (B) Reduce DIO by 15 → C2C improves by 15 days. (C) Extend DPO by 30 → C2C improves by <strong>30 days</strong> — the largest single impact. (D) Increasing safety stock INCREASES DIO, making C2C WORSE. Companies like Amazon famously achieve negative C2C partly by extending DPO to 90+ days. This is why supplier payment terms are a key working capital lever.</div>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="q-block" id="qb13">
+    <div class="q-header">
+      <span class="q-num-badge">Q14</span>
+      <div>
+        <div class="q-topic">Fill Rate vs Perfect Order Fulfillment</div>
+        <div class="q-text">A company reports a 99% fill rate but only a 91% Perfect Order Fulfillment rate. Which explanation BEST accounts for the gap between these two metrics?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o13_0" onclick="pick(13,0,3)"><span class="opt-letter">A</span> The metrics are measuring different time periods, so the gap is a reporting artifact</label>
+      <label class="opt" id="o13_1" onclick="pick(13,1,3)"><span class="opt-letter">B</span> Fill rate and Perfect Order Fulfillment measure the same thing — a gap of this magnitude is not possible</label>
+      <label class="opt" id="o13_2" onclick="pick(13,2,3)"><span class="opt-letter">C</span> A 99% fill rate guarantees on-time delivery, so the Perfect Order rate should also be at least 99%</label>
+      <label class="opt" id="o13_3" onclick="pick(13,3,3)"><span class="opt-letter">D</span> Fill rate only measures whether ordered items were shipped on the first attempt; Perfect Order requires ALL four criteria simultaneously — complete, on time, damage-free, AND correctly documented — making it a far stricter composite measure</label>
+    </div>
+    <div class="feedback" id="fb13">
+      <div class="fb-result" id="fbr13"></div>
+      <div class="fb-exp"><strong>Key point:</strong> <em>Fill rate</em> = % of orders shipped complete on first shipment (quantity only). <em>Perfect Order Fulfillment</em> = % of orders that are complete AND on time AND damage-free AND correctly documented — ALL four simultaneously. An order can achieve 99% fill rate (right quantities) but still fail Perfect Order if 8% are late, damaged, or misdocumented. This is why Perfect Order is always a lower number than fill rate — it multiplies multiple performance dimensions together. Perfect Order is the SCOR composite reliability metric.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Integration/Mixed -->
+  <div class="section-header">Section 3 · Integration &amp; Mixed Topics (Q15–Q20)</div>
+
+  <!-- Q15 -->
+  <div class="q-block" id="qb14">
+    <div class="q-header">
+      <span class="q-num-badge">Q15</span>
+      <div>
+        <div class="q-topic">Demand Patterns + Forecasting Method Selection</div>
+        <div class="q-text">A consumer electronics company finds that its wireless headphone line has experienced a consistent upward trend over 18 months, with recurring sales spikes in Q4 each year. Which forecasting approach BEST captures BOTH of these demand patterns?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o14_0" onclick="pick(14,0,0)"><span class="opt-letter">A</span> A trend-adjusted exponential smoothing model (Holt's method) combined with a seasonal index to capture both the upward trend and the annual Q4 spike</label>
+      <label class="opt" id="o14_1" onclick="pick(14,1,0)"><span class="opt-letter">B</span> A 3-period simple moving average, as it incorporates recent demand and requires minimal data</label>
+      <label class="opt" id="o14_2" onclick="pick(14,2,0)"><span class="opt-letter">C</span> Naive forecasting using last Q4's actual demand as the forecast for next Q4</label>
+      <label class="opt" id="o14_3" onclick="pick(14,3,0)"><span class="opt-letter">D</span> A Delphi qualitative method, since the product is relatively new and historical data is limited</label>
+    </div>
+    <div class="feedback" id="fb14">
+      <div class="fb-result" id="fbr14"></div>
+      <div class="fb-exp"><strong>Key point:</strong> When demand has <em>both</em> a trend and seasonality, neither a simple moving average (which ignores both) nor naive forecasting (which ignores trend) is adequate. The correct approach is a model that explicitly decomposes demand into: (1) base level, (2) trend, and (3) seasonal component. Holt's double exponential smoothing captures trend; adding seasonal indices (Holt-Winters) captures seasonality too. With 18 months of data available, qualitative methods are no longer needed — quantitative models are now more appropriate.</div>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="q-block" id="qb15">
+    <div class="q-header">
+      <span class="q-num-badge">Q16</span>
+      <div>
+        <div class="q-topic">Leagile SC Strategy + Technology</div>
+        <div class="q-text">A sports apparel company uses a leagile supply chain: plain base garments are mass-produced efficiently in Asia and held at a European DC. Final customization (team printing, branding) is done only after receiving actual retailer orders. Which combination of IT systems BEST supports this end-to-end leagile structure?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o15_0" onclick="pick(15,0,2)"><span class="opt-letter">A</span> Blockchain for garment provenance tracking + IoT sensors on factory machines</label>
+      <label class="opt" id="o15_1" onclick="pick(15,1,2)"><span class="opt-letter">B</span> Demand sensing software + APS for the customization facility + EDI with Asian suppliers</label>
+      <label class="opt" id="o15_2" onclick="pick(15,2,2)"><span class="opt-letter">C</span> ERP for efficient upstream production planning + WMS for the European DC holding point + TMS for rapid, flexible outbound delivery to retailers</label>
+      <label class="opt" id="o15_3" onclick="pick(15,3,2)"><span class="opt-letter">D</span> CPFR with all retail partners to jointly develop demand forecasts for finished customized garments</label>
+    </div>
+    <div class="feedback" id="fb15">
+      <div class="fb-result" id="fbr15"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The leagile model has two distinct zones requiring different IT support: (1) <em>Upstream (lean/push)</em>: ERP to plan and control efficient mass production. (2) <em>DC holding point</em>: WMS to manage the semi-finished goods buffer. (3) <em>Downstream (agile/pull)</em>: TMS to execute rapid, flexible outbound delivery in response to actual orders. Option C maps one system to each zone of the leagile model. Option D (CPFR) supports collaborative forecasting but doesn't address the operational execution stack. Option A addresses traceability, not the core leagile execution need.</div>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="q-block" id="qb16">
+    <div class="q-header">
+      <span class="q-num-badge">Q17</span>
+      <div>
+        <div class="q-topic">Bullwhip Effect + SCOR</div>
+        <div class="q-text">Reducing the Bullwhip Effect is PRIMARILY addressed by which SCOR process, and through what mechanism?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o16_0" onclick="pick(16,0,1)"><span class="opt-letter">A</span> Source — by qualifying multiple suppliers to increase supply-side flexibility and reduce dependency on any one source</label>
+      <label class="opt" id="o16_1" onclick="pick(16,1,1)"><span class="opt-letter">B</span> Plan — by improving demand signal accuracy, reducing order batching, and aligning all supply chain tiers around a single shared demand signal</label>
+      <label class="opt" id="o16_2" onclick="pick(16,2,1)"><span class="opt-letter">C</span> Make — by increasing manufacturing flexibility, reducing batch sizes, and shortening changeover times to react faster to demand changes</label>
+      <label class="opt" id="o16_3" onclick="pick(16,3,1)"><span class="opt-letter">D</span> Enable — by implementing ERP systems that automate purchase order generation based on reorder points</label>
+    </div>
+    <div class="feedback" id="fb16">
+      <div class="fb-result" id="fbr16"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The Bullwhip Effect is fundamentally a <em>planning and information problem</em> — demand signals are distorted as they travel upstream. The SCOR <em>Plan</em> process directly addresses this: it encompasses demand planning, supply planning, and balancing the two. Bullwhip remedies (sharing POS data, reducing order batching, collaborative forecasting, eliminating artificial promotions) are all planning interventions. Make and Source adaptations can help operationally but don't eliminate the root cause — distorted demand signals in the planning process.</div>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="q-block" id="qb17">
+    <div class="q-header">
+      <span class="q-num-badge">Q18</span>
+      <div>
+        <div class="q-topic">S&OP + IBP — Process Failure</div>
+        <div class="q-text">A company has a mature S&OP process that consistently produces an operational consensus plan. However, the CFO repeatedly rejects it because the plan does not align with the approved annual financial budget. The MOST likely root cause is:</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o17_0" onclick="pick(17,0,3)"><span class="opt-letter">A</span> The S&OP process is running at too detailed a level — it should aggregate to product families, not individual SKUs</label>
+      <label class="opt" id="o17_1" onclick="pick(17,1,3)"><span class="opt-letter">B</span> The forecasting model used in the demand review step is producing systematic errors that carry through to the plan</label>
+      <label class="opt" id="o17_2" onclick="pick(17,2,3)"><span class="opt-letter">C</span> The supply review step is not being completed before the demand review, creating sequence errors in the process</label>
+      <label class="opt" id="o17_3" onclick="pick(17,3,3)"><span class="opt-letter">D</span> Finance is not sufficiently integrated into the S&OP process — the plan is operationally driven without being reconciled to financial targets, which is exactly the gap that Integrated Business Planning (IBP) addresses</label>
+    </div>
+    <div class="feedback" id="fb17">
+      <div class="fb-result" id="fbr17"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The CFO rejecting the S&OP plan due to financial misalignment is the classic symptom of immature financial integration in S&OP. In a traditional S&OP, finance participates as a reviewer; in <em>IBP (Integrated Business Planning)</em>, financial modeling is embedded throughout the process — every plan is simultaneously evaluated for P&L, cash flow, and balance sheet impact. The progression: S&OP (operational consensus) → IBP (operational + financial + strategic alignment). This gap between operations and finance is one of the primary reasons companies advance to IBP.</div>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="q-block" id="qb18">
+    <div class="q-header">
+      <span class="q-num-badge">Q19</span>
+      <div>
+        <div class="q-topic">VMI — Impact on SCOR Metrics</div>
+        <div class="q-text">A supplier takes over inventory management at a customer's warehouse under a VMI agreement. On-shelf availability at the customer improves from 91% to 97%, and the customer's average inventory holding drops by 25%. Which SCOR performance attributes improve MOST directly for the CUSTOMER?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o18_0" onclick="pick(18,0,0)"><span class="opt-letter">A</span> Reliability (higher fill rate / better product availability) AND Asset Management (lower customer-held inventory reduces DIO, improving C2C and ROA)</label>
+      <label class="opt" id="o18_1" onclick="pick(18,1,0)"><span class="opt-letter">B</span> Agility and Costs only — since the supplier now absorbs demand variability on the customer's behalf</label>
+      <label class="opt" id="o18_2" onclick="pick(18,2,0)"><span class="opt-letter">C</span> Responsiveness and Enable only — since the supplier manages the data and replenishment decisions</label>
+      <label class="opt" id="o18_3" onclick="pick(18,3,0)"><span class="opt-letter">D</span> Reliability only — asset management is unaffected because the supplier's inventory still sits in the customer's warehouse</label>
+    </div>
+    <div class="feedback" id="fb18">
+      <div class="fb-result" id="fbr18"></div>
+      <div class="fb-exp"><strong>Key point:</strong> VMI improves two customer SCOR attributes: (1) <em>Reliability</em> — the supplier, with real-time visibility into the customer's stock, replenishes proactively → higher fill rate and fewer stockouts. (2) <em>Asset Management</em> — in most VMI agreements the supplier owns the inventory until it is consumed, so the customer's DIO (Days Inventory Outstanding) decreases → lower C2C cycle time and higher ROA. Option D is wrong: in true VMI the supplier retains ownership until consumption — the customer's balance sheet asset (inventory) actually decreases.</div>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="q-block" id="qb19">
+    <div class="q-header">
+      <span class="q-num-badge">Q20</span>
+      <div>
+        <div class="q-topic">Leagile + SCOR Processes</div>
+        <div class="q-text">In a leagile supply chain, the Customer Order Decoupling Point (CODP) marks the transition from lean/push to agile/pull. From a SCOR model perspective, which two processes are MOST directly split by the CODP?</div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o19_0" onclick="pick(19,0,2)"><span class="opt-letter">A</span> Source and Return — upstream sourcing is planned by forecast, returns are driven by actual customer product failures</label>
+      <label class="opt" id="o19_1" onclick="pick(19,1,2)"><span class="opt-letter">B</span> Plan and Enable — planning switches from forecast-driven to order-driven at the decoupling point</label>
+      <label class="opt" id="o19_2" onclick="pick(19,2,2)"><span class="opt-letter">C</span> Make and Deliver — upstream Make is forecast-driven (lean push), while downstream Deliver is actual-order-driven (agile pull), with the CODP sitting between them as a semi-finished goods buffer</label>
+      <label class="opt" id="o19_3" onclick="pick(19,3,2)"><span class="opt-letter">D</span> Source and Make — raw material sourcing is lean/cost-driven, while final assembly is agile/responsive</label>
+    </div>
+    <div class="feedback" id="fb19">
+      <div class="fb-result" id="fbr19"></div>
+      <div class="fb-exp"><strong>Key point:</strong> The CODP is the point in the supply chain where the mode switches from push (forecast-driven) to pull (order-driven). In SCOR terms: the <em>Make</em> process upstream of the CODP is executed based on forecasts (lean, efficient). The <em>Deliver</em> process downstream is triggered by actual customer orders (agile, responsive). The CODP itself is often a semi-finished goods buffer (strategic inventory). Option D (Source and Make) is wrong because both Source and Make are typically on the upstream/lean side — the split occurs between Make and Deliver.</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: Advanced Scenarios -->
+  <div class="section-header">Section 4 · Advanced Scenarios (Q21–Q25)</div>
+
+  <!-- Q21 -->
+  <div class="q-block" id="qb20">
+    <div class="q-header">
+      <span class="q-num-badge">Q21</span>
+      <div>
+        <div class="q-topic">Advanced Scenario — Inventory Turns vs Service Level</div>
+        <div class="q-text">
+          <div class="q-scenario">Scenario: MediSupply has achieved 12 inventory turns per year — well above the industry average of 8 turns. However, its Perfect Order Fulfillment rate has fallen to 78% against an industry benchmark of 95%. Leadership proposes further reducing inventory to push turns to 15.</div>
+          What is the MOST LIKELY diagnosis, and what action should be recommended?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o20_0" onclick="pick(20,0,1)"><span class="opt-letter">A</span> Higher inventory turns always improve service — MediSupply's Perfect Order problem is caused by poor order documentation, not inventory levels</label>
+      <label class="opt" id="o20_1" onclick="pick(20,1,1)"><span class="opt-letter">B</span> Excessively lean inventory may have created insufficient safety stock, causing stockouts — the recommendation is to analyze service by SKU and selectively increase stock for critical/fast-moving items rather than cutting further</label>
+      <label class="opt" id="o20_2" onclick="pick(20,2,1)"><span class="opt-letter">C</span> The Perfect Order issue is solely caused by an inaccurate demand forecast — fix the forecasting model and service will recover without changing inventory levels</label>
+      <label class="opt" id="o20_3" onclick="pick(20,3,1)"><span class="opt-letter">D</span> Pushing turns to 15 will improve the Perfect Order rate because faster replenishment cycles reduce out-of-stock risk</label>
+    </div>
+    <div class="feedback" id="fb20">
+      <div class="fb-result" id="fbr20"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Inventory turns and service level are in tension — there is no free lunch. At 12 turns (vs. industry 8), MediSupply has likely cut inventory below the safety stock threshold for some items, causing frequent stockouts that drive down Perfect Order. Pushing to 15 turns would worsen this. The correct action is an SKU-level service-level analysis: identify which items are stocking out, calculate their appropriate safety stock given lead time and demand variability, and target lean inventory <em>where demand is stable</em> while maintaining adequate buffers for critical items. This balances efficiency and reliability — the classic SCOR Costs vs. Reliability trade-off.</div>
+    </div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="q-block" id="qb21">
+    <div class="q-header">
+      <span class="q-num-badge">Q22</span>
+      <div>
+        <div class="q-topic">Advanced Scenario — Planning Hierarchy &amp; Mix</div>
+        <div class="q-text">
+          <div class="q-scenario">Scenario: TechCo's S&OP produces an accurate product family forecast of 10,000 units/month for its "Smart Home" family. The MPS team disaggregates this into: Model A = 5,000 units, Model B = 3,000, Model C = 2,000. Actual consumer demand reveals Model A at 7,000 units while B and C together total only 3,000 — the family aggregate was correct, but the mix was wrong.</div>
+          What is the MOST appropriate corrective action?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o21_0" onclick="pick(21,0,0)"><span class="opt-letter">A</span> Revise the SKU-level disaggregation assumptions used in the MPS — the product family forecast is accurate, but the product mix allocation between SKUs needs to be corrected using more granular demand data</label>
+      <label class="opt" id="o21_1" onclick="pick(21,1,0)"><span class="opt-letter">B</span> Reduce the S&OP product family forecast to 9,000 units to account for the mix variability and rebuild accuracy from a lower base</label>
+      <label class="opt" id="o21_2" onclick="pick(21,2,0)"><span class="opt-letter">C</span> Switch from a level to a chase production strategy so the factory can react to real-time mix signals</label>
+      <label class="opt" id="o21_3" onclick="pick(21,3,0)"><span class="opt-letter">D</span> Implement CPFR with retailers to improve point-of-sale data sharing at the product family aggregate level</label>
+    </div>
+    <div class="feedback" id="fb21">
+      <div class="fb-result" id="fbr21"></div>
+      <div class="fb-exp"><strong>Key point:</strong> This scenario illustrates the distinction between aggregate accuracy and <em>mix accuracy</em>. The S&OP aggregate forecast (10,000 units) was correct — so the S&OP process itself is working. The error is in how the MPS team <em>disaggregates</em> the family total into individual SKUs. The fix is at the MPS level: improve the mix forecasting assumptions (possibly using POS data per SKU, price elasticity, or causal variables). Option D (CPFR) helps get better data but wouldn't directly fix the disaggregation logic. Option B reduces the aggregate — wrong, since the aggregate was right. Option C confuses the supply strategy with the planning problem.</div>
+    </div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="q-block" id="qb22">
+    <div class="q-header">
+      <span class="q-num-badge">Q23</span>
+      <div>
+        <div class="q-topic">Advanced Scenario — Resilience Investment Analysis</div>
+        <div class="q-text">
+          <div class="q-scenario">Scenario: GlobalPharma single-sources a critical API from one supplier in Southeast Asia. A typhoon disrupted the plant for 6 weeks, causing $25M in lost sales. Management now proposes: (1) qualify a second supplier (+$800K/year), and (2) maintain 8 weeks of safety stock of the API (+$2M/year in inventory carrying costs). Total annual resilience cost: $2.8M.</div>
+          Which statement BEST evaluates whether this resilience investment is justified?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o22_0" onclick="pick(22,0,3)"><span class="opt-letter">A</span> The investment is not justified — $2.8M per year is excessive for an event that may not repeat for decades</label>
+      <label class="opt" id="o22_1" onclick="pick(22,1,3)"><span class="opt-letter">B</span> Single-sourcing is always preferable for supply chain efficiency; the typhoon was an anomaly that does not warrant permanent structural change</label>
+      <label class="opt" id="o22_2" onclick="pick(22,2,3)"><span class="opt-letter">C</span> The investment should be evaluated by comparing the resilience cost to the disruption probability multiplied by expected financial impact — but no specific conclusion can be drawn without knowing the disruption probability</label>
+      <label class="opt" id="o22_3" onclick="pick(22,3,3)"><span class="opt-letter">D</span> The $25M single event loss likely justifies the $2.8M annual cost — the investment pays back if disruptions of similar magnitude occur more frequently than once every approximately 9 years ($25M ÷ $2.8M ≈ 8.9 years)</span></label>
+    </div>
+    <div class="feedback" id="fb22">
+      <div class="fb-result" id="fbr22"></div>
+      <div class="fb-exp"><strong>Key point:</strong> Resilience investments are evaluated like insurance: Annual Cost vs. (Probability × Impact). With a $25M event, the breakeven is: $25M ÷ $2.8M ≈ 8.9 years — meaning if a similar disruption could realistically occur once per decade or more frequently, the investment is financially justified. Southeast Asia faces typhoon risk annually, so this threshold is not unreasonable. Option C is technically correct in principle but avoids the answer — the data IS sufficient to frame the decision. Single-sourcing for efficiency at the expense of resilience is a classic supply chain risk trade-off that the CSCP exam tests from multiple angles.</div>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="q-block" id="qb23">
+    <div class="q-header">
+      <span class="q-num-badge">Q24</span>
+      <div>
+        <div class="q-topic">Advanced Scenario — Technology Gap Analysis</div>
+        <div class="q-text">
+          <div class="q-scenario">Scenario: A mid-size consumer goods company has an ERP system managing finance, purchasing, and manufacturing. However: (1) once goods leave the factory, there is zero visibility into outbound shipment status until delivery; (2) the distribution center tracks inventory using shared Excel spreadsheets; and (3) suppliers send demand forecast input via email, making collaborative planning impossible.</div>
+          Which technology roadmap MOST completely addresses ALL THREE gaps?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o23_0" onclick="pick(23,0,2)"><span class="opt-letter">A</span> Blockchain for end-to-end transaction transparency + APS for manufacturing optimization</label>
+      <label class="opt" id="o23_1" onclick="pick(23,1,2)"><span class="opt-letter">B</span> TMS for outbound shipment tracking + CPFR platform for supplier collaboration (DC gap remains unaddressed)</label>
+      <label class="opt" id="o23_2" onclick="pick(23,2,2)"><span class="opt-letter">C</span> WMS for DC operations + TMS for real-time outbound shipment visibility + CPFR or EDI supplier portal for collaborative demand planning</label>
+      <label class="opt" id="o23_3" onclick="pick(23,3,2)"><span class="opt-letter">D</span> APS for advanced multi-facility planning + IoT sensors on factory equipment + ERP upgrade for better reporting</label>
+    </div>
+    <div class="feedback" id="fb23">
+      <div class="fb-result" id="fbr23"></div>
+      <div class="fb-exp"><strong>Key point — system-to-gap mapping:</strong> Gap 1 (no shipment visibility after factory) → <em>TMS</em>: real-time carrier tracking, freight visibility. Gap 2 (Excel at DC) → <em>WMS</em>: warehouse operations (receiving, put-away, picking, inventory location management). Gap 3 (email-based supplier collaboration) → <em>CPFR platform or EDI portal</em>: structured collaborative forecasting and replenishment. Option C is the only one that addresses all three gaps with the right tools. Option B misses the DC gap. Options A and D address manufacturing problems that weren't described.</div>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="q-block" id="qb24">
+    <div class="q-header">
+      <span class="q-num-badge">Q25</span>
+      <div>
+        <div class="q-topic">Advanced Scenario — Full M1 + M2 Integration</div>
+        <div class="q-text">
+          <div class="q-scenario">Scenario: GlobalConnect's supply chain review reveals: Inventory turns = 4/year (industry: 8). Cash-to-Cash Cycle Time = 92 days (industry: 45 days). Perfect Order Fulfillment = 88% (target: 95%). Tracking signal has been at +4.8 consistently for 3 months (all errors positive). S&OP aggregate forecasts are accurate; however, SKU-level forecasts show high error and the product mix is frequently wrong.</div>
+          Which diagnosis and integrated action plan is MOST comprehensive and accurate?
+        </div>
+      </div>
+    </div>
+    <div class="q-opts">
+      <label class="opt" id="o24_0" onclick="pick(24,0,1)"><span class="opt-letter">A</span> All problems trace back to forecast error — fixing the SKU-level forecast will automatically resolve the inventory, service, and financial metrics</label>
+      <label class="opt" id="o24_1" onclick="pick(24,1,1)"><span class="opt-letter">B</span> The data reveals interconnected problems: (i) the consistent +4.8 tracking signal indicates systematic SKU demand underestimation — fix the MPS disaggregation; (ii) turns at 4 vs. benchmark 8 and C2C of 92 days indicate excess inventory investment — lean initiatives and/or extend DPO; (iii) the 88% Perfect Order rate may reflect inventory misallocated to wrong SKUs due to mix errors — rebalance safety stock placement after fixing the mix forecast</label>
+      <label class="opt" id="o24_2" onclick="pick(24,2,1)"><span class="opt-letter">C</span> GlobalConnect should outsource its entire supply chain to a third-party logistics provider to solve all efficiency and service problems simultaneously</label>
+      <label class="opt" id="o24_3" onclick="pick(24,3,1)"><span class="opt-letter">D</span> The 92-day C2C is primarily caused by slow customer payments (high DSO) — the team should prioritize an accounts receivable collection campaign above all other actions</label>
+    </div>
+    <div class="feedback" id="fb24">
+      <div class="fb-result" id="fbr24"></div>
+      <div class="fb-exp"><strong>Key point — integrated diagnosis:</strong> This scenario requires connecting all the data: (1) <em>Tracking signal +4.8, consistent, all-positive</em> → systematic positive bias at SKU level (underestimating specific SKUs) even though aggregate S&OP is accurate → fix mix disaggregation in MPS. (2) <em>4 turns vs. 8 benchmark, 92-day C2C</em> → strongly suggests excess overall inventory (high DIO) OR very long payment terms → lean inventory and/or negotiate DPO extension. (3) <em>88% Perfect Order despite excess aggregate inventory</em> → inventory is likely concentrated in the wrong SKUs (mix problem) → rebalance after fixing mix forecast. Option D is wrong — the data shows excess inventory (high turns benchmark gap) which suggests DIO is the likely C2C driver, not DSO. Option A oversimplifies: fixing forecast alone won't reduce inventory already built up or immediately fix supplier terms. Option C is irrelevant — the problems are management/process issues, not a structural outsourcing case.</div>
+    </div>
+  </div>
+
+  <!-- Final Score -->
+  <div style="background:var(--card);border-radius:12px;padding:24px;margin-top:28px;box-shadow:0 2px 8px rgba(0,0,0,.08);text-align:center">
+    <div style="font-size:1rem;color:#555;margin-bottom:6px">Final Score</div>
+    <div style="font-size:2.4rem;font-weight:700;color:var(--accent)" id="final-score">0 / 25</div>
+    <div style="font-size:.9rem;color:#777;margin-top:4px" id="final-pct">Answer all questions to see your result</div>
+    <div style="margin-top:16px;font-size:.85rem;color:#555" id="final-msg"></div>
+  </div>
+
+</div>
+
+<footer>Day 6 Quiz · Weekend Review: Modules 1 &amp; 2 · CSCP Exam Prep · Christophe Goossens · July 2026</footer>
+
+<script>
+const TOTAL = 25;
+const ANSWERS = [1,2,3,0,1,0,0,2,3,1,0,1,2,3,0,2,1,3,0,2,1,0,3,2,1];
+let answered = new Array(TOTAL).fill(false);
+let correct = new Array(TOTAL).fill(false);
+let score = 0;
+
+function pick(qIdx, optIdx, correctOpt) {
+  if (answered[qIdx]) return;
+  answered[qIdx] = true;
+  const isCorrect = (optIdx === correctOpt);
+  if (isCorrect) { score++; correct[qIdx] = true; }
+
+  const chosen = document.getElementById('o' + qIdx + '_' + optIdx);
+  chosen.classList.add(isCorrect ? 'correct' : 'wrong');
+  chosen.classList.add('disabled');
+
+  if (!isCorrect) {
+    const corEl = document.getElementById('o' + qIdx + '_' + correctOpt);
+    if (corEl) corEl.classList.add('correct');
+  }
+
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById('o' + qIdx + '_' + i);
+    if (el) el.classList.add('disabled');
+  }
+
+  const fb = document.getElementById('fb' + qIdx);
+  const fbr = document.getElementById('fbr' + qIdx);
+  fb.style.display = 'block';
+  fbr.textContent = isCorrect ? '✅ Correct!' : '❌ Incorrect';
+  fbr.className = 'fb-result ' + (isCorrect ? 'fb-correct' : 'fb-wrong');
+
+  document.getElementById('qb' + qIdx).classList.add('answered');
+  updateUI();
+}
+
+function updateUI() {
+  const answeredCount = answered.filter(Boolean).length;
+  const pct = Math.round(answeredCount / TOTAL * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = answeredCount + ' of ' + TOTAL + ' answered';
+  document.getElementById('score-num').textContent = score + ' / ' + TOTAL;
+  document.getElementById('final-score').textContent = score + ' / ' + TOTAL;
+
+  if (answeredCount === TOTAL) {
+    const scorePct = Math.round(score / TOTAL * 100);
+    document.getElementById('final-pct').textContent = scorePct + '% (' + (scorePct >= 80 ? 'Target reached! ✅' : 'Below 80% target — review missed questions') + ')';
+    let msg = '';
+    if (scorePct >= 92) msg = '🏆 Outstanding! Modules 1 & 2 are well integrated — you are ready for Module 3.';
+    else if (scorePct >= 80) msg = '✅ Good work! Review any missed questions and note which sections cost you points.';
+    else if (scorePct >= 64) msg = '⚠️ Below target — re-read the sections you struggled with before continuing to Day 7.';
+    else msg = '🔄 Consider revisiting Modules 1 and 2 topic summaries before retaking this quiz.';
+    document.getElementById('final-msg').textContent = msg;
+  } else {
+    document.getElementById('final-pct').textContent = 'Answer all questions to see your result';
+  }
+}
+
+function resetQuiz() {
+  answered = new Array(TOTAL).fill(false);
+  correct = new Array(TOTAL).fill(false);
+  score = 0;
+  for (let q = 0; q < TOTAL; q++) {
+    for (let o = 0; o < 4; o++) {
+      const el = document.getElementById('o' + q + '_' + o);
+      if (el) el.className = 'opt';
+    }
+    const fb = document.getElementById('fb' + q);
+    if (fb) fb.style.display = 'none';
+    const qb = document.getElementById('qb' + q);
+    if (qb) qb.classList.remove('answered');
+  }
+  updateUI();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+updateUI();
+</script>
+</body>
+</html>
