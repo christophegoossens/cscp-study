@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>6.1.3: Customer Service Metrics</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 6: Supply Chain Relationships</div>
+  <div class="hdr-title">6.1.3 · Customer Service Metrics</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 17% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Measuring Customer Service Performance</div><div class="block-body"><div class="def-box"><b>Customer service metrics</b>: Quantitative measures that track how well the supply chain is meeting customer requirements — enabling performance management, benchmarking, and continuous improvement.</div><div class="key-point">The SCOR model's customer-facing metrics: Reliability (Perfect Order %), Responsiveness (Order Fulfillment Cycle Time), and Agility (Upside/Downside Adaptability). These three capture the customer's experience of the supply chain.</div><div class="def-box"><b>Net Promoter Score (NPS)</b>: A customer loyalty metric asking: 'How likely are you to recommend us to a colleague or friend?' (0–10 scale). Promoters (9–10) minus Detractors (0–6) = NPS. Widely used as a proxy for customer satisfaction and relationship health.</div><div class="formula">NPS = % Promoters − % Detractors</div></div></div><div class="block"><div class="block-title">Key Customer Service KPIs</div><div class="block-body"><div class="def-box"><b>On-Time In-Full (OTIF)</b>: A combined metric measuring whether orders are delivered on time AND in full. OTIF = (On-time %) × (In-full %). Major retailers (Walmart, Target) impose financial penalties for OTIF failures.</div><div class="formula">OTIF = % On-Time × % In-Full</div><div class="def-box"><b>Order fill rate</b>: The percentage of customer orders (or order lines) shipped complete from available stock at time of order. Measures inventory availability from the customer's perspective.</div><div class="def-box"><b>Order cycle time (OCT)</b>: Elapsed time from customer order placement to product receipt. A key responsiveness metric — shorter OCT = competitive advantage in fast-moving markets.</div><div class="def-box"><b>Customer complaint rate</b>: Number of complaints per 100 or 1,000 orders — measures overall service quality. High complaint rate = underlying supply chain or product quality problem requiring root cause analysis.</div><div class="key-point">Metrics should be reported at multiple levels: overall average, by customer segment, by product category, by region — to identify where performance gaps actually exist.</div></div></div><div class="block"><div class="block-title">Balancing Service and Cost</div><div class="block-body"><div class="key-point">The service-cost trade-off: every percentage point of improvement in fill rate, on-time delivery, or order cycle time costs progressively more. The last 1–2% of perfection is exponentially more expensive than the first 95%.</div><div class="def-box"><b>Cost-to-serve</b>: The total supply chain cost associated with serving a specific customer or customer segment — including order processing, warehousing, picking, transportation, and returns. Cost-to-serve analysis reveals which customers are profitable vs. which consume more cost than they generate.</div><div class="key-point">Low-margin customers with high service requirements may actually be unprofitable when full cost-to-serve is calculated. This insight drives customer portfolio rationalization and differentiated pricing.</div><div class="def-box"><b>Activity-Based Costing (ABC costing)</b>: A costing method that assigns costs to activities and then to cost objects (customers, products) based on their actual consumption of those activities — enabling accurate cost-to-serve calculation.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">OTIF — formula and importance</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">OTIF = % On-Time × % In-Full
+
+Example: 95% on-time × 92% in-full = 87.4% OTIF
+
+Importance: many major retailers (Walmart, Target, Amazon) require high OTIF and impose financial penalties (chargebacks, fines) for failures.
+
+Why multiplicative: a shipment must be BOTH on-time AND complete to count — partial credit not given. Misses on either dimension = 0 for that order in OTIF.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Net Promoter Score (NPS) — formula and meaning</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Survey question: 'How likely to recommend us?' (0–10)
+Promoters: 9–10 → loyal enthusiasts
+Passives: 7–8 → satisfied but not loyal
+Detractors: 0–6 → unhappy, may spread negative word
+
+NPS = % Promoters − % Detractors
+Range: −100 to +100
+
+Interpretation: >50 = excellent; 0–50 = good; <0 = needs improvement
+
+Value: simple, benchmarkable, correlates with growth and customer retention.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Cost-to-serve analysis — what is it and why does it matter?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Cost-to-serve = total supply chain cost of serving a specific customer or segment.
+
+Includes: order processing + picking labor + packaging + transportation + returns handling + customer service calls.
+
+Why it matters: Revenue − COGS = gross margin; but gross margin doesn't reveal TRUE profitability.
+A customer with high gross margin but complex orders, frequent returns, and premium delivery requirements may have a negative NET margin when full cost-to-serve is deducted.
+
+Action: rationalize unprofitable customers (minimum order size, service fees) or exit the relationship.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Order fill rate vs. OTIF vs. Perfect Order</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Fill rate: % of orders shipped complete from stock (availability dimension only)
+
+OTIF: % of orders both on-time AND in-full (combines delivery timing + completeness)
+
+Perfect Order: % of orders on-time × in-full × damage-free × correctly invoiced (adds quality and accuracy dimensions)
+
+Fill rate ≥ OTIF ≥ Perfect Order → each adds requirements → harder to achieve 100%.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Service-cost trade-off — the last 1-2% problem</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Moving from 90% to 95% fill rate: moderate cost increase.
+Moving from 95% to 99%: significant cost increase (more safety stock, faster transport, more responsive operations).
+Moving from 99% to 99.9%: extremely expensive — exponentially diminishing returns.
+
+Why: the last few percentage points require preparing for rare, extreme events (tail-risk inventory, emergency freight, dedicated capacity).
+
+Decision: optimal service level = where marginal cost of improvement = marginal value to customer retention.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Order Cycle Time (OCT) — components and improvement levers</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">OCT = time from customer order → product receipt
+
+Components:
+1. Order transmission (customer to seller system)
+2. Order processing (picking, credit check)
+3. Order picking and packing
+4. Carrier pickup to delivery
+5. Customer receiving
+
+Levers to reduce OCT:
+• EDI/API order transmission (eliminates manual)
+• Same-day pick/ship cutoff extension
+• Closer DC to customer (last-mile)
+• Faster carrier mode
+• Real-time order visibility (tracks where delays occur)</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A supplier with 94% on-time delivery and 96% order fill rate has an OTIF of:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> 95%</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> 90.24%</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> 96%</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> 94%</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">OTIF = % On-Time × % In-Full = 0.94 × 0.96 = 0.9024 = 90.24%. Both dimensions must be met for an order to count as OTIF compliant. Even if each individual metric is above 90%, the combined OTIF is lower because orders failing either dimension are counted as failures — regardless of which dimension failed.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Cost-to-serve analysis reveals that a high-revenue customer is unprofitable. The most appropriate response is:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Immediately terminate the customer relationship</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Analyze the cost drivers, then consider options: minimum order sizes, service fees, renegotiating terms, or exiting the relationship based on full financial impact</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Absorb the cost to retain the revenue</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Reduce service to all customers to save cost</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Cost-to-serve reveals the TRUE profitability of serving a customer after all supply chain costs. Options when a customer is unprofitable: (1) diagnose which costs are high (many small orders? returns? special handling?); (2) address root causes (minimum order sizes, SKU rationalization, delivery consolidation); (3) add surcharges for costly services; (4) renegotiate pricing; (5) as a last resort, exit the relationship. 'Absorb the cost' is not a strategy — it funds losses indefinitely.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Net Promoter Score (NPS) is calculated as:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Average satisfaction rating on a 1–10 scale</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> % of Promoters (9–10 rating) minus % of Detractors (0–6 rating)</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Total customers surveyed minus dissatisfied customers</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> % of orders delivered on time</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">NPS: survey asks likelihood to recommend (0–10). Promoters (9–10) = loyal advocates. Passives (7–8) = satisfied but neutral. Detractors (0–6) = unhappy, risk negative word-of-mouth. NPS = % Promoters − % Detractors. Range: −100 to +100. NPS is widely used because it's simple, correlates with growth, and enables benchmarking across industries. Passives are excluded from the calculation.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Tracking customer service metrics at the overall average level only is problematic because:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Average metrics are too complicated to calculate</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Averages hide performance gaps — problems in specific segments, regions, or product categories are masked by averaging with high performers</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Only OTIF metrics should be tracked</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Customer service cannot be quantified</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">An overall 95% on-time average might look fine — but if it hides 80% on-time for one region and 99% for others, the regional problem is invisible until a major customer complains. Metrics should be segmented by: customer tier, product category, origin, carrier, and DC — to expose where performance actually breaks down and focus improvement effort where it matters most.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Activity-Based Costing (ABC costing) is used in supply chain to:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Classify inventory items into A, B, and C categories by value</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Assign costs to activities and then allocate those costs to customers or products based on their actual consumption — enabling accurate cost-to-serve analysis</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Calculate the EOQ for each product category</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Determine which suppliers receive A, B, or C quality ratings</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">ABC costing (not to be confused with ABC inventory classification) traces overhead costs to activities, then to the products or customers that consume those activities. Traditional costing spreads overhead evenly — hiding the true cost of complex, demanding customers or products. ABC reveals that some customers consume far more order processing, special handling, returns processing, and customer service than others — critical for accurate cost-to-serve and profitability analysis.</div></div></div>
+  </div>
+</div>
+<footer>6.1.3: Customer Service Metrics · Module 6 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

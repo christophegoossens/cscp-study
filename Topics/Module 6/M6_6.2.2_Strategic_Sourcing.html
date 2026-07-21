@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>6.2.2: Strategic Sourcing & Alliances</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 6: Supply Chain Relationships</div>
+  <div class="hdr-title">6.2.2 · Strategic Sourcing & Alliances</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 17% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Strategic Sourcing Process</div><div class="block-body"><div class="def-box"><b>Strategic sourcing</b>: A systematic, data-driven approach to procurement that analyzes total spend, supply market conditions, and business requirements — to develop sourcing strategies that maximize long-term value, not just minimize unit price.</div><div class="key-point">Strategic sourcing process (7 steps):</div><ul><li><b>1. Category profile</b>: Define scope, spend, and business requirements</li><li><b>2. Supply market analysis</b>: Assess supplier landscape, competitive dynamics, market trends</li><li><b>3. Strategy development</b>: Determine optimal sourcing approach for this category</li><li><b>4. RFI/RFP process</b>: Gather supplier information and competitive bids</li><li><b>5. Supplier evaluation</b>: Assess suppliers on total value (not just price)</li><li><b>6. Negotiation and selection</b>: Negotiate and award contract to best-value supplier</li><li><b>7. Relationship management</b>: Manage ongoing supplier performance and relationship</li></ul><div class="def-box"><b>Spend analysis</b>: Compiling and analyzing all procurement spending — by category, supplier, business unit, and geography — to identify consolidation opportunities, maverick spending, and strategic sourcing priorities.</div></div></div><div class="block"><div class="block-title">Make vs. Buy and Outsourcing Decisions</div><div class="block-body"><div class="def-box"><b>Make vs. buy analysis</b>: A strategic decision comparing the cost and capability of producing a product/service in-house vs. purchasing it from an external supplier — considering TCO, strategic fit, capability, and risk.</div><div class="key-point">Factors favoring 'make' (insource): core competency, proprietary technology, quality control requirements, capacity utilization, long-term cost advantage.</div><div class="key-point">Factors favoring 'buy' (outsource): supplier has superior capability, not a core competency, enables capital focus elsewhere, access to latest technology, flexibility.</div><div class="def-box"><b>Strategic outsourcing</b>: Deliberately outsourcing non-core activities to specialist providers — allowing the company to focus resources on its core competencies while leveraging suppliers' specialized capabilities.</div><div class="def-box"><b>Core competency</b>: The combination of skills, knowledge, and technology that give a company a competitive advantage — activities it does better than anyone else and that are difficult to imitate. Core competencies should typically not be outsourced.</div></div></div><div class="block"><div class="block-title">Strategic Alliances</div><div class="block-body"><div class="def-box"><b>Strategic alliance</b>: A long-term cooperative arrangement between two or more companies that shares resources, risks, and rewards to achieve mutual strategic goals — without a full merger or acquisition.</div><div class="key-point">Types of strategic alliances:</div><ul><li><b>Joint venture</b>: Two companies create a new, jointly owned entity — maximum integration and shared investment</li><li><b>Equity alliance</b>: One company takes an equity stake in the other — financial alignment of interests</li><li><b>Non-equity alliance</b>: Contractual arrangement without equity — licensing, technology sharing, co-development agreements</li></ul><div class="key-point">Alliance success factors: complementary strengths (each brings something the other lacks), clear governance, aligned objectives, trust, and defined exit terms. Most alliances fail due to misaligned expectations or inadequate governance.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Strategic sourcing — 7-step process</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1. Category profile: define scope, spend, requirements
+2. Supply market analysis: who are the suppliers, market dynamics
+3. Strategy development: right approach for this category
+4. RFI/RFP: gather supplier info and competitive bids
+5. Supplier evaluation: score on total value (TCO, quality, service)
+6. Negotiation and selection: award contract
+7. Relationship management: ongoing performance and development
+
+Key: this is a CONTINUOUS cycle, not one-time. Markets change, suppliers change, requirements change.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Make vs. buy — key decision factors</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Favor MAKE (insource) when:
+• It's a core competency
+• Proprietary technology / competitive advantage
+• Superior quality control needed
+• Have excess capacity to utilize
+• Long-term lower TCO
+
+Favor BUY (outsource) when:
+• Supplier has superior capability
+• NOT a core competency
+• Capital better deployed elsewhere
+• Need flexibility (supplier scales with you)
+• Access to supplier's latest technology</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is spend analysis?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Compiling and analyzing ALL procurement spending — by category, supplier, business unit, geography.
+
+Goals:
+1. Consolidation: multiple departments buying same thing from different suppliers → combine volume for better pricing
+2. Maverick spend: employees buying outside approved contracts (no leverage, no visibility)
+3. Category prioritization: which categories have most savings potential?
+4. Supplier rationalization: too many suppliers in a category → consolidate for better terms
+
+Requires: clean data from ERP/P2P systems.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Core competency — definition and outsourcing implication</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Core competency = the combination of skills, knowledge, and technology that gives a company competitive advantage — difficult for competitors to imitate.
+
+Examples: Apple's product design and UX, Amazon's logistics, Toyota's manufacturing system.
+
+Outsourcing rule: NEVER outsource your core competency — it's your competitive advantage. Outsource everything else to focus resources on what makes you uniquely valuable.
+
+Warning: once outsourced, core skills atrophy and become difficult to rebuild.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Strategic alliance types</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Joint venture: two companies create a NEW jointly owned entity. Shared investment and control. Example: Sony Ericsson (now just Sony).
+
+Equity alliance: company A buys equity stake in company B. Financial alignment without new entity.
+
+Non-equity (contractual) alliance: license agreement, technology sharing, co-development, preferred partnership — contractual only, no ownership.
+
+Most flexible → least flexible: non-equity → equity → JV. More equity = more commitment but harder to exit.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">RFI vs. RFP vs. RFQ</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">RFI (Request for Information): gather general supplier info and capabilities. Early stage — market survey. No commitment.
+
+RFP (Request for Proposal): ask suppliers to propose their approach, solution, and indicative pricing. Used for complex or service procurement where solution matters as much as price.
+
+RFQ (Request for Quote): ask suppliers for a specific price for a defined specification. Used for commodity/standard goods where specs are clear and price drives selection.
+
+Process: RFI → RFP → RFQ (narrowing from market survey to competitive bid to final price).</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company should NOT outsource activities that are:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> Expensive to perform in-house</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> Core competencies — sources of competitive advantage that are difficult for competitors to imitate</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> Performed by many other companies in the industry</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Related to manufacturing rather than services</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Core competencies = what makes the company uniquely valuable and competitive. Outsourcing them transfers the capability to suppliers who may serve competitors, and allows internal capability to atrophy. Once a core competency is lost, it's extremely difficult to rebuild. Examples of what NOT to outsource: Apple's product design, Toyota's manufacturing system. Outsource everything else — focus capital and talent on what makes you better than competitors.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Spend analysis helps procurement organizations primarily by:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Setting the annual budget for all departments</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Revealing consolidation opportunities, maverick spending, and strategic sourcing priorities by analyzing all procurement spending data</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Automatically selecting the lowest-cost supplier for each category</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Replacing the need for supplier negotiation</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Spend analysis: compile and categorize all spending → reveal: (1) consolidation opportunities (many departments buying the same category from different suppliers — combine for volume leverage); (2) maverick spending (purchases outside negotiated contracts — fixing this delivers immediate savings); (3) category priorities (which categories have highest spend and lowest maturity = highest savings potential). Without spend analysis, procurement operates blind to where leverage and savings truly exist.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">The 7-step strategic sourcing process is designed to:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Select the lowest-price supplier in the shortest time</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Systematically analyze spend, supply markets, and business requirements to develop sourcing strategies that maximize total long-term value</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Eliminate all supplier relationships in favor of in-house production</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Comply with government procurement regulations</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Strategic sourcing: systematic, data-driven process moving from 'find cheapest price' to 'find best total value.' Steps ensure: requirements are clearly defined before going to market (prevents re-work), supply market is analyzed (understand leverage), multiple qualified suppliers compete (maximizes competitive tension), and ongoing relationship management continues after contract award (extracts long-term value). It's a continuous cycle — not a one-time event.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">A joint venture differs from a non-equity strategic alliance in that:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Joint ventures are temporary; alliances are permanent</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> A joint venture creates a new, jointly owned entity — sharing investment, risk, and control — while a non-equity alliance is a contractual relationship without ownership</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Non-equity alliances require government approval; joint ventures do not</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> There is no meaningful difference between the two</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Joint venture = two companies create a new legal entity they jointly own and govern. Requires significant capital investment and operational commitment from both parties. Very hard to exit. Non-equity alliance = contractual arrangement (technology license, co-development agreement) with no ownership transfer. Easier to form and exit. JVs are appropriate when the shared activity requires dedicated assets, personnel, and long-term commitment that neither party would fund alone.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Strategic outsourcing is most beneficial when:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> A company wants to outsource its core competencies to focus on non-strategic work</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> A company outsources non-core activities to specialist providers — freeing capital and talent to focus on core competencies where it has competitive advantage</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> All production is moved to a single external supplier</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Outsourcing is used to reduce supplier relationship management cost</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Strategic outsourcing logic: specialize in what you do best, outsource everything else to specialists who do those things best. Example: a pharmaceutical company outsources logistics (to a 3PL), IT infrastructure (to a cloud provider), and manufacturing of generic APIs (to a contract manufacturer) — freeing capital and management focus to invest in drug discovery and clinical development, where its competitive advantage lies. The result: better performance in core areas AND lower cost in non-core areas.</div></div></div>
+  </div>
+</div>
+<footer>6.2.2: Strategic Sourcing & Alliances · Module 6 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>
