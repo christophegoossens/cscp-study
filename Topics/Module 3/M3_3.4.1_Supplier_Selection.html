@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3.4.1: Supplier Evaluation and Selection</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 3: Sourcing Products and Services</div>
+  <div class="hdr-title">3.4.1 · Supplier Evaluation and Selection</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 17% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">The Supplier Selection Process</div><div class="block-body"><p>Supplier selection occurs after strategic sourcing decisions (make-vs-buy, category strategy) are made. It is the first step in the purchasing function.</p><div class="def-box"><b>Supplier evaluation</b>: A formal process of assessing potential suppliers against predefined criteria before awarding business.</div><p>Traditional supplier selection focused primarily on: lowest price, quality, and delivery. Modern supply chain thinking requires a broader view — long-term partnership potential, innovation capability, financial stability, and ESG performance.</p><div class="key-point">Modern supplier selection focuses on TOTAL VALUE — not just lowest price. A supplier that is slightly more expensive but delivers higher quality, better flexibility, and innovation capability may have a lower TCO and higher strategic value.</div></div></div><div class="block"><div class="block-title">Supplier Evaluation Criteria</div><div class="block-body"><div class="key-point">Common supplier evaluation criteria (weighted by category importance):</div><ul><li><b>Cost</b>: Unit price, TCO, payment terms, cost reduction roadmap</li><li><b>Quality</b>: Defect rates (PPM), quality certifications (ISO 9001, IATF 16949), quality systems</li><li><b>Delivery</b>: On-time delivery rate, lead time, scheduling flexibility</li><li><b>Capacity</b>: Current capacity and ability to scale with demand</li><li><b>Financial stability</b>: Credit rating, years in business, ownership structure</li><li><b>Technology/innovation</b>: R&D capability, product development collaboration</li><li><b>Sustainability/ESG</b>: Environmental certifications, labor practices, ethical sourcing</li><li><b>Location/logistics</b>: Geographic proximity, transportation costs, customs risk</li></ul><div class="def-box"><b>Supplier scorecard</b>: A structured evaluation tool that rates suppliers across multiple criteria with defined weights. Enables objective, comparable assessment of multiple suppliers.</div><div class="def-box"><b>Total Cost of Ownership (TCO)</b>: Used as a selection criterion to compare the true all-in cost of sourcing from each supplier — not just the quoted price.</div></div></div><div class="block"><div class="block-title">Supplier Approval and Qualification</div><div class="block-body"><div class="def-box"><b>Approved Vendor List (AVL)</b>: A list of suppliers that have been formally evaluated and approved to supply specific items or categories. Purchasing should only buy from approved suppliers.</div><p>Supplier qualification steps typically include:</p><ul><li>Financial and business review (stability, references)</li><li>Technical capability assessment (facility audit, process capability)</li><li>Quality system audit (ISO certifications, corrective action process)</li><li>Sample/prototype approval (first article inspection)</li><li>Trial production run and performance monitoring</li></ul><div class="key-point">Qualification is a one-time gate — ongoing performance management (via supplier scorecards and reviews) determines whether the supplier maintains approved status.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Traditional vs. modern supplier selection criteria</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Traditional: price, quality, delivery (transactional focus).
+Modern: TCO, financial stability, innovation capability, flexibility, ESG performance, strategic partnership potential. Modern = long-term total value, not just lowest price.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a supplier scorecard?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A structured evaluation tool rating suppliers across multiple weighted criteria (cost, quality, delivery, flexibility, innovation, ESG). Enables objective comparison and ongoing performance tracking — not just one-time selection.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is an Approved Vendor List (AVL)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A formally maintained list of suppliers that have been evaluated and approved to supply specific items/categories. Purchasing should only place orders with approved suppliers — the AVL enforces supply base governance.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">8 key supplier evaluation criteria</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Cost/TCO
+2) Quality (defect rates, certifications)
+3) Delivery (OTD, lead time)
+4) Capacity (current + scalability)
+5) Financial stability
+6) Technology/innovation
+7) Sustainability/ESG
+8) Location/logistics</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Supplier qualification steps</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Financial/business review
+2) Technical capability assessment (facility audit)
+3) Quality system audit (ISO certs, corrective action)
+4) Sample/prototype approval (first article inspection)
+5) Trial production + ongoing performance monitoring</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Why does modern supply chain thinking require more than lowest-price selection?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Low price may come with hidden TCO costs (quality failures, long lead times, inflexibility, financial risk). A slightly higher-priced supplier with better quality, flexibility, and innovation may have lower TCO and create more long-term competitive value.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A supplier quotes the lowest price but has a history of 5% defect rates and frequent late deliveries. Using TCO-based selection, this supplier:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> Should be selected immediately — price is the primary criterion</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> May not be the best choice — quality failure costs and late delivery costs could exceed the price savings</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> Should be selected but monitored closely</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Should be disqualified only if they miss a delivery after selection</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">TCO-based selection: low price + 5% defect rate = high rework/scrap costs + quality inspection costs + customer service failures. Late deliveries = expediting costs + customer satisfaction damage. These hidden costs may far exceed the price savings.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">An Approved Vendor List (AVL) is used to:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Set the maximum price a supplier can charge</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Control which suppliers are authorized to supply — purchasing only orders from pre-qualified, approved suppliers</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Track all purchase orders placed with each supplier</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Rank suppliers by delivery performance</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">The AVL is a governance tool — it defines which suppliers are qualified to supply each item/category. Purchasing should not buy from non-approved suppliers without going through the qualification process first.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A company is selecting a supplier for a critical aerospace component. Which evaluation criteria should be given the HIGHEST weight?</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Geographic proximity to reduce freight cost</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Quality systems, certifications (e.g., AS9100), and process capability — given the safety-critical nature</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Lowest quoted unit price</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Fastest delivery lead time</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">For safety-critical components (aerospace), quality is paramount. Quality system maturity (AS9100 certification), process capability (Cpk), and corrective action processes take highest weight — a defective component can cause catastrophic failure regardless of cost or delivery speed.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">First article inspection (FAI) is typically performed during:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,2)"> Initial RFI process to qualify the supplier</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,2)"> Annual contract renewal reviews</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,2)"> Supplier qualification — to verify the supplier can produce to specification before full production</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,2)"> Quarterly supplier performance reviews</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">First article inspection (FAI) = evaluating a sample/prototype produced by the supplier to verify it meets all specifications before approving the supplier for full production orders. It is a qualification gate, not an ongoing monitoring activity.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Which of the following best represents a STRATEGIC supplier relationship approach?</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Switching to the lowest-priced supplier every year at contract renewal</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Building a long-term collaborative partnership with a key supplier — sharing forecasts, joint development, and mutual investment</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Maintaining 10 suppliers per category to maximize price competition</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Issuing spot market RFQs for all purchases to minimize cost</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Strategic supplier relationships = long-term, collaborative, mutual investment. Both parties share information (forecasts, roadmaps), co-develop innovations, and align processes. This drives lower TCO and competitive advantage that purely transactional, lowest-price relationships cannot achieve.</div></div></div>
+  </div>
+</div>
+<footer>3.4.1: Supplier Evaluation and Selection · Module 3 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

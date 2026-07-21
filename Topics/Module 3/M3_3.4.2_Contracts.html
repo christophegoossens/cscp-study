@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3.4.2: Contracts</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 3: Sourcing Products and Services</div>
+  <div class="hdr-title">3.4.2 · Contracts</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 17% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">What is a Contract?</div><div class="block-body"><div class="def-box"><b>Contract (ASCM)</b>: An agreement between two or more competent persons or companies to perform or not to perform specific acts or services, or to deliver merchandise. A contract is enforceable by law.</div><p>Key contract-related terms:</p><ul><li><b>Annualized contract</b>: A negotiated agreement for one year — sets pricing, ensures supply continuity, allows for periodic adjustments</li><li><b>Bilateral contract</b>: Each party makes a promise to the other (most commercial contracts)</li><li><b>Trading partner agreement</b>: Describes all facets of the business relationship between partners — pricing, service levels, data sharing, IP, liability</li><li><b>CISG (Contracts for the International Sale of Goods)</b>: Governs international sales contracts — an international legal framework</li></ul><div class="key-point">The level of the buyer-supplier relationship determines the type of contract needed. Spot market buy → simple PO. Strategic partnership → comprehensive trading partner agreement.</div></div></div><div class="block"><div class="block-title">Types of Contracts by Risk Allocation</div><div class="block-body"><div class="key-point">The key distinction between contract types is WHO BEARS THE COST RISK if actual costs differ from estimates:</div><ul><li><b>Fixed-price contract</b>: The buyer pays a set price regardless of the supplier's actual cost. Supplier bears cost risk. Best when: scope is well-defined and stable.</li><li><b>Cost-plus contract</b>: Buyer pays the supplier's actual costs plus an agreed profit margin. Buyer bears cost risk. Best when: scope is uncertain or evolving (R&D, large projects).</li><li><b>Time and materials (T&M)</b>: Buyer pays for actual time spent and materials used at agreed rates. Shared risk. Common for services and projects with uncertain scope.</li><li><b>Performance-based contract</b>: Pricing linked to supplier achieving defined performance outcomes (e.g., uptime, delivery rate). Aligns supplier incentives with buyer outcomes.</li></ul><div class="key-point">Fixed-price = best for the buyer when scope is clear (supplier bears risk). Cost-plus = best for the supplier when scope is uncertain (buyer bears risk). Understanding who bears risk is critical for CSCP exam questions on contract types.</div></div></div><div class="block"><div class="block-title">Key Contract Terms</div><div class="block-body"><p>Common terms that appear in supply contracts:</p><ul><li><b>Incoterms</b>: International commercial terms defining who is responsible for freight, insurance, and risk of loss at each point in transit (e.g., FOB, CIF, DAP, EXW)</li><li><b>Payment terms</b>: When payment is due — Net 30, Net 60, 2/10 Net 30 (2% discount if paid within 10 days)</li><li><b>Force majeure</b>: Exempts parties from performance obligations during unforeseeable events (natural disasters, pandemics)</li><li><b>Liquidated damages</b>: Pre-agreed financial penalties for specific contract breaches (e.g., late delivery)</li><li><b>Intellectual property (IP) clause</b>: Defines ownership of designs, tooling, and innovations developed during the relationship</li></ul><div class="def-box"><b>Incoterms (ASCM)</b>: Standard terms of sale internationally recognized, defining the transfer of risk and responsibility for freight and insurance between buyer and seller.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM definition: Contract</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">An agreement between two or more competent persons or companies to perform or not to perform specific acts or services, or to deliver merchandise. Contracts are enforceable by law.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Fixed-price vs. cost-plus contract — who bears cost risk?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Fixed-price: supplier bears cost risk (price is set regardless of actual cost). Best when scope is clear.
+Cost-plus: buyer bears cost risk (pays actual cost + profit). Best when scope is uncertain (R&D, complex projects).</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What are Incoterms?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">International commercial terms defining who (buyer or seller) is responsible for freight, insurance, and risk of loss at each point in transit. Examples: EXW (buyer takes risk at factory door), FOB (seller's risk until goods are on board ship), CIF (seller covers cost, insurance, freight to destination port).</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a trading partner agreement?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A comprehensive contract between supply chain partners describing all aspects of their business: pricing, service levels, data sharing protocols, IP ownership, liability, and dispute resolution. Used for strategic, long-term relationships.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a performance-based contract?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A contract where pricing is linked to the supplier achieving defined performance outcomes (e.g., uptime %, on-time delivery rate, defect rate). Aligns supplier incentives with buyer outcomes — paid more for better performance.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What are liquidated damages in a supply contract?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Pre-agreed financial penalties for specific contract breaches — typically late delivery or missed performance targets. Agreed upfront so both parties know the consequences of non-performance without needing to prove actual damages in court.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A buyer contracts with an engineering firm to develop a new product. The design requirements will evolve as development progresses. Which contract type is most appropriate?</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> Fixed-price — to protect the buyer from cost overruns</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> Cost-plus — because scope is uncertain and evolving, buyer accepts cost risk for flexibility</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> Annualized contract with fixed pricing</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Performance-based contract linked to delivery date</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Uncertain, evolving scope → cost-plus contract. Fixed-price forces the supplier to price in all uncertainty (high price) or take losses on scope creep. Cost-plus allows scope to evolve while paying actual costs + agreed profit — appropriate for R&D and complex projects.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">In a fixed-price contract, who bears the risk if material costs rise unexpectedly after the contract is signed?</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> The buyer — they pay whatever the supplier's cost is</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> The supplier — they must deliver at the agreed price regardless of actual cost increases</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> The risk is shared equally between buyer and supplier</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> A government arbitrator determines who pays</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Fixed-price = the supplier commits to a set price. If their actual costs (materials, labor) rise after signing, the supplier absorbs the difference. This is why suppliers price in a risk premium on fixed-price contracts for uncertain scope.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Incoterms are primarily used in contracts to define:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Payment terms and discount schedules</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Who is responsible for freight, insurance, and risk of loss at each point in transit</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Quality standards and defect rate tolerances</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Dispute resolution procedures</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Incoterms = internationally recognized terms that define the division of responsibilities (freight, insurance, risk of loss) between buyer and seller at specific transit points. Critical for international contracts to avoid ambiguity about who owns the goods when they are damaged or lost.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">A supplier contract includes a clause stating the supplier will pay €500 per day for every day a shipment is delivered late. This is an example of:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,2)"> Force majeure clause</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,2)"> Performance-based pricing</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,2)"> Liquidated damages</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,2)"> Cost-plus adjustment</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Liquidated damages = pre-agreed financial penalties for specific breaches (late delivery, missed targets). Both parties agree upfront — the buyer doesn't need to prove actual damages in court; the penalty is automatic per the contract terms.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">CISG (Contracts for the International Sale of Goods) is relevant when:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> A domestic company buys goods from its own subsidiary</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Two companies from different countries enter into a sale of goods agreement</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> A company buys services (not goods) internationally</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> A company uses EDI for domestic purchase orders</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">CISG is an international legal framework governing cross-border sale of goods contracts between companies in different countries (that have ratified the convention). It provides a standard legal basis, avoiding the need to choose one country's domestic law.</div></div></div>
+  </div>
+</div>
+<footer>3.4.2: Contracts · Module 3 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

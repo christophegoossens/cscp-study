@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3.2.1: Supply Plans, Categories & Segmentation</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 3: Sourcing Products and Services</div>
+  <div class="hdr-title">3.2.1 · Supply Plans, Categories & Segmentation</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 17% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Supply Planning</div><div class="block-body"><div class="def-box"><b>Supply plan</b>: The strategic design of a supply network based on total cost of ownership, make-versus-buy decisions, and sourcing strategies. Answers key structural questions before tactical buying begins.</div><p>Key supply planning questions:</p><ul><li>Centralized vs. decentralized sourcing — global leverage or local flexibility?</li><li>Local vs. lowest-cost sourcing — resilience vs. cost efficiency?</li><li>Contingency plans for supply risks</li><li>Sole-source vs. single-source vs. multi-source strategy</li><li>Different strategies for strategic vs. non-strategic materials</li></ul><div class="def-box"><b>Sole source</b>: Only one supplier exists in the market for this item — no choice. High risk.</div><div class="def-box"><b>Single source</b>: Multiple suppliers exist but the company chooses to use only one — a strategic decision for volume leverage or partnership. Lower risk than sole source (can switch).</div><div class="def-box"><b>Multiple source</b>: Two or more suppliers provide the same item — maximizes competition and resilience but reduces volume leverage per supplier.</div></div></div><div class="block"><div class="block-title">Category Management and Strategy</div><div class="block-body"><div class="def-box"><b>Category</b>: A grouping of similar products or services that share similar supply market characteristics and can be managed together strategically.</div><div class="def-box"><b>Category strategy</b>: A plan for how the organization will source a specific category — covering supplier selection approach, contract type, relationship depth, and performance expectations.</div><div class="key-point">The Kraljic Matrix is the most widely used tool for category segmentation in supply chain:</div><ul><li><b>Strategic items</b> (high spend, high risk): Deep supplier partnerships, long-term contracts, joint planning — e.g., key raw materials</li><li><b>Leverage items</b> (high spend, low risk): Maximize purchasing power, competitive bidding, multiple suppliers — e.g., standard components</li><li><b>Bottleneck items</b> (low spend, high risk): Ensure supply continuity, safety stock, qualify alternates — e.g., single-source specialty parts</li><li><b>Non-critical / routine items</b> (low spend, low risk): Simplify and automate — blanket POs, e-procurement, vendor-managed inventory</li></ul><div class="key-point">Different categories require completely different sourcing strategies. Applying the same approach to all categories wastes resources and misses risk.</div></div></div><div class="block"><div class="block-title">Supply Plan Validation</div><div class="block-body"><p>Before finalizing the supply plan, validate it against: corporate strategy alignment, financial feasibility, risk assessment, and supplier market realities.</p><p>The supply plan must be aligned with S&OP — what the supply plan promises must be supportable within the company's overall demand and operational plan.</p><p>Supply plan refinement often follows a spend analysis — using data on what the organization actually buys to validate that the planned sourcing approach matches spend realities.</p></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Sole source vs. single source vs. multiple source</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Sole source: only ONE supplier exists in market — no choice, high risk.
+Single source: multiple suppliers exist, company chooses one — strategic decision for leverage/partnership.
+Multiple source: 2+ suppliers for same item — maximizes competition and resilience.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">The Kraljic Matrix — 4 quadrants</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Strategic (high spend, high risk): deep partnerships, long-term contracts.
+Leverage (high spend, low risk): competitive bidding, maximize power.
+Bottleneck (low spend, high risk): ensure supply continuity, safety stock.
+Non-critical (low spend, low risk): simplify and automate.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a category strategy?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A plan for sourcing a specific category — covering: supplier selection approach, contract type, relationship depth, performance targets, and risk mitigation. Different categories need fundamentally different strategies (Kraljic Matrix).</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a supply plan?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The strategic design of a supply network — based on TCO, make-vs-buy decisions, and sourcing strategy. Answers structural questions: centralized vs. decentralized, local vs. lowest-cost, sole/single/multi-source, strategic vs. non-strategic materials.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How should non-critical/routine items be sourced?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Simplify and automate — blanket purchase orders, e-procurement, vendor-managed inventory (VMI), or purchasing cards. Minimize management time on low-value, low-risk items to free resources for strategic categories.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Why must the supply plan align with S&OP?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The supply plan defines supply capacity and sourcing strategy. If it doesn't align with the demand plan (S&OP output), the company risks being unable to source what S&OP plans to produce and sell. Supply planning and demand planning must be synchronized.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company's key raw material is available from only one global supplier. How should this be categorized in the Kraljic Matrix?</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,2)"> Leverage item — high spend, low risk</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,2)"> Non-critical item — low spend, low risk</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,2)"> Bottleneck item — limited supply availability, high risk</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,2)"> Strategic item — high spend AND high risk</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Single global supplier = high supply risk regardless of spend level. If spend is LOW but risk is HIGH → Bottleneck item. Strategy: secure supply through safety stock, qualify alternates, and long-term contracts to lock in availability.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">A purchasing team is buying standard office supplies that are widely available from many suppliers. Using the Kraljic Matrix, what is the recommended sourcing approach?</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,2)"> Deep strategic partnership with one preferred supplier</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,2)"> Long-term contract to ensure supply continuity</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,2)"> Simplify and automate — blanket POs, e-procurement, minimize management time</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,2)"> Competitive bidding with full RFP process every quarter</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Office supplies = non-critical (low spend, low risk). The strategy is to minimize transaction cost through automation — blanket orders, e-procurement, or VMI. Using a full RFP process or strategic partnership wastes resources on low-value items.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A company sources a high-value component from 3 competing suppliers. This is called:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,2)"> Sole sourcing</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,2)"> Single sourcing</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,2)"> Multiple sourcing</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,2)"> Offshoring</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Multiple sourcing = using 2+ suppliers for the same item. Benefits: price competition, supply resilience (if one fails, others can cover). Tradeoff: lower volume leverage per supplier and more relationship management complexity.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">The Kraljic Matrix segments purchases based on:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Lead time and order frequency</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Spend level (high/low) and supply risk (high/low)</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Supplier location and contract length</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Product complexity and quality requirements</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Kraljic Matrix axes: (1) Spend importance — low to high; (2) Supply risk — low to high. These two dimensions create four quadrants (Non-critical, Leverage, Bottleneck, Strategic) each requiring a different sourcing strategy.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Which supply planning decision directly affects supply chain resilience versus cost efficiency?</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Centralized vs. decentralized procurement</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Whether to use single or multiple sourcing</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> The choice of ERP system</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> The frequency of S&OP meetings</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Single source → lower cost (volume leverage, simpler management) but higher risk (one supplier failure = stockout). Multiple source → higher cost per supplier but better resilience. This is the fundamental cost-resilience tradeoff in supply planning.</div></div></div>
+  </div>
+</div>
+<footer>3.2.1: Supply Plans, Categories & Segmentation · Module 3 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>
