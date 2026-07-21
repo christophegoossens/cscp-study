@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>5.2.1: Distribution Services</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 5: Logistics, Transportation & Distribution</div>
+  <div class="hdr-title">5.2.1 · Distribution Services</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 9% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Distribution Network Design</div><div class="block-body"><div class="def-box"><b>Distribution</b>: The activities involved in delivering products from manufacturer to end customer — encompassing warehousing, transportation, order management, and channel management.</div><div class="def-box"><b>Distribution channel</b>: The path a product takes from producer to end consumer. Can be: direct (manufacturer → consumer), or indirect (manufacturer → distributor/wholesaler → retailer → consumer). More channel steps = more cost but potentially broader reach.</div><div class="key-point">Distribution network design decisions: number and location of DCs, make-or-buy (own vs. outsource), inventory positioning (where to hold stock), and transportation mode mix.</div><div class="def-box"><b>Direct distribution</b>: Manufacturer ships directly to end customer — eliminating intermediaries. Reduces markup cost, provides direct customer relationship, but requires logistics infrastructure and is challenging at scale.</div><div class="def-box"><b>Indirect distribution</b>: Uses intermediaries (distributors, wholesalers, retailers) — sacrifices margin for reach, reduced logistics complexity, and faster market penetration.</div></div></div><div class="block"><div class="block-title">Order Fulfillment and Service Levels</div><div class="block-body"><div class="def-box"><b>Order cycle time</b>: The elapsed time from when a customer places an order to when they receive it. A key customer service metric — shorter = competitive advantage.</div><div class="key-point">Order cycle time components: order transmission + order processing + order picking/packing + transportation + customer receiving. Each step can be a source of delay or variability.</div><div class="def-box"><b>Perfect Order</b>: An industry metric measuring the percentage of orders that are delivered on time, in full, damage-free, with correct documentation, and correctly invoiced. Perfect Order % = (On Time %) × (In Full %) × (Damage Free %) × (Invoice Accuracy %).</div><div class="formula">Perfect Order % = % On Time × % In Full × % Damage Free × % Invoice Accurate</div><div class="key-point">The Perfect Order metric is multiplicative — four 99% scores give only ~96% perfect order performance. Small improvements across all dimensions compound significantly.</div></div></div><div class="block"><div class="block-title">Omnichannel and E-Commerce Distribution</div><div class="block-body"><div class="def-box"><b>Omnichannel distribution</b>: Seamlessly fulfilling orders from multiple channels (store, website, mobile, marketplace) using the same inventory pool — customers can order from any channel and receive or return through any channel.</div><div class="key-point">Omnichannel challenges: inventory visibility across all locations, faster fulfillment expectations (same-day/next-day), higher return rates (e-commerce), and more complex transportation (individual parcels vs. pallets).</div><div class="def-box"><b>Last-mile delivery</b>: The final leg of delivery from a distribution point to the end customer. The most expensive and complex part of e-commerce logistics — parcel carriers, gig delivery, and locker networks are competing solutions.</div><div class="def-box"><b>Ship-from-store</b>: Using retail store inventory to fulfill online orders — reduces last-mile distance and cost by leveraging proximity to customers, but adds operational complexity to stores.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Perfect Order metric — formula and why it matters</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Perfect Order % = % On Time × % In Full × % Damage Free × % Invoice Accurate
+
+Example: 98% × 97% × 99% × 99% = ~93.3% perfect orders
+
+Whyit matters: customer experience depends on ALL dimensions being right. A shipment on time but wrong quantity = imperfect. The multiplicative calculation shows why each dimension must be excellent — even small failures compound quickly.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Direct vs. indirect distribution channels</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Direct: Manufacturer → Consumer
+✓ Higher margin (no intermediary markup)
+✓ Direct customer relationship/data
+✗ Requires own logistics infrastructure
+✗ Harder to reach scale
+
+Indirect: Manufacturer → Distributor → Retailer → Consumer
+✓ Broader reach and scale
+✓ Reduced logistics complexity
+✗ Lower margin (intermediary takes markup)
+✗ Less direct customer visibility</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Order cycle time — components</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1. Order transmission (customer to seller)
+2. Order processing (system + credit check)
+3. Order picking and packing
+4. Carrier pickup / transportation
+5. Customer receiving and acceptance
+
+Total = order cycle time. Reducing any component shortens cycle time. Consistency (low variability) in each step is as important as speed.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is omnichannel distribution?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Fulfilling customer orders from multiple channels (physical store, website, app, marketplace) using a shared, visible inventory pool — with flexible fulfillment and return options.
+
+Customer can: buy online / pick up in store (BOPIS), buy in store / ship to home, return online purchase to store.
+
+Requires: real-time inventory visibility across all nodes, unified OMS (Order Management System), flexible fulfillment execution.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is last-mile delivery and why is it expensive?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Last mile = final delivery from a distribution point to the end customer's door.
+
+Why expensive: (1) Many small individual stops vs. few bulk stops; (2) Failed deliveries (no one home); (3) Urban congestion; (4) Labor-intensive; (5) Customer expectation of speed (same/next day).
+
+Solutions: parcel carriers (UPS, FedEx), crowd-sourced delivery (DoorDash, Instacart), package lockers, ship-from-store (reduces distance).</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a distribution channel and why does it matter strategically?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The path a product follows from producer to end consumer (including all intermediaries).
+
+Strategic importance:
+• Channel choice affects cost, reach, margin, and customer relationships
+• Disintermediation (cutting out intermediaries) = higher margin + direct relationships, but requires own logistics
+• Adding channels = more reach but complexity
+• Channel conflict: if selling direct AND through retailers, retailers may object to competing with the manufacturer</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">If a company's order fulfillment performance is: 95% on time, 98% in full, 99% damage-free, and 97% invoice accurate, its Perfect Order rate is approximately:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,2)"> 97.25%</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,2)"> 95%</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,2)"> 89.5%</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,2)"> 100%</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Perfect Order % = 0.95 × 0.98 × 0.99 × 0.97 = approximately 0.895 = ~89.5%. This illustrates the multiplicative effect: even though no individual metric is catastrophically bad, the combined result is that roughly 1 in 10 orders has something wrong. Improving each dimension by even 1–2% significantly lifts the combined score.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">A manufacturer that sells directly to consumers through its own website is using:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Indirect distribution through intermediaries</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Direct distribution — eliminating channel intermediaries</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> A 3PL distribution model</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Cross-docking distribution</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Direct distribution = manufacturer to end consumer with no intermediary (no distributor, wholesaler, or retailer). Benefits: higher margin (no intermediary markup), direct customer data and relationship, control over brand experience. Challenges: requires building own logistics/fulfillment capability, harder to achieve the physical reach of retail chains.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">The most expensive component of e-commerce logistics is typically:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,2)"> Ocean freight from suppliers</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,2)"> Warehouse storage costs</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,2)"> Last-mile delivery to end customers</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,2)"> Customs and duties</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Last-mile delivery (final delivery to customer's door) is the most expensive part of e-commerce logistics — typically accounting for 40–50% of total delivery cost. Why: many individual stops vs. bulk delivery, failed delivery attempts, customer expectation of speed, labor-intensive. It's why Amazon invested heavily in its own delivery network and why drone/autonomous delivery innovation is focused on last-mile.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">Omnichannel fulfillment requires which critical operational capability?</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Separate inventory pools for each sales channel</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Real-time, unified inventory visibility across all locations and channels</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> All orders shipped from a single central warehouse</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Customers limited to one return method</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Omnichannel requires a single, real-time view of inventory across all locations (DCs, stores, in-transit) — so any order from any channel can be fulfilled from the most efficient location. Without unified inventory visibility, orders are accepted that can't be filled, or inventory is siloed per channel (inefficient). An Order Management System (OMS) typically provides this unified view.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Adding an intermediary (distributor) to a distribution channel typically:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,0)"> Reduces the manufacturer's margin but increases market reach and reduces logistics complexity</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,0)"> Increases the manufacturer's margin by sharing logistics costs</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,0)"> Eliminates the need for customer service</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,0)"> Has no effect on the total supply chain cost</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Intermediaries (distributors, wholesalers) take a margin for their services — reducing the manufacturer's per-unit profit. But they provide value: they cover more geographic territory, carry inventory (reducing manufacturer's inventory), handle customer relationships, and aggregate demand from many end customers. The manufacturer trades margin for reach and reduced logistics complexity. Whether that trade-off is worth it depends on the market, volume, and competitive dynamics.</div></div></div>
+  </div>
+</div>
+<footer>5.2.1: Distribution Services · Module 5 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

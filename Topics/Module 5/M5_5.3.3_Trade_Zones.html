@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>5.3.3: Trade Zones & Blocs</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 5: Logistics, Transportation & Distribution</div>
+  <div class="hdr-title">5.3.3 · Trade Zones & Blocs</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 9% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Free Trade Agreements and Trade Blocs</div><div class="block-body"><div class="def-box"><b>Free Trade Agreement (FTA)</b>: A treaty between two or more countries eliminating or reducing tariffs, quotas, and trade barriers on goods exchanged between them — promoting trade and economic integration.</div><div class="key-point">Major trade blocs and agreements relevant to CSCP:</div><ul><li><b>USMCA (United States-Mexico-Canada Agreement)</b>: Replaced NAFTA in 2020 — free trade between the US, Canada, and Mexico</li><li><b>EU (European Union)</b>: Single market — free movement of goods, services, capital, and people among 27 member states; common external tariff</li><li><b>RCEP (Regional Comprehensive Economic Partnership)</b>: World's largest FTA — 15 Asia-Pacific nations including China, Japan, South Korea, ASEAN</li><li><b>CPTPP (Comprehensive and Progressive Agreement for Trans-Pacific Partnership)</b>: 11 Pacific Rim countries excluding the US</li></ul><div class="def-box"><b>Rules of origin</b>: Criteria that determine whether a product qualifies for preferential tariff treatment under an FTA — typically requiring that a minimum percentage of the product's value is added within the FTA partner countries.</div></div></div><div class="block"><div class="block-title">Trade Zones</div><div class="block-body"><div class="def-box"><b>Free Trade Zone (FTZ) / Foreign Trade Zone</b>: A designated geographic area within a country where goods can be imported, stored, handled, manufactured, or reconfigured without paying customs duties — until goods enter domestic commerce.</div><div class="def-box"><b>Export Processing Zone (EPZ)</b>: A special zone focused on manufacturing for export — companies in EPZs receive tax and regulatory benefits in exchange for exporting the majority of their production. Common in developing countries to attract foreign investment.</div><div class="def-box"><b>Special Economic Zone (SEZ)</b>: A broader version of EPZ — offers tax holidays, reduced regulation, and business incentives across multiple industries. China's SEZs (Shenzhen, Shanghai Pudong) played a key role in China's industrial development.</div><div class="def-box"><b>Bonded warehouse</b>: A secure storage facility where imported goods can be held without paying duties until they are either entered into domestic commerce (duties paid) or re-exported duty-free. Provides duty deferral and cash flow benefits.</div></div></div><div class="block"><div class="block-title">Impact on Supply Chain Strategy</div><div class="block-body"><div class="key-point">Trade agreements shape supply chain design: companies locate manufacturing in FTA partner countries to qualify for preferential tariff rates, reducing product landed cost.</div><div class="key-point">Trade policy risk: tariffs and trade agreements change — supply chains built around specific trade preferences become vulnerable when agreements change or tariffs are imposed. Companies must monitor trade policy as a strategic risk.</div><div class="def-box"><b>Country of origin determination</b>: Complex rules govern where a product 'comes from' for tariff purposes — substantial transformation test (was the product fundamentally changed in the last country?) or specific percentage of value addition. Critical for FTA qualification.</div><div class="key-point">Nearshoring trend: companies shifting manufacturing from Asia to USMCA countries (Mexico) to reduce tariff exposure, improve supply chain resilience, and lower transportation costs and lead times — driven partly by trade policy risk.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">USMCA, EU, RCEP — what are they?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">USMCA: US-Mexico-Canada Agreement (replaced NAFTA 2020) — free trade across North America
+
+EU: 27-member single market — free movement of goods/services/capital/people; common external tariff to non-members
+
+RCEP: Regional Comprehensive Economic Partnership — 15 Asia-Pacific nations (China, Japan, S. Korea, ASEAN + others); world's largest FTA by GDP
+
+For CSCP: know these shape where companies manufacture to minimize tariffs.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Rules of origin — what are they and why do they matter?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Rules of origin = criteria defining whether a product qualifies for preferential FTA tariff rates.
+
+Typically require: minimum % of product value added within FTA partner countries, OR specific manufacturing process performed in-country.
+
+Why it matters: A Chinese company can't just ship goods through Mexico to get USMCA tariff rates — the product must have sufficient North American content.
+
+Supply chain implication: sourcing decisions are influenced by rules of origin to preserve FTA benefits.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Free Trade Zone (FTZ) — key benefits</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Goods can be imported into an FTZ without paying customs duties. Duties only paid when goods leave FTZ and enter domestic commerce.
+
+Benefits:
+1. Duty deferral (pay later = cash flow benefit)
+2. Inverted tariff benefit: if components have higher duty than finished goods, manufacture in FTZ and pay finished goods rate
+3. Re-export duty-free (if goods are exported from FTZ, no duty paid)
+4. Duty reduction on scrap/waste (pay duty only on what enters commerce, not on waste from production)</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">EPZ vs. SEZ</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Export Processing Zone (EPZ): manufacturing zone — tax/regulatory benefits in exchange for exporting most production. Common in developing nations to attract foreign manufacturing investment.
+
+Special Economic Zone (SEZ): broader concept — tax holidays, reduced regulation across multiple industries and activities. China's SEZs (Shenzhen 1980) were a key tool for economic development by attracting FDI with favorable conditions.
+
+Both: reduce cost of doing business in specific geographic areas.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a bonded warehouse?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A licensed, secure facility where imported goods can be held without paying customs duties.
+
+Goods can: (1) Enter domestic commerce upon payment of duties, OR (2) Be re-exported without paying any duties, OR (3) Be held while awaiting customs processing or sale
+
+Benefit: duty deferral until goods are actually sold. Useful for: seasonal goods, goods awaiting sale/distribution decisions, goods that may be re-exported.
+
+Difference from FTZ: bonded warehouse is a storage-only facility; FTZ allows manufacturing/processing.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How do trade agreements shape supply chain design?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Companies locate manufacturing in FTA partner countries to qualify for preferential (zero or low) tariff rates → lower product landed cost.
+
+Example: USMCA benefit → many companies manufacture in Mexico rather than Asia to sell to US market at zero tariff.
+
+Risk: trade policy changes. If tariffs are imposed or FTA renegotiated, the supply chain built around those preferences becomes expensive to restructure.
+
+Trend: nearshoring to USMCA countries driven by BOTH tariff benefits AND supply chain resilience (shorter lead times, reduced risk).</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">Rules of origin in a Free Trade Agreement determine:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> Which carrier must be used for shipments between FTA partners</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> Whether a product qualifies for preferential tariff treatment — based on sufficient manufacturing or value addition within partner countries</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> The maximum tariff rate that can be charged on any imported good</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Which countries can join the trade agreement</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Rules of origin prevent 'tariff shopping' — a non-FTA country routing goods through an FTA partner to get preferential rates. FTAs require that goods have sufficient 'local' content (% of value added, specific processing, or substantial transformation) to qualify for the lower tariff. Supply chain implication: where you source components and manufacture affects whether you can claim FTA tariff benefits.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">A company imports components into a Free Trade Zone, assembles finished goods, and re-exports to customers in other countries. The customs duty impact is:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Full duties are paid on components immediately upon import</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> No duties are paid on components, and if finished goods are re-exported, no duties are paid at all</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Duties are paid on finished goods at a rate higher than components</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> The company must pay duties in both the importing and exporting country</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">FTZ benefit: goods enter the zone without paying duties. If finished goods are re-exported (never entering domestic commerce), no duty is paid at any point. If goods are sold domestically, duties are paid on the finished goods (not components) when they exit the FTZ — potentially at a lower rate than if each component was dutiable upon import (inverted tariff benefit).</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A company moves manufacturing from China to Mexico primarily to reduce import duties when selling to US customers. This is an example of:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Outsourcing production to reduce labor costs</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Supply chain design driven by trade agreements — leveraging USMCA preferential tariff rates</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Vertical integration of the supply chain</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Cross-docking strategy optimization</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">USMCA (formerly NAFTA) provides zero or near-zero tariffs for qualifying goods produced in the US, Canada, or Mexico. By manufacturing in Mexico (and meeting USMCA rules of origin), the company eliminates the tariff it would pay importing from China — reducing product landed cost in the US. This is 'trade agreement-driven supply chain design' — a legitimate and common supply chain strategy.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">A bonded warehouse differs from a regular warehouse in that:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> It is operated by customs authorities rather than a private company</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Goods can be stored without paying import duties until they enter domestic commerce or are re-exported</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> It only stores bonded (insured) goods</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> It is always located inside a Free Trade Zone</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Bonded warehouse = licensed facility where imported goods are held under customs supervision without paying duties. Duties are only assessed when goods leave the warehouse to enter domestic commerce. If re-exported, no duty is paid. Benefit: defer duty payment until goods are actually sold (cash flow improvement) and avoid paying duty on goods that will ultimately be re-exported.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">The RCEP (Regional Comprehensive Economic Partnership) is significant because:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> It replaced the World Trade Organization as the global trade regulator</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> It is the world's largest free trade agreement by GDP — covering 15 Asia-Pacific nations including China, Japan, South Korea, and ASEAN</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> It only covers technology goods and services</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> It eliminated all tariffs between the US and China</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">RCEP (effective 2022): 15 nations — China, Japan, South Korea, Australia, New Zealand, and 10 ASEAN members. Covers ~30% of global GDP and 30% of world population — the largest FTA by economic scale. It reduces tariffs across the Asia-Pacific region, facilitating supply chains among its member countries. The US is NOT a member. Significant for companies with Asia-Pacific manufacturing or sourcing.</div></div></div>
+  </div>
+</div>
+<footer>5.3.3: Trade Zones & Blocs · Module 5 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

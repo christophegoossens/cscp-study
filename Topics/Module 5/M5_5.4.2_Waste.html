@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>5.4.2: Waste</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 5: Logistics, Transportation & Distribution</div>
+  <div class="hdr-title">5.4.2 · Waste</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 9% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Waste in the Supply Chain</div><div class="block-body"><div class="def-box"><b>Supply chain waste</b>: Any material, resource, or activity in the supply chain that does not add value to the customer — including product waste (scrap, defects), packaging waste, energy waste, and process waste (non-value-added activities).</div><div class="key-point">Waste reduction is both a cost driver (less waste = lower cost) and a sustainability imperative (less waste = lower environmental impact). The two goals are aligned — efficient supply chains are typically more sustainable.</div><div class="def-box"><b>Industrial ecology</b>: A systems approach where the waste of one company becomes the input of another — mimicking natural ecosystems where nothing is 'wasted.' Also called 'circular economy' thinking at the industrial level.</div></div></div><div class="block"><div class="block-title">Sustainability and the Circular Economy</div><div class="block-body"><div class="def-box"><b>Circular economy</b>: An economic model that eliminates waste by keeping materials in use as long as possible — through design for longevity, repair, reuse, remanufacturing, and recycling. Contrasts with the linear 'take-make-dispose' model.</div><div class="key-point">Circular economy strategies (in order of value preservation):</div><ul><li><b>Refuse/Reduce</b>: Eliminate unnecessary materials/use</li><li><b>Reuse</b>: Use again as-is</li><li><b>Repair</b>: Fix and continue using</li><li><b>Remanufacture</b>: Rebuild to original spec</li><li><b>Recycle</b>: Break down and use materials again</li><li><b>Recover energy</b>: Extract energy from waste (last resort before disposal)</li></ul><div class="def-box"><b>Extended Producer Responsibility (EPR)</b>: Regulations requiring manufacturers to take back and manage their products at end of life — incentivizing design for recyclability and creating a reverse logistics obligation. Common in EU for electronics (WEEE directive), batteries, and packaging.</div></div></div><div class="block"><div class="block-title">Waste Reduction in Logistics</div><div class="block-body"><div class="def-box"><b>Packaging waste</b>: Excess or non-recyclable packaging is a major source of supply chain waste. Sustainable packaging goals: right-size (eliminate excess space/material), use recycled/recyclable materials, and minimize weight (reducing transport emissions).</div><div class="def-box"><b>Carbon footprint of logistics</b>: Transportation is a major source of greenhouse gas emissions — freight accounts for ~8% of global CO2 emissions. Strategies to reduce: consolidation (fuller loads), mode shift (rail/ocean vs. truck/air), route optimization, and alternative fuels (electric, hydrogen, biodiesel).</div><div class="key-point">Scope 3 emissions: indirect emissions in a company's supply chain — including purchased goods, transportation, business travel, and use of sold products. Increasingly reported by companies under ESG (Environmental, Social, Governance) frameworks. Supply chain typically represents 70–90% of a company's total carbon footprint.</div><div class="def-box"><b>Green logistics</b>: Integrating environmental considerations into logistics decision-making — mode selection, load optimization, packaging design, and reverse logistics planning to minimize environmental impact.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Circular economy vs. linear economy</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Linear economy: Take (raw materials) → Make (product) → Dispose (landfill). One-directional, creates waste.
+
+Circular economy: Design products for longevity, repair, reuse, remanufacturing, recycling. Materials stay in use as long as possible.
+
+Strategies (highest to lowest value preservation):
+Refuse → Reduce → Reuse → Repair → Remanufacture → Recycle → Recover energy → Dispose</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is Extended Producer Responsibility (EPR)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">EPR = regulations requiring manufacturers to take responsibility for their products at end-of-life.
+
+Examples: EU WEEE Directive (electronics take-back), battery regulations, packaging EPR.
+
+Effect: manufacturers must design for recyclability (or pay for disposal), fund take-back programs, or pay into recycling schemes.
+
+Supply chain impact: creates reverse logistics obligation; incentivizes eco-design; shifts end-of-life cost from government/consumer to producer.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Scope 1, 2, 3 emissions — what's the difference?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Scope 1: Direct emissions from company-owned operations (company fleet, factory boilers)
+Scope 2: Indirect emissions from purchased energy (electricity, steam)
+Scope 3: All OTHER indirect emissions in the value chain:
+  - Upstream: suppliers, transportation of purchased goods
+  - Downstream: distribution, customer use, end-of-life disposal
+
+Scope 3 = 70–90% of most companies' total carbon footprint. Supply chain is the biggest lever for reducing corporate emissions.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How does freight consolidation reduce environmental impact?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">More goods per vehicle = fewer vehicle trips to move the same total volume.
+
+Full trucks produce lower emissions per unit shipped than half-empty trucks.
+
+Consolidation methods: FTL vs. LTL optimization, cross-docking, milk runs (one truck picks up from multiple suppliers), intermodal (shift long haul from truck to rail/ocean — lower emissions per ton-mile).
+
+Bonus: also reduces cost (fewer trips = lower freight spend).</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is industrial ecology?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A systems approach where waste outputs from one company become inputs for another — mimicking natural ecosystems (nothing is 'wasted'; everything cycles).
+
+Example: a steel mill's slag becomes cement manufacturer's raw material; a food processor's organic waste becomes biogas for energy.
+
+Contrasts with traditional 'end-of-pipe' approach (manage waste after it's created) by designing systems where waste = resource from the start.
+
+Larger concept: industrial symbiosis (companies in geographic proximity exchange waste streams).</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Green logistics strategies</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Mode shift: rail/ocean instead of truck/air → lower emissions per ton-mile
+Load optimization: full loads, reduced empty miles
+Route optimization: TMS finds shortest/most efficient routes
+Packaging right-sizing: less material, lighter weight = less fuel to transport
+Alternative fuels: electric, hydrogen, biodiesel vehicles
+Consolidation: more goods per trip
+Local sourcing: shorter transportation distances
+Return logistics design: reduce emissions of reverse supply chain</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">In the circular economy hierarchy, 'remanufacturing' is preferred over 'recycling' because:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> Remanufacturing is cheaper than recycling in all cases</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> Remanufacturing preserves more material value — restoring a product to like-new function vs. breaking it down to raw materials and starting again</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> Recycling is illegal in most countries</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Remanufacturing requires less energy than recycling</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Circular economy hierarchy: highest value preservation → lowest. Remanufacturing keeps the product structure intact — rebuilds using existing components, preserving the manufacturing energy and material value embedded in those parts. Recycling breaks everything down to raw materials — losing the value of previous manufacturing steps and requiring significant energy to process. Rule: keep materials at highest level of use possible for as long as possible.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Extended Producer Responsibility (EPR) regulations change supply chain design by:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Eliminating the need for reverse logistics</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Requiring manufacturers to design for end-of-life and fund/manage product take-back — creating reverse logistics obligations and incentivizing eco-design</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Shifting all recycling responsibility to consumers</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Requiring all products to be manufactured domestically</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">EPR = 'you made it, you're responsible for it.' Manufacturers must plan and fund product recovery at end-of-life (take-back programs, contributions to recycling schemes). This incentivizes design changes: modular design (easier disassembly), recyclable materials (lower disposal cost), fewer hazardous substances (lower compliance cost). It also creates a mandatory reverse logistics program — companies must build or outsource the reverse supply chain.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Supply chain transportation typically represents what percentage of a company's total carbon footprint (Scope 3)?</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,2)"> Less than 5%</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,2)"> 10–20%</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,2)"> 70–90%</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,2)"> 100%</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Scope 3 emissions (all indirect supply chain emissions) typically represent 70–90% of a company's total carbon footprint. Transportation (freight) is a large component of Scope 3 — along with purchased goods/services (the emissions from suppliers' production). This is why supply chain decarbonization has become a major focus: a company can't meaningfully reduce its total carbon impact without addressing its supply chain, which dominates total emissions.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">A company that designs its packaging to be smaller, lighter, and made from recycled materials is pursuing:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Extended Producer Responsibility compliance only</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Green logistics — reducing environmental impact through packaging design choices that also reduce transportation cost</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Industrial ecology</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> A cost-increase strategy</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Green logistics = integrating environmental considerations into logistics decisions. Packaging example: smaller (fewer packages per shipment? wrong — same volume. Actually: less space wasted → more product per truck → fewer trips), lighter (reduces vehicle weight → less fuel per trip), recycled materials (lower carbon intensity of materials). This is a case where environmental and economic goals align: less packaging material = lower material cost + lower shipping cost + lower environmental impact.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Industrial ecology differs from traditional waste management in that:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Industrial ecology focuses only on reducing production waste</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Industrial ecology designs systems where one company's waste becomes another's input — eliminating the concept of 'waste' by treating all outputs as resources</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Traditional waste management is illegal in most countries</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> There is no practical difference</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Traditional waste management: treat waste after it's created (end-of-pipe). Industrial ecology: design systems at the outset so waste doesn't exist — outputs from one process/company are inputs for another. Example: industrial symbiosis parks where companies cluster geographically to exchange waste streams (steam, heat, by-products). The goal is a closed loop where no material goes to landfill. This systems-level design is more effective and economical than treating waste as an afterthought.</div></div></div>
+  </div>
+</div>
+<footer>5.4.2: Waste · Module 5 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>5.1.3: Transportation Strategy</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 5: Logistics, Transportation & Distribution</div>
+  <div class="hdr-title">5.1.3 · Transportation Strategy</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 9% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Transportation's Role in the Supply Chain</div><div class="block-body"><div class="def-box"><b>Transportation</b>: The physical movement of goods from one location to another — creating place utility. It is typically the largest single cost component of logistics (averaging 40–60% of total logistics cost).</div><div class="key-point">Transportation strategy must balance three dimensions: cost (rate per unit shipped), service (transit time, reliability, damage rate), and flexibility (ability to handle exceptions). Optimizing all three simultaneously is the strategic challenge.</div><div class="def-box"><b>Freight terms (Incoterms)</b>: Internationally agreed terms defining who bears responsibility and cost for shipment at each stage. Common terms: EXW (Ex Works — buyer pays all), FOB (Free on Board — seller pays to named port/location), DDP (Delivered Duty Paid — seller pays everything to destination).</div><div class="def-box"><b>Transit time vs. transit time variability</b>: Transit time = how long shipment takes. Variability = how unpredictable that time is. Variability is often more damaging than slow transit — uncertainty forces higher safety stock.</div></div></div><div class="block"><div class="block-title">Transportation Modes</div><div class="block-body"><div class="key-point">Five primary transportation modes — each with distinct cost/service trade-offs:</div><ul><li><b>Truck (road)</b>: Most flexible, door-to-door delivery, high cost per ton-mile, ideal for short-to-medium distances</li><li><b>Rail</b>: Low cost for bulk/heavy freight, slow, limited to rail network, long-haul advantage</li><li><b>Air</b>: Fastest, highest cost, ideal for high-value, time-sensitive, low-weight goods</li><li><b>Ocean (water)</b>: Lowest cost per ton-mile, slow, ideal for international bulk/container shipping</li><li><b>Pipeline</b>: Very low cost for liquids/gases, high fixed cost, no flexibility (fixed route)</li></ul><div class="def-box"><b>Intermodal transportation</b>: Using two or more modes in a single shipment — typically truck + rail (TOFC: trailer on flatcar) or truck + ocean (containerization). Combines the advantages of each mode: rail/ocean cost efficiency + truck door-to-door flexibility.</div></div></div><div class="block"><div class="block-title">Transportation Management</div><div class="block-body"><div class="def-box"><b>Transportation Management System (TMS)</b>: Software that plans, executes, and optimizes freight movements — carrier selection, load planning, route optimization, freight payment, and performance tracking.</div><div class="def-box"><b>Freight consolidation</b>: Combining multiple small shipments into a larger load — reducing cost per unit by filling carrier capacity. LTL (Less-than-Truckload) shipments are consolidated by carriers; shippers can consolidate internally before tendering.</div><div class="def-box"><b>LTL vs. FTL</b>: Less-than-Truckload (LTL) = shipment doesn't fill a truck — multiple shippers share space, slower, more handling, lower cost for small volumes. Full Truckload (FTL) = one shipper fills the truck — faster, fewer touches, better for large volumes.</div><div class="key-point">Key transportation cost drivers: distance, weight, density, stowability, handling requirements, liability (value of goods), and market factors (carrier capacity and fuel prices).</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">5 transportation modes — cost and speed comparison</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Most expensive → least: Air > Truck > Rail > Ocean > Pipeline
+Fastest → slowest: Air > Truck > Rail > Ocean > Pipeline
+
+Air: fastest, most expensive — high-value, time-sensitive goods
+Truck: flexible, door-to-door — most common for domestic
+Rail: cheap for bulk long-haul — no door-to-door
+Ocean: cheapest per ton-mile — international, slow
+Pipeline: cheapest for liquids/gas — highly inflexible</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is intermodal transportation?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Using two or more transportation modes in a single shipment, typically in a standardized container.
+
+Examples:
+• Truck to port → ocean container → truck from port (international)
+• TOFC: Trailer On FlatCar (truck trailer carried by rail for long haul)
+
+Advantage: combines ocean/rail cost efficiency with truck door-to-door flexibility. Standardized containers eliminate reloading.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">LTL vs. FTL</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">LTL (Less-than-Truckload): shipment < full truck. Multiple shippers share space. Carrier consolidates loads at hub. Slower, more handling touches, risk of damage. Lower cost for small volumes.
+
+FTL (Full Truckload): one shipper fills truck. Direct delivery, faster, fewer touches. Lower cost per unit at scale. Best for large, regular shipments.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a TMS?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Transportation Management System — software for planning, executing, and optimizing freight.
+
+Capabilities: carrier selection, rate comparison, load/route optimization, shipment tracking, freight audit & payment, KPI reporting.
+
+Benefit: reduces freight cost 5–15% through better mode/carrier selection and load optimization; improves visibility and on-time performance.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Transit time variability — why does it matter more than transit time?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Transit time = average delivery time (e.g., 3 days).
+Variability = range around that average (e.g., 2–5 days).
+
+Variability forces HIGHER safety stock: if you can't predict when product arrives, you must buffer against late deliveries.
+
+Low variability (reliable, consistent) = lower safety stock needed, even if average transit time is longer.
+High variability = must carry more safety stock regardless of average transit time.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Key transportation cost drivers (DWSHLM)</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Distance: farther = more cost
+Weight: heavier = more cost
+Stowability (density): low-density goods cost more (pay for space not weight)
+Handling: special requirements (hazmat, refrigeration) = premium
+Liability: high-value goods = higher insurance/care
+Market: carrier capacity and fuel prices
+
+Shippers can reduce costs by: shipping denser loads, consolidating, choosing optimal mode, using a TMS.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company needs to ship electronics from China to the US. The least expensive mode would typically be:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,2)"> Air freight</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,2)"> Truck (road)</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,2)"> Ocean freight (container ship)</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,2)"> Pipeline</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Ocean freight has the lowest cost per ton-mile of any mode — ideal for international shipments where transit time (typically 2–4 weeks from Asia to US) is acceptable. Electronics are high-value but can tolerate ocean transit time with appropriate lead time planning. Air freight would be dramatically more expensive (8–10× ocean cost per kg) and is reserved for urgent/very high-value shipments where time cost justifies the premium.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Transit time VARIABILITY forces companies to maintain higher safety stock because:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Variable transit times mean shipments are always late</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> When arrival time is unpredictable, companies must buffer against late deliveries — stocking more to avoid stockouts</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Variable transit reduces total logistics cost</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Carriers charge more for variable delivery windows</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Safety stock exists primarily to cover uncertainty — in demand AND in supply lead time. If a supplier consistently delivers in 5 days, you plan for 5 days. If it varies 3–8 days, you must plan for the worst case (8 days) to avoid stockouts — carrying extra safety stock for those extra 3 days. Reducing lead time VARIABILITY (not necessarily average lead time) is one of the highest-leverage ways to reduce safety stock.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">Intermodal transportation is used to:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Transport goods using only ocean shipping worldwide</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Combine two or more modes in a single shipment to leverage cost and service advantages of each</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Eliminate the need for trucking in domestic logistics</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Move goods by pipeline across international borders</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Intermodal = multiple modes, single shipment, standardized container. Example: truck picks up at factory (flexibility), container loaded on train for 1,000-mile haul (cheap bulk), truck delivers to customer (flexibility). The container doesn't change — eliminating reloading cost and time. Benefits: lower cost than all-truck, faster than all-rail, more flexible than all-rail.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">A shipper with a small, time-sensitive shipment that doesn't fill a truck would use:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,2)"> Full truckload (FTL)</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,2)"> Pipeline</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,2)"> Less-than-Truckload (LTL)</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,2)"> Ocean container</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">LTL = Less-than-Truckload. The carrier consolidates multiple small shippers' loads. The shipper pays only for the space their freight occupies. Trade-offs: slower (consolidation/deconsolidation adds time), more handling (damage risk), but cost-effective for small shipments. FTL would mean paying for an entire truck the shipper can't fill — wasteful for small volumes.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Freight consolidation reduces transportation cost by:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Using slower transportation modes for all shipments</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Combining multiple small shipments into a larger load — spreading fixed carrier costs over more units</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Requiring customers to pick up their own orders</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Eliminating the need for a TMS</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Carriers price freight based partly on filling their capacity. A full truck costs roughly the same as a half-empty truck — so cost per unit drops as load increases. Consolidation: combine multiple small shipments going to the same region into one full load. Ship the full load at FTL rates instead of multiple LTL shipments. Lower cost per unit, fewer carrier pickups to manage.</div></div></div>
+  </div>
+</div>
+<footer>5.1.3: Transportation Strategy · Module 5 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

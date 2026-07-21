@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>5.2.2: Transport Mode & Carrier Selection</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 5: Logistics, Transportation & Distribution</div>
+  <div class="hdr-title">5.2.2 · Transport Mode & Carrier Selection</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 9% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Carrier Types</div><div class="block-body"><div class="key-point">Carriers are classified by ownership and service type:</div><ul><li><b>Private carrier</b>: Company-owned fleet — maximum control, high fixed cost, ideal when high volume and specialized requirements justify the investment</li><li><b>Common carrier</b>: Offers service to any shipper at published tariff rates — regulated, no exclusivity (e.g., UPS, FedEx, major railroads)</li><li><b>Contract carrier</b>: Serves specific shippers under contract — dedicated equipment/service, negotiated rates, more committed capacity than common carrier</li><li><b>Freight broker</b>: Intermediary matching shippers with carriers — doesn't own equipment, earns commission, access to spot market capacity</li></ul><div class="def-box"><b>Asset-based vs. non-asset-based 3PL</b>: Asset-based 3PLs own trucks/warehouses (more control, higher cost). Non-asset-based (brokers, freight forwarders) rely on networks of contracted carriers — more flexibility, lighter capital.</div></div></div><div class="block"><div class="block-title">Mode and Carrier Selection Criteria</div><div class="block-body"><div class="key-point">Factors in transportation mode selection:</div><ul><li><b>Cost</b>: Total freight cost per unit or shipment</li><li><b>Transit time</b>: How long delivery takes</li><li><b>Reliability/consistency</b>: On-time performance and transit time variability</li><li><b>Cargo characteristics</b>: Weight, dimensions, fragility, temperature sensitivity, hazmat classification</li><li><b>Destination accessibility</b>: Rail doesn't reach all locations; air serves major airports only</li><li><b>Frequency</b>: How often shipments are needed</li></ul><div class="def-box"><b>Routing guide</b>: A document (or system rule) specifying which carrier and mode a shipper prefers for each lane (origin-destination pair), based on pre-negotiated rates and service levels. Carriers are typically listed in priority order.</div><div class="def-box"><b>Spot market vs. contract rates</b>: Contract rates are negotiated with carriers for a defined period (usually 1 year) — predictable cost. Spot market rates are transacted one shipment at a time — volatile, can be lower or much higher than contract rates depending on carrier capacity.</div></div></div><div class="block"><div class="block-title">Carrier Performance Management</div><div class="block-body"><div class="def-box"><b>Carrier scorecard</b>: A structured performance evaluation of carriers across metrics: on-time pickup, on-time delivery, claims ratio (damage), invoice accuracy, responsiveness. Used for carrier development, renewals, and routing guide prioritization.</div><div class="key-point">Key carrier KPIs:</div><ul><li><b>On-time delivery %</b>: % of shipments delivered on or before committed date</li><li><b>Cargo claims ratio</b>: Claims value ÷ freight revenue — measures damage/loss rate</li><li><b>Load acceptance rate</b>: % of tender offers the carrier accepts (low = unreliable capacity)</li><li><b>Invoice accuracy</b>: % of carrier invoices that match contracted rates without disputes</li></ul><div class="def-box"><b>Preferred carrier program</b>: A tiered carrier management strategy — preferred carriers (reliable, competitive rates) get first tender priority. Backup carriers get overflow. This ensures capacity during tight markets while maintaining cost discipline.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">4 carrier types</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Private carrier: company-owned fleet — full control, high fixed cost
+Common carrier: any shipper, published tariff rates (UPS, FedEx, major railroads)
+Contract carrier: dedicated to specific shippers under contract — negotiated rates, committed capacity
+Freight broker: intermediary matching shippers with carriers — no equipment, spot market access
+
+Most shippers use a mix: contract carriers for regular lanes, spot/broker for overflow.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Contract rates vs. spot market rates</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Contract rates: negotiated with carrier for a set period (typically annual). Stable, predictable cost. Carrier commits to capacity. Shipper commits to volume.
+
+Spot market: rate set for a single shipment based on current supply/demand of carrier capacity. Volatile — can be 50% cheaper or 100% more expensive than contract rates depending on market conditions.
+
+Strategy: use contracts for base volume, spot/broker for surge capacity.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Key factors in mode selection</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1. Cost (total freight rate)
+2. Transit time (how fast needed)
+3. Reliability (on-time consistency)
+4. Cargo characteristics (weight, dimensions, fragility, hazmat, temp)
+5. Destination accessibility (rail/air don't reach everywhere)
+6. Frequency needed
+
+No mode wins on all dimensions — choose based on the specific shipment requirements and what matters most to the customer.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a routing guide?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A document or system rule specifying which carrier and mode to use for each shipping lane (origin-destination pair).
+
+Typically: Carrier 1 (preferred, best rate) → Carrier 2 (backup) → Carrier 3 (last resort/spot market)
+
+Purpose: ensure shippers consistently use negotiated rates, comply with customer routing requirements, and protect preferred carrier relationships.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Carrier scorecard — key KPIs</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">On-time pickup %: Does carrier arrive to collect when scheduled?
+On-time delivery %: % delivered on/before committed date
+Cargo claims ratio: damage/loss rate
+Load acceptance rate: % of tenders the carrier actually accepts
+Invoice accuracy: % of invoices matching contracted rates
+
+Used for: carrier development, annual contract negotiations, routing guide prioritization.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Private fleet vs. common carrier — when to use each</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Private fleet: company owns trucks.
+Use when: very high volume on consistent lanes, specialized handling (hazmat, refrigerated), exceptional service requirements, or driving competitive differentiation through delivery (e.g., same-day delivery as a brand promise).
+
+Common carrier: 3rd party trucks.
+Use when: variable volume, many destinations, specialized equipment needed occasionally, or capital is better deployed elsewhere. Lower fixed cost, scalable.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A shipper uses a routing guide with three carrier options listed in priority order. The purpose of the routing guide is to:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> Allow carriers to choose their own assignments</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> Ensure consistent use of pre-negotiated rates and preferred carriers, with fallback options for overflow</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> Set spot market prices for freight</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Eliminate the need for a Transportation Management System</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Routing guides specify: for this lane (origin-destination), use Carrier A first (best rate/service), then Carrier B if A declines, then Carrier C/spot market as last resort. Benefits: consistent application of negotiated rates, protection of preferred carrier relationships, and predictable freight cost. Without a routing guide, shippers might accidentally use expensive carriers or skip preferred arrangements.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">A carrier with a low 'load acceptance rate' is problematic because:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> They charge the highest freight rates</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> They frequently decline tender offers — meaning the shipper can't rely on them for capacity when needed</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> They deliver too quickly, causing customer receiving issues</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> They don't use electronic invoicing</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Load acceptance rate = % of shipment tenders the carrier actually accepts. A carrier that accepts only 60% of tenders will leave 40% of loads needing urgent re-tendering — likely at spot market rates. Low acceptance means unreliable capacity commitment. Preferred carriers should have high acceptance rates (85%+) — that's the value of a contract relationship.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">For a recurring, high-volume lane, a shipper is better served by:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Spot market rates, because they're always lower than contract rates</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> Contract rates negotiated with a carrier — providing price stability and committed capacity</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Using only private fleet regardless of cost</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> Posting the load to any broker at market rate each time</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Contract rates provide: price predictability (know your cost for the year), committed carrier capacity (carrier reserves trucks for you), and typically lower rates than spot market average (carrier values the guaranteed volume). Spot market is better for overflow or irregular lanes where volume doesn't justify a carrier committing dedicated capacity. Spot rates can swing dramatically (±50%) with market conditions.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">A cargo claims ratio measures:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> The percentage of invoices disputed by the shipper</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> The value of damage/loss claims relative to total freight revenue — indicating the carrier's care for cargo</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> The percentage of on-time deliveries</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> The carrier's fuel surcharge as a percentage of base rate</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Cargo claims ratio = Claims value ÷ Freight revenue × 100%. It measures how often (and how much) the carrier damages or loses freight. A high ratio = the carrier is rough with cargo, improperly secures loads, or has theft issues. This metric drives carrier selection (don't use high-claims carriers for fragile or high-value goods) and annual contract renewal decisions.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">A company ships refrigerated pharmaceutical products requiring precise temperature control throughout transit. The most important mode selection criterion is:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Lowest freight cost per kilogram</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Cargo characteristics — specifically temperature control capability and reliability of the carrier's refrigerated equipment</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Fastest possible transit time regardless of cost</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Carrier with highest load acceptance rate</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">Pharmaceuticals require cold chain integrity — temperature excursions can render product worthless or dangerous. For temperature-sensitive cargo, the most critical criterion is the carrier's reefer (refrigerated) equipment reliability, temperature monitoring capability, and track record with pharma shipments. Cost matters, but a cheaper carrier that compromises the cold chain destroys far more value than the freight savings — and creates regulatory and safety liability.</div></div></div>
+  </div>
+</div>
+<footer>5.2.2: Transport Mode & Carrier Selection · Module 5 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

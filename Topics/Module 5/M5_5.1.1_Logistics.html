@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>5.1.1: Logistics</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 5: Logistics, Transportation & Distribution</div>
+  <div class="hdr-title">5.1.1 · Logistics</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 9% (module)</span>
+    <span class="badge">6 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (6)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">What is Logistics?</div><div class="block-body"><div class="def-box"><b>Logistics</b>: The planning, implementation, and control of the efficient, effective forward and reverse flow and storage of goods, services, and related information between the point of origin and the point of consumption in order to meet customer requirements (CSCMP definition).</div><div class="key-point">Logistics is the 'place and time' utility creator in the supply chain — getting the right product to the right place at the right time in the right condition at the right cost.</div><div class="def-box"><b>Integrated logistics management</b>: Treating all logistics activities (transportation, warehousing, inventory, order processing, packaging) as a unified system rather than separate functions — optimizing total logistics cost rather than minimizing each function independently.</div><div class="def-box"><b>Total logistics cost (TLC)</b>: The sum of all costs across logistics functions: transportation + warehousing + inventory carrying + order processing + packaging + administration. Trade-offs exist between functions — e.g., faster transport (higher cost) can reduce inventory carrying costs.</div></div></div><div class="block"><div class="block-title">Logistics Functions</div><div class="block-body"><div class="key-point">Primary logistics activities (directly add time and place value):</div><ul><li><b>Transportation</b>: Moving goods from origin to destination</li><li><b>Inventory management</b>: Maintaining the right stock at the right location</li><li><b>Order processing</b>: Managing customer orders from receipt to fulfillment</li></ul><div class="key-point">Secondary logistics activities (support primary activities):</div><ul><li><b>Warehousing</b>: Storage, handling, and distribution of goods</li><li><b>Materials handling</b>: Physical movement within a facility</li><li><b>Packaging</b>: Protecting goods and enabling efficient handling</li><li><b>Procurement</b>: Sourcing materials and services</li><li><b>Logistics information systems</b>: WMS, TMS, order management systems</li></ul><div class="def-box"><b>Customer service</b>: In logistics, customer service means meeting the order cycle requirements (availability, order fill rate, delivery speed, consistency) that customers need to plan their own operations.</div></div></div><div class="block"><div class="block-title">Logistics Network Design</div><div class="block-body"><div class="def-box"><b>Logistics network design</b>: Determining the optimal number, location, and size of warehouses and distribution centers to serve customers at target service levels while minimizing total logistics cost.</div><div class="key-point">Trade-off in network design: Fewer DCs → lower facility costs but higher transportation costs and longer delivery times. More DCs → higher facility costs but lower transport costs and faster delivery. Optimal design balances both.</div><div class="def-box"><b>Cross-docking</b>: A logistics strategy where incoming goods are transferred directly from receiving to outbound shipping — with minimal or no storage. Reduces inventory and handling while speeding product flow. Requires tight coordination with suppliers and customers.</div><div class="def-box"><b>Third-party logistics (3PL)</b>: Outsourcing logistics functions to a specialized provider — transportation, warehousing, fulfillment, customs brokerage. 3PLs provide expertise, scale, and flexibility without capital investment in assets.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 6</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:17%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">CSCMP definition of logistics</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The planning, implementation, and control of the efficient, effective forward and REVERSE flow and storage of goods, services, and related information between the POINT OF ORIGIN and POINT OF CONSUMPTION to meet customer requirements.
+
+Key words: forward AND reverse (includes returns); point of origin to consumption (end-to-end); meet customer requirements (customer-driven).</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Total logistics cost — what's included?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Transportation + Warehousing + Inventory carrying costs + Order processing + Packaging + Administration
+
+Key principle: optimize the TOTAL, not each part individually.
+Trade-off example: faster (expensive) transport → lower inventory holding costs → may lower TOTAL cost even though transport cost is higher.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is cross-docking?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Transferring incoming goods directly from receiving to outbound shipping — little or no storage.
+
+Benefits: eliminates storage cost, reduces handling, speeds product to customer.
+Requirements: synchronized supplier deliveries, high volumes of the same product, close coordination between supply and demand.
+
+Example: Walmart's distribution centers use cross-docking to rapidly flow goods from multiple suppliers to stores without warehousing them.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is a 3PL?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Third-party logistics provider — a company that manages logistics functions on behalf of another company.
+
+Services: transportation, warehousing, fulfillment, freight brokerage, customs clearance, reverse logistics.
+
+Why use a 3PL: access expertise and scale, avoid asset investment, flexible capacity, focus on core business.
+
+Example: UPS Supply Chain Solutions, DHL Supply Chain, XPO Logistics.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Primary vs. secondary logistics activities</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">PRIMARY (directly create time/place value):
+• Transportation
+• Inventory management
+• Order processing
+
+SECONDARY (support primary):
+• Warehousing
+• Materials handling
+• Packaging
+• Procurement
+• Logistics information systems (WMS, TMS)</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Logistics network design trade-off</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Fewer DCs:
+✓ Lower facility/fixed costs
+✗ Higher transportation costs (longer distances)
+✗ Slower delivery to customers
+
+More DCs:
+✓ Lower transport costs (closer to customers)
+✓ Faster delivery
+✗ Higher facility costs, inventory duplication
+
+Optimal: balance total cost (facility + transport + inventory) at target service level.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">The concept of 'total logistics cost' is important because:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> It measures only transportation expenses</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> Optimizing one logistics function in isolation often increases costs elsewhere — total cost optimization produces the best overall result</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> It equals the cost of goods sold divided by logistics volume</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Logistics cost is fixed and cannot be managed</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Total logistics cost includes: transportation + warehousing + inventory carrying + order processing + packaging. These functions have trade-offs: using faster (more expensive) transport can reduce inventory carrying costs by enabling leaner safety stocks. Minimizing only transportation or only warehousing in isolation will sub-optimize the total system. TLC thinking evaluates the combined impact of decisions across all logistics functions.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Cross-docking primarily benefits logistics operations by:</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Providing large storage capacity for safety stock</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Eliminating storage time — goods flow directly from inbound to outbound, reducing inventory and handling costs</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Slowing distribution to allow for quality inspection</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Centralizing all inventory at a single location</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">Cross-docking = direct transfer from inbound to outbound with minimal or no storage. Benefits: eliminates warehousing cost, reduces handling touches, speeds product to market. It's ideal for high-volume, fast-moving, time-sensitive goods (perishables, fashion) where speed matters more than storage. Requires tight supply-demand synchronization.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A company with warehouses near every major customer region would have:</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> Low transportation costs and low inventory costs</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> High facility costs but lower transportation costs and faster delivery</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> Low facility costs and high transportation costs</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> The same total cost as a centralized distribution model</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">More distribution centers: higher facility costs (more buildings, leases, staff) and potentially higher inventory costs (safety stock duplicated at each location). BUT: lower transport costs (shorter routes) and faster delivery. The trade-off depends on customer service requirements and the balance of transportation vs. facility costs. No single right answer — depends on the company's specific cost structure and service requirements.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">What distinguishes a 3PL from a company's in-house logistics operation?</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> 3PLs only handle international shipments</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> A 3PL is an external provider that manages logistics functions on behalf of the company — providing expertise, scale, and flexibility without requiring capital asset investment</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> 3PLs always own the inventory they handle</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> 3PLs are a government-regulated service</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">3PL = third-party logistics provider. The company outsources logistics functions (transport, warehousing, fulfillment) to a specialist. Key advantages: 3PLs have expertise, technology, and network scale that most companies can't match individually; avoid capital investment in trucks/warehouses; scale capacity up/down with demand; company can focus on its core competency.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">Logistics is defined as including 'reverse flow' because:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Logistics managers must sometimes reverse their decisions</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Products, materials, and information also flow backward in the supply chain — through returns, recycling, recalls, and repair</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Transportation routes always return vehicles to origin</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Customer service is the reverse of supplier management</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">The CSCMP definition explicitly includes REVERSE flow — goods don't only move forward. Reverse logistics covers: customer returns, product recalls, warranty repair, end-of-life recycling, remanufacturing, and packaging recovery. Reverse logistics has grown significantly with e-commerce (high return rates) and sustainability requirements (recycling, refurbishment).</div></div></div>
+  </div>
+</div>
+<footer>5.1.1: Logistics · Module 5 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>
