@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.1.2: Supply Chain Maturity and Complexity</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 1: Supply Chains, Demand Management & Forecasting</div>
+  <div class="hdr-title">1.1.2 · Supply Chain Maturity and Complexity</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">9 flashcards</span>
+    <span class="badge">6 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (9)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (6 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Supply Chain Maturity</div><div class="block-body"><div class="def-box"><b>Supply chain maturity</b>: The level of integration and coordination with supply partners relative to those of competing supply chains.</div><p>Organizations wanting to create value from their supply chains must determine: (1) their current maturity state, (2) their desired state, (3) how to get there.</p><p>Supply chain maturity develops along a continuum — experts generally identify 4–5 stages. The material uses a five-stage model.</p></div></div><div class="block"><div class="block-title">The 5 Stages of Supply Chain Evolution</div><div class="block-body"><ul><li><b>Stage 1 — Multiple Dysfunction</b>: Reactive, no disciplined management, no links except transactional</li><li><b>Stage 2 — Semifunctional Enterprise</b>: Internal functions start to coordinate, still siloed</li><li><b>Stage 3 — Integrated Enterprise</b>: Internal integration achieved; begins external collaboration</li><li><b>Stage 4 — Extended Enterprise</b>: Deep integration with key partners; shared data and planning</li><li><b>Stage 5 — Orchestrated Supply Chain</b>: Full external collaboration; synchronized planning across all network partners</li></ul><div class="key-point">Stage 1 characteristics: Reactive supply chain — no defined goals, no external links other than transactional. Equivalent to 'firefighting mode.'</div><div class="key-point">Stage 3 is a key milestone — functions that previously operated in silos (procurement, production, logistics) work together internally. The nucleus company begins extending collaboration outward.</div><div class="key-point">Stage 5 (Orchestrated) is the highest maturity — mutual transparency, shared forecasts, joint planning, synchronized execution across the entire value network.</div><p>Not all organizations need Stage 5. The required maturity depends on competitive environment, industry dynamics, and customer requirements.</p></div></div><div class="block"><div class="block-title">The Bullwhip Effect</div><div class="block-body"><div class="def-box"><b>Bullwhip effect</b>: The observation that demand variability at the retail level tends to be magnified in orders placed further up the supply chain — small fluctuations at the consumer level become large swings at the manufacturer and supplier levels.</div><div class="key-point">4 main causes of the Bullwhip Effect:</div><ul><li><b>Forecast errors</b> — each tier adds a safety buffer to forecasts, amplifying variation</li><li><b>Batch ordering</b> — companies order in batches (weekly, monthly) rather than continuously, creating demand spikes</li><li><b>Price fluctuations</b> — promotions or discounts trigger forward buying, distorting real demand signals</li><li><b>Rationing game</b> — when supply is short, customers over-order expecting allocation cuts</li></ul><div class="key-point">Consequences of the bullwhip effect: excess inventory, poor service levels, misaligned production, higher costs throughout the chain.</div><div class="key-point">Solutions include: information sharing (CPFR, vendor-managed inventory), reducing order batch sizes, stable pricing, and reducing lead times.</div></div></div><div class="block"><div class="block-title">Supply Chain Complexity</div><div class="block-body"><p>Complexity in supply chains comes from: multiple products, multiple suppliers, multiple locations, multiple customers, global operations, regulatory requirements, and technology integration.</p><div class="def-box"><b>Stable supply chain</b>: A supply chain with predictable demand and minimal need for changes. Low cost due to long production runs and minimal line changes. Stage 1–2 supply chains often operate in stable environments.</div><p>As supply chains mature, they shift from reactive and transactional to proactive, collaborative, and data-driven.</p><div class="key-point">The competitive intensity of an industry drives required maturity — high-competition markets require higher SC maturity to maintain advantage.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 9</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:11%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is supply chain maturity?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The level of integration and coordination with supply partners relative to competitors. Organizations must assess current maturity, desired maturity, and the path to get there.</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Name the 5 stages of SC evolution in order</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Stage 1: Multiple Dysfunction → Stage 2: Semifunctional Enterprise → Stage 3: Integrated Enterprise → Stage 4: Extended Enterprise → Stage 5: Orchestrated Supply Chain</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Describe Stage 1 (Multiple Dysfunction)</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The supply chain is reactive, with no disciplined management. No clear internal definitions or goals. No external links other than transactional (buy/sell). 'Firefighting mode.'</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What makes Stage 3 (Integrated Enterprise) a key milestone?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Internal functions (procurement, production, logistics, sales) finally work together in a coordinated way. The nucleus company also begins extending collaboration outward to key partners.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What characterizes Stage 5 (Orchestrated Supply Chain)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Full external collaboration with mutual transparency, shared forecasts, joint planning, and synchronized execution across ALL network partners. The highest maturity level.</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the Bullwhip Effect?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Demand variability at the retail/consumer level gets amplified as orders move upstream — small retail fluctuations become large swings in supplier orders. Caused by forecast errors, batch ordering, price fluctuations, and the rationing game.</div></div></div></div><div class="flashcard" id="fc6" onclick="flipCard(6)"><div class="card-inner" id="ci6"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the 'rationing game' that causes the bullwhip effect?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">When supply is scarce, suppliers allocate proportionally to orders. Customers anticipate this and OVER-ORDER (more than they need), further distorting the demand signal upstream.</div></div></div></div><div class="flashcard" id="fc7" onclick="flipCard(7)"><div class="card-inner" id="ci7"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Name 3 solutions to the Bullwhip Effect</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) Information sharing (CPFR, VMI) — share real demand data
+2) Reduce order batch sizes — order more frequently
+3) Stable pricing — reduce forward buying incentive
+4) Reduce lead times</div></div></div></div><div class="flashcard" id="fc8" onclick="flipCard(8)"><div class="card-inner" id="ci8"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Do all organizations need to reach Stage 5 maturity?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">No. Required maturity depends on competitive environment, industry dynamics, and customer requirements. Some industries can compete effectively at Stage 3 or 4. The cost of advancing must be justified by competitive benefits.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 6</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 6</div><div class="q-text">A company's supply chain has no formal coordination between its purchasing, production, and logistics teams — each department operates independently with no shared goals. This corresponds to:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> Stage 2: Semifunctional Enterprise</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> Stage 1: Multiple Dysfunction</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> Stage 3: Integrated Enterprise</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> Stage 4: Extended Enterprise</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">Stage 1 (Multiple Dysfunction) is characterized by no disciplined management, no coordinated flows, and no external links beyond basic buying/selling transactions. Each function operates in isolation.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 6</div><div class="q-text">The Bullwhip Effect is caused by which combination of factors?</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,1)"> Long lead times and poor warehouse layouts</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,1)"> Forecast errors, batch ordering, price fluctuations, and the rationing game</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,1)"> Overstocked safety stock and poor demand forecasting only</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,1)"> Supplier quality problems and transportation delays</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">The four classic causes of the Bullwhip Effect are: (1) forecast errors (each tier adds safety buffer), (2) batch ordering (order spikes), (3) price fluctuations (forward buying), (4) rationing game (customers over-order when supply is scarce).</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 6</div><div class="q-text">Which supply chain maturity stage is characterized by shared forecasts and synchronized planning across ALL network partners?</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,2)"> Stage 3: Integrated Enterprise</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,2)"> Stage 4: Extended Enterprise</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,2)"> Stage 5: Orchestrated Supply Chain</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,2)"> Stage 2: Semifunctional Enterprise</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">Stage 5 (Orchestrated Supply Chain) represents the highest maturity — mutual transparency, shared data, joint planning, and synchronized execution across the entire value network, not just with key partners.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 6</div><div class="q-text">A retailer notices that its orders fluctuate far more than actual consumer demand. This is an example of:</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Demand seasonality</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> The Bullwhip Effect</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Safety stock overage</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Forecast bias</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">The Bullwhip Effect: demand variability is amplified as it moves upstream. Even if consumer demand is relatively stable, the retailer's orders to the distributor — and the distributor's orders to the manufacturer — fluctuate much more.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 6</div><div class="q-text">Information sharing between supply chain partners (like sharing POS data with suppliers) primarily addresses the Bullwhip Effect by:</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Reducing transportation costs</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Allowing suppliers to plan based on real demand rather than distorted orders</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Eliminating the need for safety stock</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Replacing the need for S&OP</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">When suppliers can see actual point-of-sale data (real demand), they don't have to rely on distorted orders that include safety buffers and batch effects. This dramatically reduces demand signal amplification.</div></div></div><div class="q-block" id="q5"><div class="q-num">Q6 of 6</div><div class="q-text">A company operating in a stable, low-competition market with predictable demand most likely needs to reach:</div><div class="q-opts"><label class="opt" id="opt5_0"><input type="radio" name="q5" value="0" onchange="checkAns(5,0,2)"> Stage 5 to remain competitive</label><label class="opt" id="opt5_1"><input type="radio" name="q5" value="1" onchange="checkAns(5,1,2)"> Stage 4 at minimum</label><label class="opt" id="opt5_2"><input type="radio" name="q5" value="2" onchange="checkAns(5,2,2)"> The maturity level appropriate to their competitive environment — not necessarily Stage 5</label><label class="opt" id="opt5_3"><input type="radio" name="q5" value="3" onchange="checkAns(5,3,2)"> Stage 3 at minimum per ASCM standards</label></div><div class="q-feedback" id="fb5" style="display:none"><div class="fb-result" id="fbr5"></div><div class="fb-exp">Required SC maturity depends on competitive environment and customer requirements. A stable, low-competition market may not require the investment of Stage 5 orchestration. The cost of advancing must be justified by competitive benefit.</div></div></div>
+  </div>
+</div>
+<footer>1.1.2: Supply Chain Maturity and Complexity · Module 1 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5, 6, 7, 8],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=6;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>

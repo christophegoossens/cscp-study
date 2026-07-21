@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>1.4.3: Measures of Forecast Error</title>
+<style>
+:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}
+header{background:var(--blue);color:#fff;padding:18px 32px}
+.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}
+.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}
+.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}
+nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}
+.container{max-width:900px;margin:0 auto;padding:24px 16px}
+.tab{display:none}.tab.active{display:block}
+/* Summary */
+.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}
+.block-title{background:var(--blue);color:#fff;padding:11px 18px;font-size:.9rem;font-weight:600;letter-spacing:.3px}
+.block-body{padding:16px 18px}
+.block-body p{margin-bottom:9px;line-height:1.6;font-size:.88rem}
+.block-body ul{padding-left:18px;margin-bottom:9px}
+.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.55}
+.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55}
+.key-point{background:#fff7ed;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.55;font-weight:500}
+.formula{background:#f0fdf4;border:1px solid #86efac;border-radius:7px;padding:10px 16px;font-family:monospace;font-size:.9rem;margin:8px 0;color:#166534}
+/* Flashcards */
+.fc-bar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.fc-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn-prev,.btn-next{background:var(--accent);color:#fff}
+.btn-shuffle{background:#f3f4f6;color:#374151}
+.fc-counter{margin-left:auto;font-size:.85rem;color:#6b7280}
+.prog{height:4px;background:#e5e7eb;border-radius:2px;margin-bottom:14px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:.3s}
+.flashcard{width:100%;max-width:660px;margin:0 auto;height:200px;cursor:pointer}
+.card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .45s}
+.card-inner.flipped{transform:rotateY(180deg)}
+.card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.card-front{background:#fff;border:2px solid #dbeafe}
+.card-back{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;opacity:.55;margin-bottom:8px}
+.fc-text{font-size:.97rem;line-height:1.55}
+.fc-hint{text-align:center;color:#9ca3af;font-size:.78rem;margin-top:10px}
+/* Quiz */
+.qz-bar{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.qz-bar button{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-size:.85rem;font-weight:600;background:#fee2e2;color:#991b1b}
+.score{margin-left:auto;font-weight:700;font-size:.9rem}
+.q-block{background:var(--card);border-radius:10px;padding:18px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}
+.opt:hover{background:#f0f7ff;border-color:var(--accent)}
+.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}
+.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}
+.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}
+.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}
+.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}
+.correct-fb{background:#d1fae5;color:#065f46}
+.wrong-fb{background:#fee2e2;color:#991b1b}
+footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}
+
+.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}
+.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <a href="../00_Study_Plan_Topics.html" class="back-btn">← Study Plan</a>
+  <div class="hdr-top">Module 1: Supply Chains, Demand Management & Forecasting</div>
+  <div class="hdr-title">1.4.3 · Measures of Forecast Error</div>
+  <div class="hdr-meta">
+    <span class="badge">Exam weight: 10% (module)</span>
+    <span class="badge">8 flashcards</span>
+    <span class="badge">5 quiz questions</span>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('summary',this)">📖 Summary</button>
+  <button onclick="showTab('flashcards',this)">🗂️ Flashcards (8)</button>
+  <button onclick="showTab('quiz',this)">✅ Quiz (5 Q)</button>
+</nav>
+<div class="container">
+  <div id="summary" class="tab active"><div class="block"><div class="block-title">Why Measure Forecast Error?</div><div class="block-body"><div class="key-point">Forecast error measurement serves two purposes: (1) evaluate and improve forecast accuracy over time, and (2) size safety stock and capacity buffers to absorb the expected error.</div><div class="def-box"><b>Forecast error</b>: The difference between the actual demand and the forecasted demand for a given period. Error = Actual − Forecast.</div><p>A positive error means demand was HIGHER than forecast (risk: stockout). A negative error means demand was LOWER than forecast (risk: excess inventory).</p><p>Tracking error trends over time reveals bias — consistently positive errors = systematic under-forecasting; consistently negative = over-forecasting.</p></div></div><div class="block"><div class="block-title">Key Error Metrics</div><div class="block-body"><div class="def-box"><b>Mean Absolute Deviation (MAD)</b>: Average of the absolute values of forecast errors. Simple to calculate and interpret. Units are in the same units as demand (e.g., units, dollars). Formula: MAD = Σ|Aₜ - Fₜ| / n</div><div class="formula">MAD = Σ|Actual - Forecast| / n
+Interpretation: average error magnitude regardless of direction</div><div class="def-box"><b>Mean Absolute Percentage Error (MAPE)</b>: Expresses error as a percentage of actual demand. Allows comparison across products with different volumes. Formula: MAPE = (Σ|Aₜ - Fₜ| / Aₜ) / n × 100%</div><div class="formula">MAPE = (Σ(|Actual - Forecast| / Actual)) / n × 100%
+Interpretation: average % error — scale-independent, useful for comparing across SKUs</div><div class="def-box"><b>Mean Squared Error (MSE)</b>: Average of squared errors. Penalizes large errors more heavily than MAD. Used in many statistical models to optimize parameters.</div><div class="formula">MSE = Σ(Actual - Forecast)² / n
+Interpretation: penalizes large errors heavily; not intuitive (units are squared)</div><div class="def-box"><b>Tracking signal</b>: Cumulative forecast error divided by MAD. Monitors whether a forecast is systematically biased. Formula: Tracking signal = RSFE / MAD</div><div class="formula">Tracking Signal = RSFE / MAD
+RSFE = Running Sum of Forecast Errors (signed)
+Control limits: typically ±4 to ±6 MADs. Outside = bias detected</div><div class="key-point">Use MAD for operational safety stock sizing. Use MAPE for comparing model accuracy across different products. Use tracking signal to detect systematic bias.</div></div></div><div class="block"><div class="block-title">Using Error to Size Safety Stock</div><div class="block-body"><div class="def-box"><b>Safety stock</b>: Buffer inventory held to protect against demand variability (forecast error) and supply variability (lead time uncertainty).</div><div class="key-point">Safety stock formula using MAD: SS = Z × MAD × √LT (where Z = service level z-score, LT = lead time in periods).</div><div class="formula">Safety Stock = Z × MAD × √LT
+Z = service level factor (e.g., 1.65 for 95%, 2.05 for 98%)
+MAD = mean absolute deviation of forecast error
+LT = replenishment lead time (in same time units as MAD)</div><p>Higher forecast error → larger MAD → more safety stock needed. Improving forecast accuracy DIRECTLY reduces inventory investment.</p><div class="key-point">Every % improvement in forecast accuracy translates to a reduction in required safety stock — a direct financial benefit of better forecasting.</div></div></div><div class="block"><div class="block-title">Forecast Bias vs. Random Error</div><div class="block-body"><div class="def-box"><b>Forecast bias</b>: A systematic tendency to consistently over- or under-forecast. Detected by the tracking signal.</div><div class="def-box"><b>Random error</b>: Unexplained variation around the forecast — inherent unpredictability in demand. Cannot be eliminated; can only be buffered with safety stock.</div><div class="key-point">The goal is to ELIMINATE bias (fixable with better models or process) and REDUCE random error (through better data, demand signals). What remains requires safety stock.</div></div></div></div>
+  <div id="flashcards" class="tab">
+    <div class="fc-bar">
+      <button class="btn-prev" onclick="prevCard()">← Prev</button>
+      <button class="btn-next" onclick="nextCard()">Next →</button>
+      <button class="btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+      <span class="fc-counter" id="fcc">1 / 8</span>
+    </div>
+    <div class="prog"><div class="prog-fill" id="prg" style="width:12%"></div></div>
+    <div class="flashcard" id="fc0" onclick="flipCard(0)"><div class="card-inner" id="ci0"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How is forecast error calculated?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Error = Actual − Forecast. Positive error = demand was higher than forecast (stockout risk). Negative error = demand was lower (excess inventory risk).</div></div></div></div><div class="flashcard" id="fc1" onclick="flipCard(1)"><div class="card-inner" id="ci1"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is MAD and when is it used?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Mean Absolute Deviation = Σ|Actual − Forecast| / n. Average error magnitude, ignoring direction. Used operationally for safety stock sizing because it's in demand units and easy to interpret.</div></div></div></div><div class="flashcard" id="fc2" onclick="flipCard(2)"><div class="card-inner" id="ci2"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is MAPE and why is it useful?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Mean Absolute Percentage Error = average of (|error|/actual) × 100%. Expresses error as a % — scale-independent. Used to compare forecast accuracy ACROSS products with different volumes.</div></div></div></div><div class="flashcard" id="fc3" onclick="flipCard(3)"><div class="card-inner" id="ci3"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the tracking signal and what does it detect?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Tracking Signal = RSFE / MAD (Running Sum of Forecast Errors ÷ MAD). Detects SYSTEMATIC BIAS — whether the forecast consistently over- or under-predicts. Control limits: ±4 to ±6 MADs.</div></div></div></div><div class="flashcard" id="fc4" onclick="flipCard(4)"><div class="card-inner" id="ci4"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Safety stock formula using MAD</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">SS = Z × MAD × √LT
+Z = service level z-score (1.65 for 95%, 2.05 for 98%)
+MAD = mean absolute deviation of forecast error
+LT = replenishment lead time in forecast periods</div></div></div></div><div class="flashcard" id="fc5" onclick="flipCard(5)"><div class="card-inner" id="ci5"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Forecast bias vs. random error</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Bias: systematic over- or under-forecasting (FIXABLE with better models/process — detected by tracking signal).
+Random error: inherent demand unpredictability (can only be buffered with safety stock — cannot be eliminated).</div></div></div></div><div class="flashcard" id="fc6" onclick="flipCard(6)"><div class="card-inner" id="ci6"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Why does improving forecast accuracy reduce inventory cost?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Safety stock is sized based on MAD (or demand variability). Lower forecast error → smaller MAD → less safety stock needed → lower inventory investment. Forecast accuracy improvements have direct financial value.</div></div></div></div><div class="flashcard" id="fc7" onclick="flipCard(7)"><div class="card-inner" id="ci7"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What does MSE measure and how does it differ from MAD?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">MSE = average of SQUARED errors. Penalizes large errors more heavily than MAD — a single large error has outsized impact. Used inside statistical optimization but less intuitive than MAD for operational use.</div></div></div></div>
+    <div class="fc-hint">👆 Click to flip · Use buttons to navigate</div>
+  </div>
+  <div id="quiz" class="tab">
+    <div class="qz-bar">
+      <button onclick="resetQuiz()">🔄 Reset</button>
+      <span class="score" id="sc">Score: 0 / 5</span>
+    </div>
+    <div class="q-block" id="q0"><div class="q-num">Q1 of 5</div><div class="q-text">A company's tracking signal consistently reads +7 over the past 6 months (control limit is ±4). This indicates:</div><div class="q-opts"><label class="opt" id="opt0_0"><input type="radio" name="q0" value="0" onchange="checkAns(0,0,1)"> The forecast is accurate — the positive signal means demand is healthy</label><label class="opt" id="opt0_1"><input type="radio" name="q0" value="1" onchange="checkAns(0,1,1)"> The forecast is systematically UNDER-forecasting — actual demand consistently exceeds the forecast</label><label class="opt" id="opt0_2"><input type="radio" name="q0" value="2" onchange="checkAns(0,2,1)"> The forecast is systematically OVER-forecasting — too much inventory is being built</label><label class="opt" id="opt0_3"><input type="radio" name="q0" value="3" onchange="checkAns(0,3,1)"> The MAD is too low and needs to be recalculated</label></div><div class="q-feedback" id="fb0" style="display:none"><div class="fb-result" id="fbr0"></div><div class="fb-exp">A positive RSFE (Running Sum of Forecast Errors) means actual > forecast consistently = the model is systematically UNDER-forecasting. A tracking signal above +4 (control limit) is a signal to review and correct the forecasting model.</div></div></div><div class="q-block" id="q1"><div class="q-num">Q2 of 5</div><div class="q-text">Which error metric is best for COMPARING forecast accuracy across two products with very different sales volumes (e.g., 100 units/month vs. 10,000 units/month)?</div><div class="q-opts"><label class="opt" id="opt1_0"><input type="radio" name="q1" value="0" onchange="checkAns(1,0,2)"> MAD — because it uses the same units as demand</label><label class="opt" id="opt1_1"><input type="radio" name="q1" value="1" onchange="checkAns(1,1,2)"> MSE — because it penalizes large errors</label><label class="opt" id="opt1_2"><input type="radio" name="q1" value="2" onchange="checkAns(1,2,2)"> MAPE — because it expresses error as a percentage, making it scale-independent</label><label class="opt" id="opt1_3"><input type="radio" name="q1" value="3" onchange="checkAns(1,3,2)"> Tracking signal — because it detects bias</label></div><div class="q-feedback" id="fb1" style="display:none"><div class="fb-result" id="fbr1"></div><div class="fb-exp">MAPE is scale-independent — it expresses error as a percentage of actual demand. This allows meaningful comparison across products at very different volume levels. MAD is scale-dependent (units), so a MAD of 50 is massive for a 100-unit product but tiny for a 10,000-unit product.</div></div></div><div class="q-block" id="q2"><div class="q-num">Q3 of 5</div><div class="q-text">A supply chain manager wants to calculate the safety stock for a product with MAD = 20 units, lead time = 4 weeks, and desired service level (Z = 1.65). What is the safety stock?</div><div class="q-opts"><label class="opt" id="opt2_0"><input type="radio" name="q2" value="0" onchange="checkAns(2,0,1)"> 33 units</label><label class="opt" id="opt2_1"><input type="radio" name="q2" value="1" onchange="checkAns(2,1,1)"> 66 units</label><label class="opt" id="opt2_2"><input type="radio" name="q2" value="2" onchange="checkAns(2,2,1)"> 20 units</label><label class="opt" id="opt2_3"><input type="radio" name="q2" value="3" onchange="checkAns(2,3,1)"> 80 units</label></div><div class="q-feedback" id="fb2" style="display:none"><div class="fb-result" id="fbr2"></div><div class="fb-exp">SS = Z × MAD × √LT = 1.65 × 20 × √4 = 1.65 × 20 × 2 = 66 units. The square root of lead time accounts for the compounding of uncertainty over the replenishment period.</div></div></div><div class="q-block" id="q3"><div class="q-num">Q4 of 5</div><div class="q-text">What is the difference between forecast bias and random forecast error?</div><div class="q-opts"><label class="opt" id="opt3_0"><input type="radio" name="q3" value="0" onchange="checkAns(3,0,1)"> Bias is random; random error is systematic</label><label class="opt" id="opt3_1"><input type="radio" name="q3" value="1" onchange="checkAns(3,1,1)"> Bias is a systematic tendency to over- or under-forecast (fixable); random error is inherent unpredictability (buffered with safety stock)</label><label class="opt" id="opt3_2"><input type="radio" name="q3" value="2" onchange="checkAns(3,2,1)"> Both are random and cannot be reduced</label><label class="opt" id="opt3_3"><input type="radio" name="q3" value="3" onchange="checkAns(3,3,1)"> Bias only occurs in qualitative forecasts</label></div><div class="q-feedback" id="fb3" style="display:none"><div class="fb-result" id="fbr3"></div><div class="fb-exp">Bias = systematic, directional error (consistently over or under) = FIXABLE with better models or process adjustments. Random error = inherent demand variability that cannot be predicted = managed with safety stock buffers.</div></div></div><div class="q-block" id="q4"><div class="q-num">Q5 of 5</div><div class="q-text">What is the primary operational use of MAD in supply chain management?</div><div class="q-opts"><label class="opt" id="opt4_0"><input type="radio" name="q4" value="0" onchange="checkAns(4,0,1)"> Comparing forecast accuracy across different SKUs and product lines</label><label class="opt" id="opt4_1"><input type="radio" name="q4" value="1" onchange="checkAns(4,1,1)"> Sizing safety stock to buffer against forecast uncertainty</label><label class="opt" id="opt4_2"><input type="radio" name="q4" value="2" onchange="checkAns(4,2,1)"> Detecting systematic forecast bias over time</label><label class="opt" id="opt4_3"><input type="radio" name="q4" value="3" onchange="checkAns(4,3,1)"> Selecting which forecasting method to use</label></div><div class="q-feedback" id="fb4" style="display:none"><div class="fb-result" id="fbr4"></div><div class="fb-exp">MAD's primary operational application in supply chain is SAFETY STOCK SIZING. The formula SS = Z × MAD × √LT directly uses MAD to calculate the buffer inventory needed to achieve a target service level given the expected forecast error.</div></div></div>
+  </div>
+</div>
+<footer>1.4.3: Measures of Forecast Error · Module 1 · CSCP Exam Prep 2026</footer>
+<script>
+function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+let co=[0, 1, 2, 3, 4, 5, 6, 7],cur=0;
+function upd(){document.querySelectorAll('.flashcard').forEach(fc=>fc.style.display='none');document.querySelectorAll('.card-inner').forEach(ci=>ci.classList.remove('flipped'));document.getElementById('fc'+co[cur]).style.display='block';document.getElementById('fcc').textContent=(cur+1)+' / '+co.length;document.getElementById('prg').style.width=((cur+1)/co.length*100).toFixed(0)+'%';}
+function flipCard(i){document.getElementById('ci'+i).classList.toggle('flipped');}
+function nextCard(){cur=(cur<co.length-1)?cur+1:0;upd();}
+function prevCard(){cur=(cur>0)?cur-1:co.length-1;upd();}
+function shuffleCards(){for(let i=co.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[co[i],co[j]]=[co[j],co[i]];}cur=0;upd();}
+let sc=0,ans=0,tot=5;
+function checkAns(qi,ch,cor){document.querySelectorAll('[name="q'+qi+'"]').forEach((o,i)=>{o.disabled=true;const l=o.closest('.opt');if(i===cor)l.classList.add('correct');else if(i===ch&&ch!==cor)l.classList.add('wrong');});const fb=document.getElementById('fb'+qi);const fbr=document.getElementById('fbr'+qi);fb.style.display='block';if(ch===cor){fbr.textContent='✅ Correct!';fbr.className='fb-result correct-fb';sc++;}else{fbr.textContent='❌ Incorrect';fbr.className='fb-result wrong-fb';}ans++;document.getElementById('sc').textContent='Score: '+sc+' / '+ans;}
+function resetQuiz(){sc=0;ans=0;document.getElementById('sc').textContent='Score: 0 / '+tot;document.querySelectorAll('.q-opts input').forEach(i=>{i.checked=false;i.disabled=false;});document.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));document.querySelectorAll('.q-feedback').forEach(f=>f.style.display='none');}
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('.flashcard').forEach((fc,i)=>{if(i>0)fc.style.display='none';});upd();});
+</script>
+</body></html>
