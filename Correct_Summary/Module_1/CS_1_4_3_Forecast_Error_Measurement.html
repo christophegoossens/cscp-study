@@ -17,40 +17,30 @@
 <div class="tab active" id="summary">
 
   <div class="block">
-    <div class="block-title">Forecast Error &amp; Accuracy</div>
+    <div class="block-title">Forecast Error, Accuracy &amp; Bias</div>
     <div class="block-body">
-      <p>Since forecasts are almost always wrong, organizations must track and minimize forecast error over time.</p>
-      <div class="def-box">&#128214; ASCM Definition &#8212; Forecast Error: the difference between actual and forecast demand. Stated as an absolute value.</div>
+      <div class="def-box">&#128214; ASCM Definition &#8212; Forecast Error: the difference between actual and forecast demand.</div>
       <ul>
-        <li><strong>Forecast error (absolute):</strong> |Actual &#8722; Forecast|</li>
-        <li><strong>Absolute Percentage Error (APE):</strong> |Actual &#8722; Forecast| ÷ Actual × 100%</li>
-        <li><strong>Forecast accuracy:</strong> 100% &#8722; APE. A forecast accuracy of 95% means the error is 5%.</li>
+        <li><strong>Absolute error:</strong> |Actual &#8722; Forecast|</li>
+        <li><strong>APE (Absolute Percentage Error):</strong> |Actual &#8722; Forecast| ÷ Actual × 100%</li>
+        <li><strong>Forecast accuracy:</strong> 100% &#8722; APE</li>
       </ul>
-      <div class="key-point">&#128161; Key Point: Forecast error is always measured as an absolute value when calculating MAD, APE, and MAPE &#8212; direction (over vs. under) is tracked separately as bias.</div>
-    </div>
-  </div>
-
-  <div class="block">
-    <div class="block-title">Bias vs. Random Variation</div>
-    <div class="block-body">
-      <div class="def-box">&#128214; ASCM Definition &#8212; Bias: a consistent deviation from the mean in one direction (high or low). A normal property of a good forecast is that it is not biased.</div>
+      <div class="def-box">&#128214; ASCM Definition &#8212; Bias: a consistent deviation from the mean in one direction (high or low). A good forecast is not biased.</div>
       <ul>
-        <li><strong>Bias:</strong> cumulative sum of errors &#8800; 0. Consistently positive = under-forecasting; consistently negative = over-forecasting.</li>
-        <li><strong>Random variation:</strong> cumulative sum of actual demand ≈ cumulative sum of forecast demand. Errors cancel out over time.</li>
-        <li>Bias may result from a temporary situation or an unaccounted-for change in trend or seasonal effect.</li>
+        <li><strong>Bias:</strong> cumulative sum of errors &#8800; 0 (consistently positive = under-forecast; negative = over-forecast)</li>
+        <li><strong>Random variation:</strong> errors cancel out &#8212; cumulative sum ≈ 0</li>
       </ul>
     </div>
   </div>
 
   <div class="block">
-    <div class="block-title">Mean Absolute Deviation (MAD)</div>
+    <div class="block-title">MAD &amp; Tracking Signal</div>
     <div class="block-body">
       <div class="def-box">&#128214; ASCM Definition &#8212; Mean Absolute Deviation (MAD): the average of the absolute values of the deviations of observed values from some expected value. MAD = &#931;|actual &#8722; forecast| ÷ n</div>
       <ul>
-        <li>Direction (positive/negative) of error does not matter &#8212; only the size.</li>
-        <li>A MAD of 1.68 units means forecasts are off on average by ±1.68 units per period.</li>
-        <li>MAD is used as a basis for <strong>safety stock calculations</strong>. Use a safety factor table to convert to a desired service level.</li>
-        <li>±1 MAD covers ~60% of outcomes; ±2 MAD ≈ 89%; ±3 MAD ≈ 98%.</li>
+        <li>MAD of 1.68 = forecasts are off by ±1.68 units on average</li>
+        <li>Used to calculate <strong>safety stock</strong>: multiply MAD by the safety factor for your target service level</li>
+        <li>±1 MAD ≈ 60% of outcomes; ±2 MAD ≈ 89%; ±3 MAD ≈ 98%</li>
       </ul>
       <div class="exhibit">
         <img src="../_images/image51.png" alt="Exhibit 1-40" loading="lazy" style="max-width:100%">
@@ -58,20 +48,13 @@
       </div>
       <div class="exhibit">
         <img src="../_images/image53.png" alt="Exhibit 1-41" loading="lazy" style="max-width:100%">
-        <div class="exhibit-cap"><strong>Exhibit 1-41:</strong> Normal Distribution Curve for MAD of 1.68 Units</div>
+        <div class="exhibit-cap"><strong>Exhibit 1-41:</strong> Normal Distribution Curve for MAD</div>
       </div>
-    </div>
-  </div>
-
-  <div class="block">
-    <div class="block-title">Tracking Signal</div>
-    <div class="block-body">
-      <div class="def-box">&#128214; ASCM Definition &#8212; Tracking Signal: the ratio of the cumulative algebraic sum of the deviations between the forecasts and the actual values to the mean absolute deviation. Used to signal when a forecasting model needs revision.</div>
+      <div class="def-box">&#128214; ASCM Definition &#8212; Tracking Signal: the ratio of the cumulative algebraic sum of the deviations between the forecasts and the actual values to the mean absolute deviation. Signals when a model needs revision.</div>
       <ul>
-        <li>Tracking Signal = Cumulative sum of algebraic errors (positive &amp; negative) ÷ MAD</li>
-        <li>Typical rule: if tracking signal exceeds ±4 in any period, investigate and revise the model.</li>
-        <li>Consistently negative signal = over-forecasting (bias). Consistently positive = under-forecasting (bias).</li>
-        <li>Remaining in ±4 range suggests the forecasting method is appropriate for the data.</li>
+        <li>Tracking Signal = Cumulative algebraic errors (NOT absolute) ÷ MAD</li>
+        <li>Rule of thumb: if tracking signal exceeds <strong>±4</strong>, review and revise the model</li>
+        <li>Stays within ±4 = method is appropriate for the data</li>
       </ul>
       <div class="exhibit">
         <img src="../_images/image56.png" alt="Exhibit 1-43" loading="lazy" style="max-width:100%">
@@ -81,14 +64,13 @@
   </div>
 
   <div class="block">
-    <div class="block-title">Standard Deviation (SD)</div>
+    <div class="block-title">Standard Deviation &amp; Safety Stock</div>
     <div class="block-body">
-      <div class="def-box">&#128214; ASCM Definition &#8212; Standard Deviation: a measurement of dispersion of data or of a variable. Computed by finding the differences between individual values and the group mean, squaring them, summing them, dividing by n&#8722;1, and taking the square root.</div>
+      <div class="def-box">&#128214; ASCM Definition &#8212; Standard Deviation: a measurement of dispersion of data or of a variable. Computed by finding differences from the mean, squaring them, summing, dividing by n&#8722;1, and taking the square root.</div>
       <ul>
-        <li>Formula uses n&#8722;1 (the more common formula for a sample population).</li>
-        <li>±1 SD covers 68.26% of outcomes; ±2 SD = 95.44%; ±3 SD = 99.74%.</li>
-        <li>MAD and SD are interchangeable: SD ≈ 1.25 × MAD. Both can be used with safety factor tables.</li>
-        <li>Example: SD = 2.1 units, 98% service level (safety factor 2.05) → safety stock = 2.1 × 2.05 ≈ 4.3 units.</li>
+        <li>±1 SD = 68.26%; ±2 SD = 95.44%; ±3 SD = 99.74%</li>
+        <li>SD ≈ 1.25 × MAD &#8212; interchangeable for safety stock calculations</li>
+        <li>Example: SD = 2.1, 98% service level (factor 2.05) → safety stock = 2.1 × 2.05 ≈ 4.3 units</li>
       </ul>
       <div class="exhibit">
         <img src="../_images/image59.png" alt="Exhibit 1-44" loading="lazy" style="max-width:100%">
@@ -98,33 +80,17 @@
   </div>
 
   <div class="block">
-    <div class="block-title">Mean Squared Error (MSE) &amp; Comparison with MAD</div>
+    <div class="block-title">MSE &amp; MAPE</div>
     <div class="block-body">
       <ul>
-        <li><strong>MSE:</strong> squares each period error before averaging. Magnifies large errors more than MAD does.</li>
-        <li>MSE is more sensitive &#8212; useful when you need to detect if a few very large errors are hiding behind a reasonable average.</li>
-        <li>Drawback: result is in squared units, making it harder to interpret without comparison.</li>
+        <li><strong>MSE (Mean Squared Error):</strong> squares each error before averaging. Magnifies large errors &#8212; more sensitive than MAD to occasional big deviations. Harder to interpret (squared units).</li>
+        <li><strong>MAPE (Mean Absolute Percentage Error):</strong> average of all APE values. Scale-independent &#8212; compare accuracy across products, SKUs, or regions regardless of volume.</li>
       </ul>
       <div class="exhibit">
         <img src="../_images/image62.png" alt="Exhibit 1-45" loading="lazy" style="max-width:100%">
         <div class="exhibit-cap"><strong>Exhibit 1-45:</strong> Mean Squared Error and MAD Compared</div>
       </div>
-    </div>
-  </div>
-
-  <div class="block">
-    <div class="block-title">Mean Absolute Percentage Error (MAPE)</div>
-    <div class="block-body">
-      <ul>
-        <li><strong>MAPE</strong> = average of the APE values across all periods.</li>
-        <li>Expressed as a percentage &#8212; makes it meaningful even without knowing unit volumes.</li>
-        <li>Allows comparison across different products, SKUs, or regions regardless of demand scale.</li>
-        <li>Exception rules can be applied per SKU: if MAPE exceeds a threshold, trigger a forecast review.</li>
-      </ul>
-      <div class="exhibit">
-        <img src="../_images/image63.png" alt="Exhibit 1-46" loading="lazy" style="max-width:100%">
-        <div class="exhibit-cap"><strong>Exhibit 1-46:</strong> Mean Absolute Percentage Error (MAPE)</div>
-      </div>
+      <div class="key-point">&#128161; Key Point: MAD = absolute units (needs context). MAPE = percentage (universally comparable). Tracking signal detects bias. MSE highlights outlier errors. All four serve different diagnostic purposes.</div>
     </div>
   </div>
 
@@ -132,26 +98,26 @@
 <div class="tab" id="flashcards">
   <div class="fc-bar"><button class="btn-prev" onclick="prevCard()">&#8592; Prev</button><button class="btn-next" onclick="nextCard()">Next &#8594;</button><button class="btn-shuffle" onclick="shuffleCards()">&#128256; Shuffle</button><span class="fc-counter" id="fcc">1 / 20</span></div>
   <div class="prog"><div class="prog-fill" id="prg" style="width:5%"></div></div>
-  <div class="flashcard" id="fc0" style="display:block"><div class="card-inner" id="ci0" onclick="flipCard(0)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the ASCM definition of forecast error?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The difference between actual and forecast demand. Stated as an absolute value: |Actual &#8722; Forecast|.</div></div></div></div>
-  <div class="flashcard" id="fc1" style="display:none"><div class="card-inner" id="ci1" onclick="flipCard(1)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is Absolute Percentage Error (APE)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">APE = |Actual &#8722; Forecast| ÷ Actual × 100%. Expresses error as a percentage of actual demand. Forecast accuracy = 100% &#8722; APE.</div></div></div></div>
-  <div class="flashcard" id="fc2" style="display:none"><div class="card-inner" id="ci2" onclick="flipCard(2)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the ASCM definition of bias in forecasting?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A consistent deviation from the mean in one direction (high or low). A normal property of a good forecast is that it is not biased. Bias exists when cumulative actual demand &#8800; cumulative forecast.</div></div></div></div>
-  <div class="flashcard" id="fc3" style="display:none"><div class="card-inner" id="ci3" onclick="flipCard(3)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How do you detect bias vs. random variation in forecast errors?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Bias: the cumulative algebraic sum of errors consistently skews positive (under-forecast) or negative (over-forecast). Random variation: errors cancel out &#8212; cumulative sum ≈ 0 over time.</div></div></div></div>
-  <div class="flashcard" id="fc4" style="display:none"><div class="card-inner" id="ci4" onclick="flipCard(4)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the ASCM definition of Mean Absolute Deviation (MAD)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The average of the absolute values of the deviations of observed values from some expected value. MAD = &#931;|Actual &#8722; Forecast| ÷ n.</div></div></div></div>
-  <div class="flashcard" id="fc5" style="display:none"><div class="card-inner" id="ci5" onclick="flipCard(5)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How is MAD used for safety stock?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Use a safety factor table. Multiply MAD by the safety factor for the desired service level. Example: MAD = 1.68, 98% service level (safety factor 2.56 MAD) → safety stock ≈ 4.3 units.</div></div></div></div>
-  <div class="flashcard" id="fc6" style="display:none"><div class="card-inner" id="ci6" onclick="flipCard(6)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What percentage of outcomes does ±1 MAD cover?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Approximately 60%. ±2 MAD covers ≈89%; ±3 MAD covers ≈98%.</div></div></div></div>
-  <div class="flashcard" id="fc7" style="display:none"><div class="card-inner" id="ci7" onclick="flipCard(7)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the ASCM definition of tracking signal?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The ratio of the cumulative algebraic sum of the deviations between the forecasts and the actual values to the mean absolute deviation. Used to signal when a forecasting model needs revision.</div></div></div></div>
-  <div class="flashcard" id="fc8" style="display:none"><div class="card-inner" id="ci8" onclick="flipCard(8)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How do you calculate the tracking signal?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Tracking Signal = Cumulative algebraic sum of errors (positive &amp; negative, NOT absolute) ÷ MAD. Unlike MAD, errors are NOT converted to absolute values &#8212; so positive and negative errors can cancel.</div></div></div></div>
-  <div class="flashcard" id="fc9" style="display:none"><div class="card-inner" id="ci9" onclick="flipCard(9)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What does a tracking signal outside ±4 indicate?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The forecasting model may need revision. A consistently negative signal = systematic over-forecasting (bias). A consistently positive signal = systematic under-forecasting.</div></div></div></div>
-  <div class="flashcard" id="fc10" style="display:none"><div class="card-inner" id="ci10" onclick="flipCard(10)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What does it mean if the tracking signal stays within ±4?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">As a rule of thumb, the forecasting method is suitable for the data. Errors are within acceptable random variation.</div></div></div></div>
-  <div class="flashcard" id="fc11" style="display:none"><div class="card-inner" id="ci11" onclick="flipCard(11)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the ASCM definition of standard deviation?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A measurement of dispersion of data or of a variable. Computed by finding differences between values and the group mean, squaring each, summing them, dividing by n&#8722;1, and taking the square root.</div></div></div></div>
-  <div class="flashcard" id="fc12" style="display:none"><div class="card-inner" id="ci12" onclick="flipCard(12)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the relationship between standard deviation and MAD?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">SD ≈ 1.25 × MAD. They are interchangeable &#8212; both can be used with a safety factor table to determine safety stock for a desired service level.</div></div></div></div>
-  <div class="flashcard" id="fc13" style="display:none"><div class="card-inner" id="ci13" onclick="flipCard(13)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What percentages of outcomes does ±1, ±2, ±3 standard deviations cover?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">±1 SD = 68.26%, ±2 SD = 95.44%, ±3 SD = 99.74%. These are the classic normal distribution percentages.</div></div></div></div>
-  <div class="flashcard" id="fc14" style="display:none"><div class="card-inner" id="ci14" onclick="flipCard(14)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Why does the standard deviation formula divide by n&#8722;1?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">This is the sample population formula (most common). Dividing by n&#8722;1 instead of n corrects for the fact that a sample slightly underestimates the true population variance.</div></div></div></div>
-  <div class="flashcard" id="fc15" style="display:none"><div class="card-inner" id="ci15" onclick="flipCard(15)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is Mean Squared Error (MSE)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">MSE squares each period's error before averaging: MSE = &#931;(Actual &#8722; Forecast)² ÷ n. Squaring magnifies large errors, making MSE more sensitive than MAD to occasional big errors.</div></div></div></div>
-  <div class="flashcard" id="fc16" style="display:none"><div class="card-inner" id="ci16" onclick="flipCard(16)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">When is MSE preferred over MAD?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">When large isolated errors are more costly or important than small consistent ones. MSE highlights outlier errors more strongly. Drawback: result is in squared units, harder to interpret.</div></div></div></div>
-  <div class="flashcard" id="fc17" style="display:none"><div class="card-inner" id="ci17" onclick="flipCard(17)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is MAPE and why is it useful?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Mean Absolute Percentage Error = average of all APE values across periods. Expressed as a percentage, so it is scale-independent &#8212; you can compare forecast accuracy across different products, locations, or SKUs regardless of volume.</div></div></div></div>
-  <div class="flashcard" id="fc18" style="display:none"><div class="card-inner" id="ci18" onclick="flipCard(18)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the difference between MAD and MAPE?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">MAD is an absolute number (e.g., 1.68 units) &#8212; only meaningful in context of the scale of demand. MAPE is a percentage &#8212; inherently comparable across products and time periods.</div></div></div></div>
-  <div class="flashcard" id="fc19" style="display:none"><div class="card-inner" id="ci19" onclick="flipCard(19)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Summarize the four main forecast error metrics.</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">MAD: average of absolute errors &#8212; used for safety stock. Tracking Signal: detects bias (cumulative algebraic errors ÷ MAD). MSE: squares errors, sensitive to large outliers. MAPE: percentage-based, allows cross-product comparison.</div></div></div></div>
+  <div class="flashcard" id="fc0" style="display:block"><div class="card-inner" id="ci0" onclick="flipCard(0)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM def: Forecast Error</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The difference between actual and forecast demand (stated as an absolute value).</div></div></div></div>
+  <div class="flashcard" id="fc1" style="display:none"><div class="card-inner" id="ci1" onclick="flipCard(1)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Formula: Absolute Percentage Error (APE)</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">APE = |Actual &#8722; Forecast| ÷ Actual × 100%. Forecast accuracy = 100% &#8722; APE.</div></div></div></div>
+  <div class="flashcard" id="fc2" style="display:none"><div class="card-inner" id="ci2" onclick="flipCard(2)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM def: Bias</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A consistent deviation from the mean in one direction (high or low). A good forecast is not biased. Cumulative actual &#8800; cumulative forecast.</div></div></div></div>
+  <div class="flashcard" id="fc3" style="display:none"><div class="card-inner" id="ci3" onclick="flipCard(3)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Bias vs. random variation</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Bias: cumulative sum of errors &#8800; 0 (errors consistently skew one way). Random variation: errors cancel &#8212; cumulative sum ≈ 0 over time.</div></div></div></div>
+  <div class="flashcard" id="fc4" style="display:none"><div class="card-inner" id="ci4" onclick="flipCard(4)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM def: Mean Absolute Deviation (MAD)</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The average of the absolute values of the deviations of observed values from some expected value. MAD = &#931;|Actual &#8722; Forecast| ÷ n</div></div></div></div>
+  <div class="flashcard" id="fc5" style="display:none"><div class="card-inner" id="ci5" onclick="flipCard(5)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How is MAD used for safety stock?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Multiply MAD by the safety factor for your desired service level. Example: MAD = 1.68, 98% service level (factor 2.56) → safety stock ≈ 4.3 units.</div></div></div></div>
+  <div class="flashcard" id="fc6" style="display:none"><div class="card-inner" id="ci6" onclick="flipCard(6)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What % of outcomes do ±1, ±2, ±3 MAD cover?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">±1 MAD ≈ 60%, ±2 MAD ≈ 89%, ±3 MAD ≈ 98%.</div></div></div></div>
+  <div class="flashcard" id="fc7" style="display:none"><div class="card-inner" id="ci7" onclick="flipCard(7)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM def: Tracking Signal</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The ratio of the cumulative algebraic sum of the deviations between the forecasts and the actual values to the mean absolute deviation.</div></div></div></div>
+  <div class="flashcard" id="fc8" style="display:none"><div class="card-inner" id="ci8" onclick="flipCard(8)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How is tracking signal calculated?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Tracking Signal = Cumulative algebraic errors (NOT absolute &#8212; positives and negatives cancel) ÷ MAD. Unlike MAD, direction matters here.</div></div></div></div>
+  <div class="flashcard" id="fc9" style="display:none"><div class="card-inner" id="ci9" onclick="flipCard(9)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What does tracking signal ±4 rule mean?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">If tracking signal exceeds ±4 in a period, the model needs revision. Stays within ±4 = method is appropriate. Consistently negative = over-forecasting; positive = under-forecasting.</div></div></div></div>
+  <div class="flashcard" id="fc10" style="display:none"><div class="card-inner" id="ci10" onclick="flipCard(10)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM def: Standard Deviation</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A measurement of dispersion of data or of a variable. Computed by finding differences from the mean, squaring, summing, dividing by n&#8722;1, and taking the square root.</div></div></div></div>
+  <div class="flashcard" id="fc11" style="display:none"><div class="card-inner" id="ci11" onclick="flipCard(11)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What % of outcomes do ±1, ±2, ±3 SD cover?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">±1 SD = 68.26%, ±2 SD = 95.44%, ±3 SD = 99.74%.</div></div></div></div>
+  <div class="flashcard" id="fc12" style="display:none"><div class="card-inner" id="ci12" onclick="flipCard(12)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Relationship between SD and MAD</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">SD ≈ 1.25 × MAD. Interchangeable &#8212; both work with a safety factor table to determine safety stock. Use whichever measure you have available.</div></div></div></div>
+  <div class="flashcard" id="fc13" style="display:none"><div class="card-inner" id="ci13" onclick="flipCard(13)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is MSE and when is it useful?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Mean Squared Error = &#931;(Actual &#8722; Forecast)² ÷ n. Squaring magnifies large errors, making it more sensitive to outliers than MAD. Drawback: result is in squared units, harder to interpret.</div></div></div></div>
+  <div class="flashcard" id="fc14" style="display:none"><div class="card-inner" id="ci14" onclick="flipCard(14)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">MSE vs. MAD: when to prefer MSE?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">When occasional large errors matter more than many small ones. MSE highlights outliers strongly. MAD treats all errors equally regardless of size.</div></div></div></div>
+  <div class="flashcard" id="fc15" style="display:none"><div class="card-inner" id="ci15" onclick="flipCard(15)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is MAPE?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Mean Absolute Percentage Error = average of all APE values. Expressed as %, so scale-independent &#8212; you can compare forecast accuracy across products of very different volumes.</div></div></div></div>
+  <div class="flashcard" id="fc16" style="display:none"><div class="card-inner" id="ci16" onclick="flipCard(16)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">MAD vs. MAPE: key difference?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">MAD is an absolute number (e.g. 1.68 units) &#8212; only meaningful in the context of demand scale. MAPE is a % &#8212; inherently comparable across products, locations, or time periods.</div></div></div></div>
+  <div class="flashcard" id="fc17" style="display:none"><div class="card-inner" id="ci17" onclick="flipCard(17)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the complement of APE?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Forecast accuracy = 100% &#8722; APE. Example: APE of 5% → accuracy of 95%.</div></div></div></div>
+  <div class="flashcard" id="fc18" style="display:none"><div class="card-inner" id="ci18" onclick="flipCard(18)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What does a consistently negative tracking signal mean?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The model is systematically over-forecasting (actual demand is consistently lower than the forecast). Action: review the model for bias.</div></div></div></div>
+  <div class="flashcard" id="fc19" style="display:none"><div class="card-inner" id="ci19" onclick="flipCard(19)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Name the four main forecast error metrics and their purpose.</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">MAD: average absolute error &#8212; safety stock basis. Tracking Signal: detects bias (algebraic errors ÷ MAD). MSE: sensitive to large outliers (squares errors). MAPE: % error &#8212; comparable across scales.</div></div></div></div>
   <p class="fc-hint">Click card to flip &middot; Use arrows or shuffle to practise</p>
 </div>
 <div class="tab" id="quiz">
