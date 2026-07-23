@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>2.3.2: Financial and Operational Metrics and Reports</title><style>:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}header{background:var(--blue);color:#fff;padding:18px 32px}.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8;flex-wrap:wrap}.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}.container{max-width:960px;margin:0 auto;padding:24px 16px}.tab{display:none}.tab.active{display:block}.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}.block-title{padding:12px 18px 8px;font-size:.96rem;font-weight:700;color:var(--blue);border-bottom:2px solid #dce6f5;background:transparent;letter-spacing:0}.block-body{padding:16px 18px}.block-body p{margin-bottom:9px;line-height:1.65;font-size:.88rem}.block-body h4{font-size:.92rem;font-weight:700;color:var(--blue);margin:14px 0 6px}.block-body ul{padding-left:20px;margin-bottom:9px;list-style-type:disc}.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.6}.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.6}.key-point{background:#fef9c3;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.6}.exhibit{border:1px solid #e5e7eb;border-radius:8px;margin:12px 0;overflow:hidden;background:#f9fafb}.exhibit img{width:100%;display:block}.exhibit-cap{padding:8px 12px;font-size:.82rem;color:#555;background:#f3f4f6}.fc-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}.fc-bar button,.fc-bar span{padding:9px 18px;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;border:2px solid #ddd;background:#fff;transition:.2s}.fc-bar button:hover{background:#f0f7ff;border-color:var(--accent)}.fc-progress{height:6px;background:#e5e7eb;border-radius:3px;margin-bottom:16px}.fc-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#6fb3f2);border-radius:3px;transition:width .4s}.prog{height:6px;background:#e5e7eb;border-radius:3px;margin-bottom:20px;overflow:hidden}.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),#6fb3f2);border-radius:3px;transition:width .4s ease}.flashcard{background:var(--card);border-radius:16px;box-shadow:0 6px 24px rgba(30,58,95,.14);cursor:pointer;user-select:none;margin-bottom:10px}.card-inner{min-height:260px;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1)}.card-inner.flipped{transform:rotateY(180deg)}.card-front,.card-back{padding:36px 32px;backface-visibility:hidden;position:absolute;width:100%;top:0;left:0;display:flex;flex-direction:column;justify-content:center;min-height:260px;border-radius:16px}.card-front{background:linear-gradient(135deg,#fff 0%,#f0f6ff 100%);border:2px solid #e0e9f9}.card-back{transform:rotateY(180deg);background:linear-gradient(135deg,#e8f4fd 0%,#d6eeff 100%);border:2px solid #bcd8f5}.fc-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:14px;opacity:.75}.fc-text{font-size:1.05rem;line-height:1.65;color:#1a2a3a;font-weight:500}.fc-hint{text-align:center;color:#9ca3af;font-size:.82rem;margin-top:14px;font-style:italic}.btn-prev,.btn-next{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}.btn-shuffle{background:var(--blue)!important;color:#fff!important;border-color:var(--blue)!important}.fc-counter{background:#f0f4ff!important;color:var(--blue)!important;font-weight:700!important;border-color:#c7d5f0!important}.qz-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px}.qz-bar button{background:var(--blue);color:#fff;border:none;padding:8px 16px;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer}.score{font-weight:700;color:var(--blue);font-size:.9rem}.q-block{background:var(--card);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.07)}.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}.q-opts{display:flex;flex-direction:column;gap:6px}.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}.opt:hover{background:#f0f7ff;border-color:var(--accent)}.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}.correct-fb{background:#d1fae5;color:#065f46}.wrong-fb{background:#fee2e2;color:#991b1b}.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}</style></head>
+<body>
+<header>
+<a class="back-btn" href="../../Topics/00_Study_Plan_Topics.html">&#8592; Study Plan</a>
+<div class="hdr-top">Module 2: Global Supply Chain Networks</div>
+<div class="hdr-title">2.3.2 &middot; Financial and Operational Metrics and Reports</div>
+<div class="hdr-meta"><span class="badge">22 flashcards</span><span class="badge">1 quiz questions</span><span class="badge">Full CSCP content</span></div>
+</header>
+<nav>
+<button class="active" onclick="showTab('summary',this)">&#128214; Summary</button>
+<button onclick="showTab('flashcards',this)">&#128208; Flashcards (22)</button>
+<button onclick="showTab('quiz',this)">&#9989; Quiz (1 Q)</button>
+</nav>
+<div class="container">
+<div class="tab active" id="summary">
+
+  <div class="block">
+    <div class="block-title">Cost Accounting &amp; Standard Costing</div>
+    <div class="block-body">
+      <div class="def-box"><strong>Cost Accounting:</strong> the branch of accounting concerned with recording and reporting business operating costs. Used to calculate costs for supply chain and production management.</div>
+      <div class="def-box"><strong>Standard Costs:</strong> the target costs of an operation, process, or product, including direct material, direct labor, and overhead charges.</div>
+      <div class="def-box"><strong>Standard Cost Accounting System:</strong> a cost accounting system that uses cost units determined before production for estimating the cost of an order or product. Variances between standard and actual are tracked and investigated.</div>
+      <p>Key terms:</p>
+      <ul>
+        <li><strong>COGS (Cost of Goods Sold):</strong> direct materials + direct labor + manufacturing overhead allocated to goods sold.</li>
+        <li><strong>Current price:</strong> the price currently being paid, as opposed to the standard cost.</li>
+        <li><strong>Usage variance:</strong> deviation of actual consumption of materials vs. standard.</li>
+        <li><strong>Cost variance:</strong> difference between budgeted and actual cost for an activity = rate variance + volume/usage variance.</li>
+        <li><strong>Cost driver:</strong> a measurable aspect of an operation used to allocate overhead costs (e.g., direct labor hours, machine hours).</li>
+      </ul>
+      <p><strong>Standard Costing &#8212; Rate and Volume Standards:</strong></p>
+      <ul>
+        <li>Every cost has two components: <strong>rate</strong> (cost per unit of resource) and <strong>volume</strong> (units of resource used).</li>
+        <li>Variance = rate variance + usage/volume variance.</li>
+      </ul>
+      <p><strong>Overhead Rate Example:</strong></p>
+      <ul>
+        <li>Operation: 30,000 units, expected to use 1,500 direct labor hours.</li>
+        <li>Plant total: 15,000 expected DLH; total overhead = $300,000.</li>
+        <li>Overhead rate = $300,000 ÷ 15,000 = <strong>$20/DLH</strong>.</li>
+        <li>Standard overhead for operation = 1,500 × $20 = <strong>$30,000</strong>.</li>
+        <li>Actual: 1,300 DLH × $21/hour = $27,300.</li>
+        <li>Variance = $30,000 &#8722; $27,300 = <strong>$2,700 favorable</strong> (large favorable usage variance partly offset by unfavorable rate variance).</li>
+      </ul>
+      <p><strong>Efficiency Formula:</strong></p>
+      <ul>
+        <li><code>Efficiency = Standard hours produced ÷ Actual hours worked × 100%</code></li>
+        <li>Example: 110 standard hours produced in 100 actual hours = <strong>110% efficiency</strong> (favorable).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Accounting Standards: IFRS vs. US GAAP</div>
+    <div class="block-body">
+      <div class="def-box"><strong>IFRS (International Financial Reporting Standards):</strong> a common global language for business affairs so that company accounts are understandable and comparable across international boundaries. Used in 144 of 166 jurisdictions as of 2018.</div>
+      <p><strong>IFRS vs. US GAAP:</strong></p>
+      <ul>
+        <li>IFRS is <strong>principles-based</strong>: simple requirements, more judgment allowed.</li>
+        <li>US GAAP is <strong>rules-based</strong>: detailed, specific rules for every situation.</li>
+        <li>Both require the same 4 financial statements (+ notes).</li>
+        <li>Key difference: <strong>IFRS bans LIFO</strong> inventory valuation; US GAAP allows LIFO.</li>
+      </ul>
+      <p><strong>IFRS 5 Elements:</strong></p>
+      <ul>
+        <li><strong>Assets:</strong> resource controlled by the entity from which future economic benefits are expected.</li>
+        <li><strong>Liabilities:</strong> present obligation arising from past events, requiring future outflow of resources.</li>
+        <li><strong>Equity:</strong> residual interest in assets after deducting all liabilities (= Assets &#8722; Liabilities).</li>
+        <li><strong>Income:</strong> increases in economic benefits resulting in increases in equity (other than owner contributions).</li>
+        <li><strong>Expenses:</strong> decreases in economic benefits resulting in decreases in equity (other than distributions to owners).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Financial Statements</div>
+    <div class="block-body">
+      <div class="def-box"><strong>Balance Sheet:</strong> a financial statement showing assets, liabilities, and equity at a specific point in time. Equation: <strong>Assets = Liabilities + Owners&#8217; Equity</strong>.</div>
+      <p>Inventory valuation methods (balance sheet):</p>
+      <ul>
+        <li><strong>FIFO</strong> (First In, First Out): oldest inventory cost used first.</li>
+        <li><strong>LIFO</strong> (Last In, First Out): newest cost used first. Banned under IFRS.</li>
+        <li><strong>Average cost:</strong> weighted average of all units.</li>
+        <li>Once chosen, method must be kept consistent for comparability.</li>
+        <li><strong>Obsolescence:</strong> condition of being out of date &#8212; inventory must be written off and removed from financial statements.</li>
+      </ul>
+      <div class="def-box"><strong>Income Statement:</strong> a financial statement showing revenues minus expenses for a period. Also called Statement of Comprehensive Income (IFRS). Basic equation: <strong>Revenue &#8722; COGS = Gross Profit; Gross Profit &#8722; Expenses = Net Income (&#8220;bottom line&#8221;)</strong>.</div>
+      <p>Key income statement concepts:</p>
+      <ul>
+        <li><strong>Profit margin:</strong> difference between sales price and cost; measures degree of financial success.</li>
+        <li><strong>Gross margin:</strong> Revenue &#8722; COGS (does not include operating expenses).</li>
+        <li><strong>Net profit:</strong> all expenses deducted, including operating expenses, interest, and taxes.</li>
+        <li><strong>Matching principle:</strong> report related revenues and expenses in the same accounting period.</li>
+        <li>Operating expenses (sales bonuses, G&amp;A) are NOT in COGS &#8212; they appear below gross profit.</li>
+      </ul>
+      <div class="exhibit">
+        <img src="../_images/image126.png" alt="Exhibit 2-43" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 2-43:</strong> Sample Income Statement Showing Two Years of Results</div>
+      </div>
+      <div class="def-box"><strong>Funds Flow Statement (Statement of Cash Flows):</strong> a financial statement showing the effect of changes in balance sheet accounts and income on cash and equivalents. Net income is the starting point &#8212; then adjustments are made for non-cash items (e.g., depreciation is added back).</div>
+      <p>Cash flow components:</p>
+      <ul>
+        <li><strong>Operating activities:</strong> cash from normal business operations.</li>
+        <li><strong>Investing activities:</strong> cash for/from capital expenditures and investments.</li>
+        <li><strong>Financing activities:</strong> cash from borrowing, repaying debt, equity issuances.</li>
+        <li><strong>3 factors determining cash flows:</strong> sales, after-tax operating profit margins, capital requirements.</li>
+        <li>Depreciation: predetermined increment of asset cost &#8212; added back to net income on the cash flow statement (non-cash charge).</li>
+      </ul>
+      <div class="exhibit">
+        <img src="../_images/image128.png" alt="Exhibit 2-44" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 2-44:</strong> Sample Statement of Cash Flows Showing Two Years of Results (Indirect Method)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">SC Cost Metrics &amp; Multi-Organization Metrics</div>
+    <div class="block-body">
+      <p>SC cost areas to measure:</p>
+      <ul>
+        <li>Total landed cost (total cost), cost per SC function (order processing, picking, loading), cost per unit, cost as % of net sales.</li>
+        <li>Inbound freight, warehouse order processing, inventory carrying cost, administrative costs, direct labor.</li>
+        <li>Outbound freight, damage cost, return cost, service failure cost, backorder cost.</li>
+      </ul>
+      <p><strong>Multi-organization metrics</strong> address suboptimization (one partner optimizes at the expense of the whole chain):</p>
+      <ul>
+        <li><strong>SC total cost:</strong> aggregated costs of all organizations in the chain (raw material through customer delivery).</li>
+        <li><strong>Inventory days of supply:</strong> total inventory anywhere in the supply chain.</li>
+        <li><strong>Dwell time:</strong> all inventory idle time in all parts of the chain &#8212; idle inventory is non-value-added cost.</li>
+        <li><strong>Fill rate + order-to-receipt response time:</strong> overall delivery effectiveness.</li>
+        <li><strong>On-shelf-in-stock %:</strong> measures replenishment at retail level (fill rate only measures warehouse/distributor level).</li>
+      </ul>
+      <div class="exhibit">
+        <img src="../_images/image129.png" alt="Exhibit 2-45" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 2-45:</strong> Supply Chain Total Cost (end-to-end)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Supplier Financial Health: Ratio Analysis &amp; Altman Z-Score</div>
+    <div class="block-body">
+      <p>4 groups of financial ratios for assessing supplier health:</p>
+      <ul>
+        <li><strong>Liquidity ratios:</strong> how quickly assets can convert to cash. Example: <code>Quick Ratio = (Current Assets &#8722; Inventories) ÷ Current Liabilities</code></li>
+        <li><strong>Activity ratios (turnover):</strong> effective use of assets. Examples:
+          <ul>
+            <li><code>Inventory Turnover = Sales ÷ Average Inventory</code> (e.g., $100 sales ÷ $50 inventory = 2.0 turns)</li>
+            <li><code>Inventory Days&#8217; Outstanding = 365 ÷ Inventory Turnover</code> (e.g., 365 ÷ 2 = 182.5 days)</li>
+          </ul>
+        </li>
+        <li><strong>Leverage ratios:</strong> how much debt finances the business. Example: <code>Current Debt to Equity = Current Liabilities ÷ Equity</code>. Interest coverage ratio should be high (earnings covering interest payments).</li>
+        <li><strong>Profitability ratios:</strong> return on investment. Example: <code>Net Profit Margin = Net Profit ÷ Net Sales</code> (10% margin = $0.10 profit per $1 of sales).</li>
+      </ul>
+      <p><strong>Altman Z-Score</strong> &#8212; bankruptcy prediction model:</p>
+      <ul>
+        <li>Combines 4&#8211;5 weighted financial ratios to predict bankruptcy risk.</li>
+        <li><strong>Public company formula (5 ratios):</strong> Z = 1.2X&#8321; + 1.4X&#8322; + 3.3X&#8323; + 0.6X&#8324; + 1.0X&#8325;</li>
+        <li><strong>Private company formula (4 ratios):</strong> slightly different weighting; X&#8324; uses book value of equity instead of market value.</li>
+        <li>Scored red/yellow/green: suppliers below the red threshold may not be selected; above green = low risk.</li>
+        <li>SC managers use Z-score to identify suppliers at financial distress risk &#8212; key supply chain risk signal.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Strategic Profit Model (ROA Breakdown / DuPont)</div>
+    <div class="block-body">
+      <p><strong>Return on Assets (ROA):</strong></p>
+      <ul>
+        <li><code>ROA = Net Profit Margin × Asset Turnover</code></li>
+        <li><code>Net Profit Margin = Net Profit ÷ Net Sales</code></li>
+        <li><code>Asset Turnover = Net Sales ÷ Total Assets</code></li>
+        <li><code>ROA = Net Profit ÷ Total Assets</code></li>
+      </ul>
+      <p><strong>Return on Equity (ROE) &#8212; extending ROA:</strong></p>
+      <ul>
+        <li><code>ROE = ROA × Financial Leverage (Total Assets ÷ Equity)</code></li>
+      </ul>
+      <p>How SC improvements increase ROA:</p>
+      <ul>
+        <li><strong>Lower cost</strong> &#8594; higher net profit margin &#8594; higher ROA.</li>
+        <li><strong>Lower inventory</strong> &#8594; lower total assets &#8594; higher asset turnover &#8594; higher ROA.</li>
+        <li>When the Strategic Profit Model is in a spreadsheet, changes to inventory, carrying cost, or net sales automatically cascade through to show the ROA impact &#8212; powerful what-if tool.</li>
+      </ul>
+      <div class="exhibit">
+        <img src="../_images/image133.png" alt="Exhibit 2-47" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 2-47:</strong> Strategic Profit Model with Sample Data</div>
+      </div>
+      <div class="exhibit">
+        <img src="../_images/image134.png" alt="Exhibit 2-48" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 2-48:</strong> Strategic Profit Model &#8212; Effect of Inventory Reduction on ROA</div>
+      </div>
+      <div class="key-point">&#128161; Key Point: The Strategic Profit Model directly links SC decisions (inventory reduction, cost efficiency) to financial performance (ROA, ROE). This is the primary tool for quantifying the financial value of supply chain management.</div>
+    </div>
+  </div>
+
+</div>
+<div class="tab" id="flashcards">
+  <div class="fc-bar"><button class="btn-prev" onclick="prevCard()">&#8592; Prev</button><button class="btn-next" onclick="nextCard()">Next &#8594;</button><button class="btn-shuffle" onclick="shuffleCards()">&#128256; Shuffle</button><span class="fc-counter" id="fcc">1 / 22</span></div>
+  <div class="prog"><div class="prog-fill" id="prg" style="width:5%"></div></div>
+  <div class="flashcard" id="fc0" style="display:block"><div class="card-inner" id="ci0" onclick="flipCard(0)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM def: Standard Costs</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The target costs of an operation, process, or product, including direct material, direct labor, and overhead charges. Set periodically; variances between standard and actual are tracked.</div></div></div></div>
+  <div class="flashcard" id="fc1" style="display:none"><div class="card-inner" id="ci1" onclick="flipCard(1)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM def: Standard Cost Accounting System</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A cost accounting system that uses cost units determined before production for estimating the cost of an order or product. Actual vs. standard = variances (rate + usage).</div></div></div></div>
+  <div class="flashcard" id="fc2" style="display:none"><div class="card-inner" id="ci2" onclick="flipCard(2)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What are the 2 components of every standard cost?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Rate (cost per unit of resource, e.g., $/hour) and Volume/Usage (units of resource purchased or used, e.g., labor hours). Cost Variance = Rate Variance + Usage/Volume Variance.</div></div></div></div>
+  <div class="flashcard" id="fc3" style="display:none"><div class="card-inner" id="ci3" onclick="flipCard(3)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How is overhead rate calculated (example)?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Total overhead ÷ total expected cost driver. Example: $300,000 overhead ÷ 15,000 expected DLH = $20/DLH. Standard overhead for 30,000-unit order (uses 1,500 DLH) = 1,500 × $20 = $30,000.</div></div></div></div>
+  <div class="flashcard" id="fc4" style="display:none"><div class="card-inner" id="ci4" onclick="flipCard(4)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Overhead variance calculation example</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Standard: $30,000. Actual: 1,300 DLH × $21/hr = $27,300. Variance = $30,000 &#8722; $27,300 = $2,700 favorable (favorable usage variance outweighs unfavorable rate variance).</div></div></div></div>
+  <div class="flashcard" id="fc5" style="display:none"><div class="card-inner" id="ci5" onclick="flipCard(5)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Efficiency formula in standard costing</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Efficiency % = Standard hours produced ÷ Actual hours worked × 100%. Example: 110 standard hours in 100 actual hours = 110% (favorable). &gt;100% = more productive than standard.</div></div></div></div>
+  <div class="flashcard" id="fc6" style="display:none"><div class="card-inner" id="ci6" onclick="flipCard(6)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM def: IFRS</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A common global language for business affairs so company accounts are understandable and comparable internationally. Principles-based. Used in 144 of 166 jurisdictions (as of 2018).</div></div></div></div>
+  <div class="flashcard" id="fc7" style="display:none"><div class="card-inner" id="ci7" onclick="flipCard(7)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">IFRS vs. US GAAP: key differences?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">IFRS = principles-based (judgment, simpler rules); GAAP = rules-based (detailed specific rules). Both require same 4 statements. Critical difference: IFRS bans LIFO inventory valuation; GAAP allows it.</div></div></div></div>
+  <div class="flashcard" id="fc8" style="display:none"><div class="card-inner" id="ci8" onclick="flipCard(8)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What are the 5 IFRS elements?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Assets (resource providing future benefits). Liabilities (present obligation requiring future outflow). Equity (Assets &#8722; Liabilities). Income (increases in equity from non-owner sources). Expenses (decreases in equity from non-owner sources).</div></div></div></div>
+  <div class="flashcard" id="fc9" style="display:none"><div class="card-inner" id="ci9" onclick="flipCard(9)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the balance sheet equation?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Assets = Liabilities + Owners&#8217; Equity. It is always in balance because equity is the residual (difference between assets and liabilities). Snapshot at one point in time.</div></div></div></div>
+  <div class="flashcard" id="fc10" style="display:none"><div class="card-inner" id="ci10" onclick="flipCard(10)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What are FIFO, LIFO, and average cost?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Inventory valuation methods. FIFO: oldest cost used first. LIFO: newest cost used first (banned under IFRS). Average cost: weighted average of all units. Must be applied consistently year-to-year.</div></div></div></div>
+  <div class="flashcard" id="fc11" style="display:none"><div class="card-inner" id="ci11" onclick="flipCard(11)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Income statement basic equation</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Revenue &#8722; COGS = Gross Profit. Gross Profit &#8722; Operating Expenses = EBIT. EBIT &#8722; Interest &#8722; Taxes = Net Income (&#8220;bottom line&#8221;). Covers a period (month/quarter/year).</div></div></div></div>
+  <div class="flashcard" id="fc12" style="display:none"><div class="card-inner" id="ci12" onclick="flipCard(12)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the matching principle?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Report related revenues and expenses in the same accounting period. Ensures that costs incurred to generate revenue are matched against that revenue for accurate profit measurement.</div></div></div></div>
+  <div class="flashcard" id="fc13" style="display:none"><div class="card-inner" id="ci13" onclick="flipCard(13)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What 3 sections does a Statement of Cash Flows have?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1. Operating activities (cash from normal operations). 2. Investing activities (capex, acquisitions). 3. Financing activities (borrowing, debt repayment, equity). Starts from net income, adds back non-cash items like depreciation.</div></div></div></div>
+  <div class="flashcard" id="fc14" style="display:none"><div class="card-inner" id="ci14" onclick="flipCard(14)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Why is depreciation added back on the cash flow statement?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Depreciation is a non-cash charge &#8212; it reduces net income on the income statement but does not represent an actual cash outflow. Adding it back converts net income to operating cash flow.</div></div></div></div>
+  <div class="flashcard" id="fc15" style="display:none"><div class="card-inner" id="ci15" onclick="flipCard(15)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What are the 4 financial ratio groups for supplier health?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1. Liquidity (Quick Ratio = (Current Assets &#8722; Inventories) ÷ Current Liabilities). 2. Activity/Turnover (Inventory Turnover = Sales ÷ Avg Inventory; Days&#8217; Outstanding = 365 ÷ Turnover). 3. Leverage (Debt to Equity). 4. Profitability (Net Profit Margin = Net Profit ÷ Net Sales).</div></div></div></div>
+  <div class="flashcard" id="fc16" style="display:none"><div class="card-inner" id="ci16" onclick="flipCard(16)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the Altman Z-Score?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A bankruptcy prediction model using 4&#8211;5 weighted financial ratios. Public formula: Z = 1.2X&#8321; + 1.4X&#8322; + 3.3X&#8323; + 0.6X&#8324; + 1.0X&#8325;. Private formula uses book value of equity. Rated red/yellow/green. Low score = high bankruptcy risk = SC risk.</div></div></div></div>
+  <div class="flashcard" id="fc17" style="display:none"><div class="card-inner" id="ci17" onclick="flipCard(17)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is ROA and its formula in the Strategic Profit Model?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">ROA = Net Profit Margin × Asset Turnover. Net Profit Margin = Net Profit ÷ Net Sales. Asset Turnover = Net Sales ÷ Total Assets. Therefore ROA = Net Profit ÷ Total Assets.</div></div></div></div>
+  <div class="flashcard" id="fc18" style="display:none"><div class="card-inner" id="ci18" onclick="flipCard(18)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">How does reducing inventory improve ROA?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Lower inventory &#8594; lower Total Assets &#8594; higher Asset Turnover &#8594; higher ROA (same net profit, fewer assets). The Strategic Profit Model shows this cascade quantitatively.</div></div></div></div>
+  <div class="flashcard" id="fc19" style="display:none"><div class="card-inner" id="ci19" onclick="flipCard(19)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ROE formula in the Strategic Profit Model</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">ROE = ROA × Financial Leverage. Financial Leverage = Total Assets ÷ Equity. So ROE = (Net Profit ÷ Total Assets) × (Total Assets ÷ Equity) = Net Profit ÷ Equity.</div></div></div></div>
+  <div class="flashcard" id="fc20" style="display:none"><div class="card-inner" id="ci20" onclick="flipCard(20)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is suboptimization in SC metrics?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">When one partner optimizes its own metrics at the expense of overall chain performance. Example: pushing excess inventory to customers improves fill rate but increases total chain inventory cost. Addressed by end-to-end SC total cost metrics.</div></div></div></div>
+  <div class="flashcard" id="fc21" style="display:none"><div class="card-inner" id="ci21" onclick="flipCard(21)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is dwell time in SC?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">All inventory idle time in all parts of the supply chain. Idle inventory is non-value-added cost. Measuring dwell time across the chain helps identify waste and bottlenecks.</div></div></div></div>
+  <p class="fc-hint">Click card to flip &middot; Use arrows or shuffle to practise</p>
+</div>
+<div class="tab" id="quiz">
+  <div class="qz-bar"><button onclick="resetQuiz()">&#128260; Reset Quiz</button><span class="score" id="score">Score: 0/0</span></div>
+  <div class="q-block"><div class="q-num">Question 1</div><div class="q-text">What is 'return on assets' (ROA) and why is it relevant to supply chain management?</div><div class="q-opts"><div class="opt opt-0" onclick="pick(0,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Total revenue divided by number of employees</div><div class="opt opt-0" onclick="pick(0,1,1)"><span style="font-weight:700;min-width:20px">B.</span>Net income divided by total assets — supply chain decisions (inventory levels, facility investments, equipment) directly affect the asset base and thus ROA</div><div class="opt opt-0" onclick="pick(0,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Gross profit divided by cost of goods sold</div><div class="opt opt-0" onclick="pick(0,3,1)"><span style="font-weight:700;min-width:20px">D.</span>Total inventory value divided by annual sales</div></div><div class="q-feedback" id="fb-0" style="display:none"><div class="fb-result" id="res-0"></div><div class="fb-exp">ROA measures how efficiently assets generate profit. SC managers control major assets (inventory, equipment, facilities) — reducing inventory or improving asset utilization directly improves ROA.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 2</div><div class="q-text">What does 'days inventory outstanding' (DIO) measure?</div><div class="q-opts"><div class="opt opt-1" onclick="pick(1,0,1)"><span style="font-weight:700;min-width:20px">A.</span>The number of days a customer takes to pay an invoice</div><div class="opt opt-1" onclick="pick(1,1,1)"><span style="font-weight:700;min-width:20px">B.</span>The average number of days inventory is held before being sold — lower DIO means faster inventory turns and less cash tied up</div><div class="opt opt-1" onclick="pick(1,2,1)"><span style="font-weight:700;min-width:20px">C.</span>The number of days between placing an order and receiving it</div><div class="opt opt-1" onclick="pick(1,3,1)"><span style="font-weight:700;min-width:20px">D.</span>The number of days a production order takes to complete</div></div><div class="q-feedback" id="fb-1" style="display:none"><div class="fb-result" id="res-1"></div><div class="fb-exp">DIO = (Average Inventory / COGS) × 365. It measures how many days of inventory the company holds on average. Lower DIO = less working capital tied up in inventory = better cash efficiency.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 3</div><div class="q-text">What is the 'cash-to-cash cycle time' formula?</div><div class="q-opts"><div class="opt opt-2" onclick="pick(2,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Days in transit + Days in customs</div><div class="opt opt-2" onclick="pick(2,1,1)"><span style="font-weight:700;min-width:20px">B.</span>Days Inventory Outstanding + Days Sales Outstanding - Days Payable Outstanding — the net number of days between paying suppliers and collecting from customers</div><div class="opt opt-2" onclick="pick(2,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Revenue / Total Supply Chain Cost</div><div class="opt opt-2" onclick="pick(2,3,1)"><span style="font-weight:700;min-width:20px">D.</span>On-time delivery rate + Fill rate / 2</div></div><div class="q-feedback" id="fb-2" style="display:none"><div class="fb-result" id="res-2"></div><div class="fb-exp">Cash-to-cash = DIO + DSO - DPO. A shorter (or negative) cash-to-cash cycle means the company collects from customers before it must pay suppliers — a favorable working capital position (e.g., Amazon, Walmart).</div></div></div>
+  <div class="q-block"><div class="q-num">Question 4</div><div class="q-text">What is 'gross margin return on inventory investment' (GMROII)?</div><div class="q-opts"><div class="opt opt-3" onclick="pick(3,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Gross profit divided by cost of goods sold</div><div class="opt opt-3" onclick="pick(3,1,1)"><span style="font-weight:700;min-width:20px">B.</span>Gross profit generated per dollar of average inventory investment — measuring how productively inventory is deployed</div><div class="opt opt-3" onclick="pick(3,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Net profit divided by total assets</div><div class="opt opt-3" onclick="pick(3,3,1)"><span style="font-weight:700;min-width:20px">D.</span>Revenue minus all supply chain costs</div></div><div class="q-feedback" id="fb-3" style="display:none"><div class="fb-result" id="res-3"></div><div class="fb-exp">GMROII = Gross Margin / Average Inventory Cost. It measures how much gross profit is generated for each dollar invested in inventory — a retailer's key metric for evaluating product line profitability and inventory efficiency.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 5</div><div class="q-text">What is 'on-time delivery' (OTD) rate and what does it measure?</div><div class="q-opts"><div class="opt opt-4" onclick="pick(4,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Percentage of items that arrive undamaged</div><div class="opt opt-4" onclick="pick(4,1,1)"><span style="font-weight:700;min-width:20px">B.</span>The percentage of customer orders (or lines) delivered on or before the promised delivery date — a key customer-facing service metric</div><div class="opt opt-4" onclick="pick(4,2,1)"><span style="font-weight:700;min-width:20px">C.</span>The percentage of production orders completed on time</div><div class="opt opt-4" onclick="pick(4,3,1)"><span style="font-weight:700;min-width:20px">D.</span>The average number of days late for deliveries</div></div><div class="q-feedback" id="fb-4" style="display:none"><div class="fb-result" id="res-4"></div><div class="fb-exp">OTD = orders delivered on/before committed date / total orders. It measures supply chain reliability from the customer's perspective — one of the most important metrics for customer satisfaction and retention.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 6</div><div class="q-text">What is the 'perfect order rate' and what does it measure?</div><div class="q-opts"><div class="opt opt-5" onclick="pick(5,0,1)"><span style="font-weight:700;min-width:20px">A.</span>The percentage of orders shipped within 24 hours</div><div class="opt opt-5" onclick="pick(5,1,1)"><span style="font-weight:700;min-width:20px">B.</span>The percentage of orders that are delivered on time, in full, undamaged, with correct documentation and invoicing — all conditions must be met simultaneously</div><div class="opt opt-5" onclick="pick(5,2,1)"><span style="font-weight:700;min-width:20px">C.</span>The percentage of orders with no quality defects in the product</div><div class="opt opt-5" onclick="pick(5,3,1)"><span style="font-weight:700;min-width:20px">D.</span>The percentage of orders delivered by the primary carrier</div></div><div class="q-feedback" id="fb-5" style="display:none"><div class="fb-result" id="res-5"></div><div class="fb-exp">Perfect order rate = % of orders meeting ALL criteria simultaneously (on time, complete, undamaged, correctly invoiced). Even one failure counts as an imperfect order — it is the most demanding measure of order fulfillment performance.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 7</div><div class="q-text">What is 'order fulfillment cycle time' (OFCT)?</div><div class="q-opts"><div class="opt opt-6" onclick="pick(6,0,1)"><span style="font-weight:700;min-width:20px">A.</span>The time required to receive goods from a supplier</div><div class="opt opt-6" onclick="pick(6,1,1)"><span style="font-weight:700;min-width:20px">B.</span>The average time from when a customer places an order to when the order is delivered — measuring supply chain responsiveness</div><div class="opt opt-6" onclick="pick(6,2,1)"><span style="font-weight:700;min-width:20px">C.</span>The time required to plan the production schedule</div><div class="opt opt-6" onclick="pick(6,3,1)"><span style="font-weight:700;min-width:20px">D.</span>The time between placing and receiving a purchase order</div></div><div class="q-feedback" id="fb-6" style="display:none"><div class="fb-result" id="res-6"></div><div class="fb-exp">OFCT measures end-to-end supply chain speed — from order receipt to delivery. Shorter cycle times improve customer satisfaction, reduce the need for safety stock, and provide competitive advantage.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 8</div><div class="q-text">What does 'supply chain management cost' typically include?</div><div class="q-opts"><div class="opt opt-7" onclick="pick(7,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Only transportation and warehousing costs</div><div class="opt opt-7" onclick="pick(7,1,1)"><span style="font-weight:700;min-width:20px">B.</span>All costs incurred to plan, source, make, and deliver products — including planning costs, procurement costs, manufacturing/conversion costs, order management, and logistics costs</div><div class="opt opt-7" onclick="pick(7,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Only manufacturing labor costs</div><div class="opt opt-7" onclick="pick(7,3,1)"><span style="font-weight:700;min-width:20px">D.</span>Only inventory carrying costs</div></div><div class="q-feedback" id="fb-7" style="display:none"><div class="fb-result" id="res-7"></div><div class="fb-exp">Total SCM cost encompasses the full cost of operating the supply chain: planning (forecasting, S&OP), procurement (purchasing, supplier management), manufacturing/conversion, inventory carrying, and logistics (transportation, warehousing).</div></div></div>
+  <div class="q-block"><div class="q-num">Question 9</div><div class="q-text">Why is 'inventory carrying cost' an important financial metric?</div><div class="q-opts"><div class="opt opt-8" onclick="pick(8,0,1)"><span style="font-weight:700;min-width:20px">A.</span>It measures how quickly inventory is received from suppliers</div><div class="opt opt-8" onclick="pick(8,1,1)"><span style="font-weight:700;min-width:20px">B.</span>It represents the total cost of holding inventory (capital cost, storage, insurance, obsolescence, damage) — typically 15–30% of inventory value per year, making inventory reduction a high-value opportunity</div><div class="opt opt-8" onclick="pick(8,2,1)"><span style="font-weight:700;min-width:20px">C.</span>It measures how many times inventory is counted per year</div><div class="opt opt-8" onclick="pick(8,3,1)"><span style="font-weight:700;min-width:20px">D.</span>It is only relevant for perishable products</div></div><div class="q-feedback" id="fb-8" style="display:none"><div class="fb-result" id="res-8"></div><div class="fb-exp">Inventory carrying cost (typically 15–30% of average inventory value per year) includes cost of capital, warehousing, insurance, taxes, handling, obsolescence, and shrinkage. Reducing inventory by $1M can save $150K–$300K/year.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 10</div><div class="q-text">What does 'return on investment' (ROI) for a supply chain project measure?</div><div class="q-opts"><div class="opt opt-9" onclick="pick(9,0,1)"><span style="font-weight:700;min-width:20px">A.</span>The percentage of orders returned by customers</div><div class="opt opt-9" onclick="pick(9,1,1)"><span style="font-weight:700;min-width:20px">B.</span>(Net benefit / Cost of investment) × 100% — the financial return generated by the supply chain investment relative to its cost</div><div class="opt opt-9" onclick="pick(9,2,1)"><span style="font-weight:700;min-width:20px">C.</span>The ratio of supplier invoices to purchase orders</div><div class="opt opt-9" onclick="pick(9,3,1)"><span style="font-weight:700;min-width:20px">D.</span>The percentage of production capacity used</div></div><div class="q-feedback" id="fb-9" style="display:none"><div class="fb-result" id="res-9"></div><div class="fb-exp">ROI measures whether a supply chain investment (new system, process improvement, network redesign) generates sufficient financial return. Positive ROI means the investment creates value; negative ROI means it destroys value.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 11</div><div class="q-text">How is 'customer profitability analysis' useful in supply chain management?</div><div class="q-opts"><div class="opt opt-10" onclick="pick(10,0,1)"><span style="font-weight:700;min-width:20px">A.</span>It measures customer satisfaction scores</div><div class="opt opt-10" onclick="pick(10,1,1)"><span style="font-weight:700;min-width:20px">B.</span>It calculates the true profit generated by each customer after deducting all supply chain costs to serve them — revealing that some high-volume customers may actually be unprofitable due to high service costs</div><div class="opt opt-10" onclick="pick(10,2,1)"><span style="font-weight:700;min-width:20px">C.</span>It determines the credit limit for each customer</div><div class="opt opt-10" onclick="pick(10,3,1)"><span style="font-weight:700;min-width:20px">D.</span>It measures customer order frequency</div></div><div class="q-feedback" id="fb-10" style="display:none"><div class="fb-result" id="res-10"></div><div class="fb-exp">Customer profitability analysis (activity-based costing to the customer level) reveals the real cost to serve each customer. Some large customers require expensive services (small orders, special handling, returns) that make them unprofitable.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 12</div><div class="q-text">What is 'Economic Value Added' (EVA) in supply chain context?</div><div class="q-opts"><div class="opt opt-11" onclick="pick(11,0,1)"><span style="font-weight:700;min-width:20px">A.</span>The total value of inventory in the supply chain</div><div class="opt opt-11" onclick="pick(11,1,1)"><span style="font-weight:700;min-width:20px">B.</span>Net operating profit after tax minus the cost of all capital employed — measuring whether supply chain investments generate returns above the cost of capital</div><div class="opt opt-11" onclick="pick(11,2,1)"><span style="font-weight:700;min-width:20px">C.</span>The difference between the selling price and manufacturing cost</div><div class="opt opt-11" onclick="pick(11,3,1)"><span style="font-weight:700;min-width:20px">D.</span>Revenue generated from new supply chain capabilities</div></div><div class="q-feedback" id="fb-11" style="display:none"><div class="fb-result" id="res-11"></div><div class="fb-exp">EVA = NOPAT - (WACC × Capital). Supply chain investments must generate returns above the cost of capital to create shareholder value. EVA is used to evaluate supply chain strategies and network investments.</div></div></div>
+</div>
+</div>
+<footer>CSCP Study Aid &mdash; 2.3.2: Financial and Operational Metrics and Reports</footer>
+<script>function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+var cards=[],ci=0;
+function initCards(){cards=Array.from(document.querySelectorAll('.flashcard'));if(cards.length)showCard(0);}
+function showCard(i){cards.forEach((c,j)=>{c.style.display=j===i?'block':'none';var inn=c.querySelector('.card-inner');if(inn)inn.classList.remove('flipped');});ci=i;var ctr=document.getElementById('fcc');if(ctr)ctr.textContent=(i+1)+' / '+cards.length;var prg=document.getElementById('prg');if(prg)prg.style.width=((i+1)/cards.length*100)+'%';}
+function flipCard(i){var el=document.getElementById('ci'+i);if(el)el.classList.toggle('flipped');}
+function prevCard(){if(ci>0)showCard(ci-1);}
+function nextCard(){if(ci<cards.length-1)showCard(ci+1);}
+function shuffleCards(){var c=cards[0].parentElement;for(var i=cards.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));c.insertBefore(cards[j],cards[i].nextSibling);}cards=Array.from(document.querySelectorAll('.flashcard'));cards.forEach((c,j)=>{c.id='fc'+j;var inn=c.querySelector('.card-inner');if(inn){inn.id='ci'+j;inn.setAttribute('onclick','flipCard('+j+')');}});showCard(0);}
+var answered={},correct=0,total=0;
+function pick(q,o,cor){if(answered[q])return;answered[q]=true;total++;document.querySelectorAll('.opt-'+q).forEach((el,i)=>{el.classList.add(i===cor?'correct':'wrong');});var fb=document.getElementById('fb-'+q);if(fb)fb.style.display='block';var res=document.getElementById('res-'+q);if(res){if(o===cor){correct++;res.textContent='\u2713 Correct!';fb.querySelector('.fb-result').className='fb-result correct-fb';}else{res.textContent='\u2717 Incorrect';fb.querySelector('.fb-result').className='fb-result wrong-fb';}}document.getElementById('score').textContent='Score: '+correct+'/'+total;}
+function resetQuiz(){answered={};correct=0;total=0;document.getElementById('score').textContent='Score: 0/0';document.querySelectorAll('.opt').forEach(o=>{o.classList.remove('correct','wrong');});document.querySelectorAll('.q-feedback').forEach(f=>{f.style.display='none';});}
+window.onload=function(){initCards();};</script></body></html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>1.1.2: Supply Chain Maturity and Complexity</title><style>:root{--blue:#1e3a5f;--accent:#2e86de;--green:#27ae60;--red:#e74c3c;--orange:#e67e22;--bg:#f0f4fa;--card:#fff}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:#222;font-size:15px}header{background:var(--blue);color:#fff;padding:18px 32px}.hdr-top{font-size:.75rem;opacity:.65;margin-bottom:4px}.hdr-title{font-size:1.4rem;font-weight:700;line-height:1.3}.hdr-meta{display:flex;gap:16px;margin-top:10px;font-size:.82rem;opacity:.8;flex-wrap:wrap}.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:12px}nav{background:#fff;border-bottom:2px solid #e5e7eb;display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 6px rgba(0,0,0,.08)}nav button{flex:1;padding:12px 0;border:none;background:none;font-size:.9rem;font-weight:600;cursor:pointer;color:#666;border-bottom:3px solid transparent;transition:.2s}nav button.active{color:var(--accent);border-bottom-color:var(--accent);background:#f0f7ff}.container{max-width:960px;margin:0 auto;padding:24px 16px}.tab{display:none}.tab.active{display:block}.block{background:var(--card);border-radius:10px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.07);overflow:hidden}.block-title{padding:12px 18px 8px;font-size:.96rem;font-weight:700;color:var(--blue);border-bottom:2px solid #dce6f5;background:transparent;letter-spacing:0}.block-body{padding:16px 18px}.block-body p{margin-bottom:9px;line-height:1.65;font-size:.88rem}.block-body h4{font-size:.92rem;font-weight:700;color:var(--blue);margin:14px 0 6px}.block-body ul{padding-left:20px;margin-bottom:9px;list-style-type:disc}.block-body li{margin-bottom:5px;font-size:.87rem;line-height:1.6}.def-box{background:#eff6ff;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.6}.key-point{background:#fef9c3;border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 7px 7px 0;margin:8px 0;font-size:.87rem;line-height:1.6}.exhibit{border:1px solid #e5e7eb;border-radius:8px;margin:12px 0;overflow:hidden;background:#f9fafb}.exhibit img{width:100%;display:block}.exhibit-cap{padding:8px 12px;font-size:.82rem;color:#555;background:#f3f4f6}.fc-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}.fc-bar button,.fc-bar span{padding:9px 18px;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;border:2px solid #ddd;background:#fff;transition:.2s}.fc-bar button:hover{background:#f0f7ff;border-color:var(--accent)}.fc-progress{height:6px;background:#e5e7eb;border-radius:3px;margin-bottom:16px}.fc-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),#6fb3f2);border-radius:3px;transition:width .4s}.prog{height:6px;background:#e5e7eb;border-radius:3px;margin-bottom:20px;overflow:hidden}.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),#6fb3f2);border-radius:3px;transition:width .4s ease}.flashcard{background:var(--card);border-radius:16px;box-shadow:0 6px 24px rgba(30,58,95,.14);cursor:pointer;user-select:none;margin-bottom:10px}.card-inner{min-height:260px;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1)}.card-inner.flipped{transform:rotateY(180deg)}.card-front,.card-back{padding:36px 32px;backface-visibility:hidden;position:absolute;width:100%;top:0;left:0;display:flex;flex-direction:column;justify-content:center;min-height:260px;border-radius:16px}.card-front{background:linear-gradient(135deg,#fff 0%,#f0f6ff 100%);border:2px solid #e0e9f9}.card-back{transform:rotateY(180deg);background:linear-gradient(135deg,#e8f4fd 0%,#d6eeff 100%);border:2px solid #bcd8f5}.fc-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);margin-bottom:14px;opacity:.75}.fc-text{font-size:1.05rem;line-height:1.65;color:#1a2a3a;font-weight:500}.fc-hint{text-align:center;color:#9ca3af;font-size:.82rem;margin-top:14px;font-style:italic}.btn-prev,.btn-next{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}.btn-shuffle{background:var(--blue)!important;color:#fff!important;border-color:var(--blue)!important}.fc-counter{background:#f0f4ff!important;color:var(--blue)!important;font-weight:700!important;border-color:#c7d5f0!important}.qz-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px}.qz-bar button{background:var(--blue);color:#fff;border:none;padding:8px 16px;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer}.score{font-weight:700;color:var(--blue);font-size:.9rem}.q-block{background:var(--card);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.07)}.q-num{font-size:.72rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}.q-text{font-size:.9rem;font-weight:600;margin-bottom:11px;line-height:1.55}.q-opts{display:flex;flex-direction:column;gap:6px}.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 11px;border-radius:7px;border:1.5px solid #e5e7eb;cursor:pointer;font-size:.85rem;line-height:1.4;transition:.15s}.opt:hover{background:#f0f7ff;border-color:var(--accent)}.opt.correct{background:#d1fae5;border-color:var(--green);color:#065f46}.opt.wrong{background:#fee2e2;border-color:var(--red);color:#991b1b}.q-feedback{margin-top:11px;border-radius:7px;overflow:hidden}.fb-result{padding:6px 11px;font-weight:700;font-size:.85rem}.fb-exp{padding:9px 11px;font-size:.83rem;line-height:1.5;background:#f9fafb;border-top:1px solid #e5e7eb}.correct-fb{background:#d1fae5;color:#065f46}.wrong-fb{background:#fee2e2;color:#991b1b}.back-btn{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.15);color:#fff;font-size:.78rem;font-weight:600;padding:5px 12px;border-radius:6px;text-decoration:none;border:1px solid rgba(255,255,255,.25);transition:.15s;margin-bottom:10px}.back-btn:hover{background:rgba(255,255,255,.28);color:#fff}footer{text-align:center;padding:24px;color:#9ca3af;font-size:.78rem}</style></head>
+<body>
+<header>
+<a class="back-btn" href="../../Topics/00_Study_Plan_Topics.html">&#8592; Study Plan</a>
+<div class="hdr-top">Module 1: Supply Chains, Demand, and Forecasting</div>
+<div class="hdr-title">1.1.2 &middot; Supply Chain Maturity and Complexity</div>
+<div class="hdr-meta"><span class="badge">20 flashcards</span><span class="badge">1 quiz questions</span><span class="badge">Full CSCP content</span></div>
+</header>
+<nav>
+<button class="active" onclick="showTab('summary',this)">&#128214; Summary</button>
+<button onclick="showTab('flashcards',this)">&#128208; Flashcards (20)</button>
+<button onclick="showTab('quiz',this)">&#9989; Quiz (1 Q)</button>
+</nav>
+<div class="container">
+<div class="tab active" id="summary">
+
+  <div class="block">
+    <div class="block-title">Overview</div>
+    <div class="block-body">
+      <p>Supply chain maturity refers to the level of integration and coordination with supply partners relative to competing supply chains. Organizations that want to create value must assess and develop their supply chain maturity. Maturity evolves through five stages as technology and organizational culture advance.</p>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">The 5 Stages of Supply Chain Evolution</div>
+    <div class="block-body">
+      <p>Experts agree on five typical stages of development. An organization may be sheltered from some changes depending on its industry:</p>
+      <ul>
+        <li><strong>Stage 1</strong> &#8212; Multiple Dysfunction</li>
+        <li><strong>Stage 2</strong> &#8212; Semifunctional Enterprise</li>
+        <li><strong>Stage 3</strong> &#8212; Integrated Enterprise</li>
+        <li><strong>Stage 4</strong> &#8212; Extended Enterprise</li>
+        <li><strong>Stage 5</strong> &#8212; Orchestrated Supply Chain</li>
+      </ul>
+      <div class="key-point">&#128161; Key Point: Early-stage supply chains are stable with predictable supply/demand, low costs, and minimal technology needs. As maturity increases, focus shifts from internal efficiency to cross-company collaboration and digital integration.</div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Stage 1 &#8212; Multiple Dysfunction</div>
+    <div class="block-body">
+      <p>A <strong>reactive</strong> supply chain that fulfills demand without concern for costs. Perceived as a cost center.</p>
+      <ul>
+        <li>Activities are ad hoc rather than planned; management direction is vague.</li>
+        <li>Forecasting is guesswork, often inflated by marketing optimism.</li>
+        <li>Products designed without input from manufacturing or marketing.</li>
+        <li>Warehouses overstocked; trucks loaded/unloaded reactively with no advance planning.</li>
+        <li>Material Requirements Planning (MRP) at basic level only: bill of materials, master schedule, on-hand/on-order data.</li>
+        <li>Purchasing is ad hoc and transactional &#8212; no consistent preferred suppliers.</li>
+      </ul>
+      <div class="exhibit">
+        <img src="../_images/image3.png" alt="Exhibit 1-4" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 1-4:</strong> Multiple Dysfunction</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Stage 2 &#8212; Semifunctional Enterprise</div>
+    <div class="block-body">
+      <p>A <strong>reactive efficient</strong> supply chain. Functional areas are defined but each department operates in isolation (silos). Supports competitive positioning as an efficient, low-cost unit.</p>
+      <ul>
+        <li>Focuses on total delivered cost of finished goods.</li>
+        <li>Invests in connectivity technology and automation to reduce labor costs and improve throughput.</li>
+        <li>Inventory management reduces stock levels within the company.</li>
+        <li>Procurement pursues lowest-price strategies; traffic department reduces transport costs.</li>
+        <li>Marketing develops more reliable forecasting techniques.</li>
+        <li>Closed-loop MRP software may be in place; some cross-functional planning begins.</li>
+      </ul>
+      <div class="exhibit">
+        <img src="../_images/image4.png" alt="Exhibit 1-5" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 1-5:</strong> Semifunctional Enterprise</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Stage 3 &#8212; Integrated Enterprise</div>
+    <div class="block-body">
+      <p>A <strong>proactive efficient</strong> supply chain. The company shifts from individual functions to companywide business processes. Proposes design and material changes to lower complexity and costs.</p>
+      <ul>
+        <li><strong>Sales and Operations Planning (S&amp;OP)</strong> &#8212; replaces silo planning; cross-functional teams periodically align sales, marketing, and production plans.</li>
+        <li><strong>Enterprise Resource Planning (ERP)</strong> &#8212; extends closed-loop MRP to link all functional areas; advanced versions reach through the corporate supply chain.</li>
+        <li><strong>Just-in-Time (JIT)</strong> &#8212; combined with better demand planning and logistics to make fulfillment more efficient and reliable.</li>
+        <li>Product design becomes cross-functional (production, marketing, purchasing, and design engineers collaborate).</li>
+        <li>Improved customer service through better market segmentation and replenishment policies per segment.</li>
+        <li>The nucleus company may begin contracting external logistics providers (e.g., UPS, FedEx).</li>
+      </ul>
+      <div class="exhibit">
+        <img src="../_images/image5.png" alt="Exhibit 1-6" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 1-6:</strong> Integrated Enterprise</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Stage 4 &#8212; Extended Enterprise</div>
+    <div class="block-body">
+      <p>A <strong>strategic driver</strong> supply chain. The nucleus company extends at least one business process beyond its own boundaries to collaborate with partners. The supply chain actively contributes to corporate strategy.</p>
+      <ul>
+        <li>Demand generation and fulfillment are fully integrated.</li>
+        <li>Forecasting, planning, and replenishment are fully integrated and visible across partners.</li>
+        <li>Partners synchronize ERP systems across corporate boundaries to share data.</li>
+        <li><strong>Collaborative Planning, Forecasting, and Replenishment (CPFR)</strong> &#8212; cross-organizational process enabling synchronized planning with partners.</li>
+        <li>E-commerce advances: customers can order, track shipments, and communicate with customer service online.</li>
+        <li>Technological improvements, knowledge, and real-time information are shared with chain partners.</li>
+      </ul>
+      <div class="exhibit">
+        <img src="../_images/image6.png" alt="Exhibit 1-7" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 1-7:</strong> Extended Enterprise</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Stage 5 &#8212; Orchestrated Supply Chain</div>
+    <div class="block-body">
+      <p>Also called <strong>supply chain digital transformation</strong> or (in Europe) <strong>Industrie 4.0</strong>. A <strong>consistent and systematic</strong> supply chain.</p>
+      <ul>
+        <li>Improvement teams are cross-functional, technically and socially skilled.</li>
+        <li>Change management is embedded in organizational culture.</li>
+        <li>Data has integrity, is secure, and drives all decision making.</li>
+        <li>End-to-end visibility is achieved; technology gaps are resolved.</li>
+        <li>Sourcing is right-sized and resilient (quickly adaptable).</li>
+        <li>Supply chain inventory and asset data is truly real-time, feeding into predictive analytics (e.g., predictive maintenance scheduling).</li>
+        <li>Processes are shared, policies enforced, and automation is common.</li>
+      </ul>
+      <div class="key-point">&#128161; Key Point: Stage 5 goes beyond digitization (converting documents to digital) or digitalization (automated sensors triggering responses). It is a full transformation where real-time data reshapes product development, sourcing, and operations across the entire network.</div>
+      <div class="exhibit">
+        <img src="../_images/image7.png" alt="Exhibit 1-8" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 1-8:</strong> Orchestrated Supply Chain</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Maturity as an Input to Strategy</div>
+    <div class="block-body">
+      <ul>
+        <li>Higher-stage supply chains focus more on creating net value than on minimizing costs.</li>
+        <li>The goal: identify gaps preventing full connectivity and visibility, then build a roadmap to close them.</li>
+        <li>Supply chain maturity must be assessed before setting strategy &#8212; gaps determine priorities.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-title">Supply Chain Examples</div>
+    <div class="block-body">
+      <h4>Manufacturing Supply Chain Model</h4>
+      <p>Shows two tiers of suppliers, a manufacturer, distribution centers (DCs), and customers. The nucleus firm may be a designer or brand owner rather than a manufacturer. Tier 1 suppliers have their own Tier 2 suppliers &#8212; even raw material extractors have suppliers of their own.</p>
+      <div class="exhibit">
+        <img src="../_images/image8.png" alt="Exhibit 1-9" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 1-9:</strong> Manufacturing Supply Chain Model</div>
+      </div>
+
+      <h4>Service Industry Supply Chain</h4>
+      <div class="def-box"><strong>Service Industry Company:</strong> 1) In its narrowest sense, an organization that provides an intangible product (e.g., medical or legal advice). 2) In its broadest sense, all organizations except farming, mining, and manufacturing.</div>
+      <p>Service-oriented supply chains also require sophisticated management. Example: an electric utility receives products, services, and raw materials and delivers electricity to customers.</p>
+      <div class="exhibit">
+        <img src="../_images/image9.png" alt="Exhibit 1-10" loading="lazy" style="max-width:100%">
+        <div class="exhibit-cap"><strong>Exhibit 1-10:</strong> Electric Utility Supply Chain</div>
+      </div>
+
+      <h4>Specialized Supply Chains</h4>
+      <ul>
+        <li><strong>Humanitarian/disaster relief</strong> &#8212; must be built quickly and be resilient against theft, misappropriation, and transport disruptions.</li>
+        <li><strong>Hospitals</strong> &#8212; cost cutting is vital, but safe and effective patient care is always the primary goal; visibility and traceability are critical.</li>
+        <li><strong>Retail</strong> &#8212; under pressure to compete with online retailers (e.g., Amazon); must redesign supply chains for speed, cost, and omnichannel fulfillment.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<div class="tab" id="flashcards">
+  <div class="fc-bar"><button class="btn-prev" onclick="prevCard()">&#8592; Prev</button><button class="btn-next" onclick="nextCard()">Next &#8594;</button><button class="btn-shuffle" onclick="shuffleCards()">&#128256; Shuffle</button><span class="fc-counter" id="fcc">1 / 20</span></div>
+  <div class="prog"><div class="prog-fill" id="prg" style="width:5%"></div></div>
+  <div class="flashcard" id="fc0" style="display:block"><div class="card-inner" id="ci0" onclick="flipCard(0)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What does supply chain maturity refer to?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The level of integration and coordination with supply partners relative to those of competing supply chains.</div></div></div></div>
+  <div class="flashcard" id="fc1" style="display:none"><div class="card-inner" id="ci1" onclick="flipCard(1)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What are the 5 stages of supply chain evolution?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Stage 1: Multiple Dysfunction &#8212; Stage 2: Semifunctional Enterprise &#8212; Stage 3: Integrated Enterprise &#8212; Stage 4: Extended Enterprise &#8212; Stage 5: Orchestrated Supply Chain.</div></div></div></div>
+  <div class="flashcard" id="fc2" style="display:none"><div class="card-inner" id="ci2" onclick="flipCard(2)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Describe Stage 1: Multiple Dysfunction.</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A reactive supply chain that fulfills demand without concern for costs. Activities are ad hoc, forecasting is guesswork, purchasing is transactional, and there is no cross-functional planning. Perceived as a cost center.</div></div></div></div>
+  <div class="flashcard" id="fc3" style="display:none"><div class="card-inner" id="ci3" onclick="flipCard(3)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Describe Stage 2: Semifunctional Enterprise.</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A reactive efficient supply chain where functional areas are defined but operate in silos. Each department improves independently &#8212; inventory, procurement, transport, forecasting &#8212; with little cross-functional overlap.</div></div></div></div>
+  <div class="flashcard" id="fc4" style="display:none"><div class="card-inner" id="ci4" onclick="flipCard(4)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Describe Stage 3: Integrated Enterprise.</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A proactive efficient supply chain using S&amp;OP, ERP, and JIT. Cross-functional product design and improved customer segmentation. May begin contracting external logistics providers.</div></div></div></div>
+  <div class="flashcard" id="fc5" style="display:none"><div class="card-inner" id="ci5" onclick="flipCard(5)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Describe Stage 4: Extended Enterprise.</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A strategic driver supply chain extending processes beyond company boundaries. Partners synchronize ERP systems, use CPFR, and share real-time information. Supply chain actively drives corporate strategy.</div></div></div></div>
+  <div class="flashcard" id="fc6" style="display:none"><div class="card-inner" id="ci6" onclick="flipCard(6)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">Describe Stage 5: Orchestrated Supply Chain.</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">A consistent and systematic supply chain (also called digital transformation or Industrie 4.0). Real-time data drives all decisions, end-to-end visibility is achieved, and change management is embedded in culture.</div></div></div></div>
+  <div class="flashcard" id="fc7" style="display:none"><div class="card-inner" id="ci7" onclick="flipCard(7)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is CPFR and in which stage does it appear?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Collaborative Planning, Forecasting, and Replenishment (CPFR) &#8212; a cross-organizational process enabling synchronized planning with supply chain partners. Appears in Stage 4: Extended Enterprise.</div></div></div></div>
+  <div class="flashcard" id="fc8" style="display:none"><div class="card-inner" id="ci8" onclick="flipCard(8)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the difference between digitization, digitalization, and digital transformation?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Digitization = converting documents to digital format. Digitalization = automated sensors triggering responses. Digital transformation (Stage 5) = real-time data reshaping entire operations and strategy across the network.</div></div></div></div>
+  <div class="flashcard" id="fc9" style="display:none"><div class="card-inner" id="ci9" onclick="flipCard(9)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is S&amp;OP and when does it first appear?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Sales and Operations Planning (S&amp;OP) &#8212; periodic cross-functional meetings where sales, marketing, and production align plans. First appears in Stage 3: Integrated Enterprise, replacing silo-based planning.</div></div></div></div>
+  <div class="flashcard" id="fc10" style="display:none"><div class="card-inner" id="ci10" onclick="flipCard(10)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is ERP and how does it relate to MRP?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Enterprise Resource Planning (ERP) extends closed-loop MRP by adding modules for each functional area and crossing corporate boundaries. MRP appears in Stage 1; closed-loop MRP in Stage 2; ERP in Stage 3.</div></div></div></div>
+  <div class="flashcard" id="fc11" style="display:none"><div class="card-inner" id="ci11" onclick="flipCard(11)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is Just-in-Time (JIT) and when does it emerge?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">JIT is an approach aimed at minimizing inventory by receiving goods only when needed. Emerges in Stage 3 alongside better demand planning and logistics.</div></div></div></div>
+  <div class="flashcard" id="fc12" style="display:none"><div class="card-inner" id="ci12" onclick="flipCard(12)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">ASCM Definition: Service Industry Company</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">1) In its narrowest sense, an organization that provides an intangible product (e.g., medical or legal advice). 2) In its broadest sense, all organizations except farming, mining, and manufacturing.</div></div></div></div>
+  <div class="flashcard" id="fc13" style="display:none"><div class="card-inner" id="ci13" onclick="flipCard(13)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is the goal of assessing supply chain maturity?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">To identify gaps preventing full connectivity and visibility, then build a roadmap to close those gaps and advance toward greater maturity and net value creation.</div></div></div></div>
+  <div class="flashcard" id="fc14" style="display:none"><div class="card-inner" id="ci14" onclick="flipCard(14)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What makes Stage 5 different from Stage 4?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Stage 5 features truly real-time data feeding predictive analytics, full end-to-end visibility, embedded change management culture, and cross-functional teams &#8212; not just bilateral partner collaboration.</div></div></div></div>
+  <div class="flashcard" id="fc15" style="display:none"><div class="card-inner" id="ci15" onclick="flipCard(15)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What unique challenges do humanitarian supply chains face?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Must be built quickly and be resilient against theft, misappropriation, and transportation disruptions.</div></div></div></div>
+  <div class="flashcard" id="fc16" style="display:none"><div class="card-inner" id="ci16" onclick="flipCard(16)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What is Industrie 4.0?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">The European term for Stage 5 (Orchestrated Supply Chain / digital transformation). Refers to the fourth industrial revolution: fully integrated, automated, and data-driven operations.</div></div></div></div>
+  <div class="flashcard" id="fc17" style="display:none"><div class="card-inner" id="ci17" onclick="flipCard(17)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What type of supply chain does Stage 3 represent, and why?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Proactive efficient &#8212; it proposes new materials or product designs to lower complexity and costs, and uses integrated information systems (ERP, S&amp;OP) to facilitate cross-functional sharing.</div></div></div></div>
+  <div class="flashcard" id="fc18" style="display:none"><div class="card-inner" id="ci18" onclick="flipCard(18)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">What type of supply chain does Stage 2 represent, and why?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Reactive efficient &#8212; supports competitive positioning by serving as an efficient, low-cost unit focused on total delivered cost of finished goods, but without cross-functional integration.</div></div></div></div>
+  <div class="flashcard" id="fc19" style="display:none"><div class="card-inner" id="ci19" onclick="flipCard(19)"><div class="card-front"><span class="fc-label">TERM / CONCEPT</span><div class="fc-text">In which stage does CPFR first appear, and what does it enable?</div></div><div class="card-back"><span class="fc-label">ANSWER</span><div class="fc-text">Stage 4 (Extended Enterprise). CPFR enables synchronized planning across corporate boundaries, aligning forecasts and replenishment plans between the nucleus company and its supply chain partners.</div></div></div></div>
+  <p class="fc-hint">Click card to flip &middot; Use arrows or shuffle to practise</p>
+</div>
+<div class="tab" id="quiz">
+  <div class="qz-bar"><button onclick="resetQuiz()">&#128260; Reset Quiz</button><span class="score" id="score">Score: 0/0</span></div>
+  <div class="q-block"><div class="q-num">Question 1</div><div class="q-text">At the lowest level of supply chain maturity, how are supply chain functions typically organized?</div><div class="q-opts"><div class="opt opt-0" onclick="pick(0,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Fully integrated with all trading partners on a shared platform</div><div class="opt opt-0" onclick="pick(0,1,1)"><span style="font-weight:700;min-width:20px">B.</span>As isolated functional silos with limited cross-functional coordination</div><div class="opt opt-0" onclick="pick(0,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Through collaborative planning with key customers and suppliers</div><div class="opt opt-0" onclick="pick(0,3,1)"><span style="font-weight:700;min-width:20px">D.</span>As a demand-driven network with real-time visibility</div></div><div class="q-feedback" id="fb-0" style="display:none"><div class="fb-result" id="res-0"></div><div class="fb-exp">At maturity level 1, functions (procurement, manufacturing, logistics) operate independently with their own objectives, often creating sub-optimization and conflicting priorities.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 2</div><div class="q-text">What is the primary benefit of moving to higher levels of supply chain maturity?</div><div class="q-opts"><div class="opt opt-1" onclick="pick(1,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Reducing the number of employees in each function</div><div class="opt opt-1" onclick="pick(1,1,1)"><span style="font-weight:700;min-width:20px">B.</span>Achieving better cost, service, and resilience through integration and collaboration</div><div class="opt opt-1" onclick="pick(1,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Eliminating the need for IT systems</div><div class="opt opt-1" onclick="pick(1,3,1)"><span style="font-weight:700;min-width:20px">D.</span>Concentrating all supply chain decisions in a central headquarters</div></div><div class="q-feedback" id="fb-1" style="display:none"><div class="fb-result" id="res-1"></div><div class="fb-exp">Higher maturity brings cross-functional integration, then external collaboration, then full end-to-end orchestration — progressively improving cost, responsiveness, and resilience.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 3</div><div class="q-text">CPFR stands for:</div><div class="q-opts"><div class="opt opt-2" onclick="pick(2,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Centralized Planning, Forecasting, and Replenishment</div><div class="opt opt-2" onclick="pick(2,1,1)"><span style="font-weight:700;min-width:20px">B.</span>Collaborative Planning, Forecasting, and Replenishment</div><div class="opt opt-2" onclick="pick(2,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Consumer Product Flow and Returns</div><div class="opt opt-2" onclick="pick(2,3,1)"><span style="font-weight:700;min-width:20px">D.</span>Cross-Platform Forecasting and Reporting</div></div><div class="q-feedback" id="fb-2" style="display:none"><div class="fb-result" id="res-2"></div><div class="fb-exp">CPFR — Collaborative Planning, Forecasting, and Replenishment — is a business practice where trading partners share forecasts and planning data to improve supply chain performance.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 4</div><div class="q-text">Which maturity stage is characterized by sharing real-time demand and inventory data with key suppliers and customers?</div><div class="q-opts"><div class="opt opt-3" onclick="pick(3,0,2)"><span style="font-weight:700;min-width:20px">A.</span>Stage 1: Functional focus</div><div class="opt opt-3" onclick="pick(3,1,2)"><span style="font-weight:700;min-width:20px">B.</span>Stage 2: Internal integration</div><div class="opt opt-3" onclick="pick(3,2,2)"><span style="font-weight:700;min-width:20px">C.</span>Stage 3: External integration / collaboration</div><div class="opt opt-3" onclick="pick(3,3,2)"><span style="font-weight:700;min-width:20px">D.</span>Stage 4: Network orchestration</div></div><div class="q-feedback" id="fb-3" style="display:none"><div class="fb-result" id="res-3"></div><div class="fb-exp">External integration (stage 3 in most models) involves sharing information and coordinating plans with upstream suppliers and downstream customers, going beyond internal cross-functional integration.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 5</div><div class="q-text">A company in the 'internal integration' maturity stage has most likely achieved:</div><div class="q-opts"><div class="opt opt-4" onclick="pick(4,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Collaboration with all tier-2 suppliers</div><div class="opt opt-4" onclick="pick(4,1,1)"><span style="font-weight:700;min-width:20px">B.</span>A single integrated S&OP process aligning sales, operations, and finance internally</div><div class="opt opt-4" onclick="pick(4,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Real-time visibility across all supply chain partners</div><div class="opt opt-4" onclick="pick(4,3,1)"><span style="font-weight:700;min-width:20px">D.</span>Full automation of supplier selection and ordering</div></div><div class="q-feedback" id="fb-4" style="display:none"><div class="fb-result" id="res-4"></div><div class="fb-exp">Internal integration means functions within the company — sales, operations, procurement, finance — work from a single set of shared data and plans (e.g., S&OP).</div></div></div>
+  <div class="q-block"><div class="q-num">Question 6</div><div class="q-text">What does the Gartner Supply Chain Top 25 benchmark primarily measure?</div><div class="q-opts"><div class="opt opt-5" onclick="pick(5,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Number of countries a company sources from</div><div class="opt opt-5" onclick="pick(5,1,1)"><span style="font-weight:700;min-width:20px">B.</span>Supply chain excellence combining financial performance, customer service, and industry peer opinion</div><div class="opt opt-5" onclick="pick(5,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Warehouse automation technology adoption</div><div class="opt opt-5" onclick="pick(5,3,1)"><span style="font-weight:700;min-width:20px">D.</span>Sustainability certifications held by the supply chain</div></div><div class="q-feedback" id="fb-5" style="display:none"><div class="fb-result" id="res-5"></div><div class="fb-exp">The Gartner Top 25 uses a composite score of return on assets, inventory turns, revenue growth, and peer/analyst opinion to identify supply chain leaders.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 7</div><div class="q-text">Which of the following is a characteristic of a 'demand-driven' supply chain at high maturity?</div><div class="q-opts"><div class="opt opt-6" onclick="pick(6,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Orders are batched monthly and sent to suppliers</div><div class="opt opt-6" onclick="pick(6,1,1)"><span style="font-weight:700;min-width:20px">B.</span>Production and replenishment are triggered by real-time customer demand signals</div><div class="opt opt-6" onclick="pick(6,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Inventory is pushed into the channel based on quarterly forecasts</div><div class="opt opt-6" onclick="pick(6,3,1)"><span style="font-weight:700;min-width:20px">D.</span>All decisions are made by a central planning team</div></div><div class="q-feedback" id="fb-6" style="display:none"><div class="fb-result" id="res-6"></div><div class="fb-exp">Demand-driven supply chains use actual demand data (point-of-sale, consumption) to trigger replenishment, reducing the bullwhip effect and inventory waste.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 8</div><div class="q-text">What is a key risk of remaining at a low supply chain maturity level?</div><div class="q-opts"><div class="opt opt-7" onclick="pick(7,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Too much collaboration with suppliers that reduces bargaining power</div><div class="opt opt-7" onclick="pick(7,1,1)"><span style="font-weight:700;min-width:20px">B.</span>Sub-optimal total supply chain cost and poor responsiveness to market changes</div><div class="opt opt-7" onclick="pick(7,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Over-investment in technology that is not needed</div><div class="opt opt-7" onclick="pick(7,3,1)"><span style="font-weight:700;min-width:20px">D.</span>Excessive information sharing with competitors</div></div><div class="q-feedback" id="fb-7" style="display:none"><div class="fb-result" id="res-7"></div><div class="fb-exp">Low maturity (silos, poor integration) leads to higher total cost (local optimization vs. system optimization), slower response to demand changes, and vulnerability to disruptions.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 9</div><div class="q-text">Which term describes the practice of companies working together to jointly plan, forecast, and replenish inventory?</div><div class="q-opts"><div class="opt opt-8" onclick="pick(8,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Vertical integration</div><div class="opt opt-8" onclick="pick(8,1,1)"><span style="font-weight:700;min-width:20px">B.</span>CPFR — Collaborative Planning, Forecasting, and Replenishment</div><div class="opt opt-8" onclick="pick(8,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Master data management</div><div class="opt opt-8" onclick="pick(8,3,1)"><span style="font-weight:700;min-width:20px">D.</span>S&OP (Sales and Operations Planning)</div></div><div class="q-feedback" id="fb-8" style="display:none"><div class="fb-result" id="res-8"></div><div class="fb-exp">CPFR is a structured collaboration process where trading partners jointly develop a single agreed demand forecast and use it to drive replenishment decisions.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 10</div><div class="q-text">At the highest level of supply chain maturity, what is the primary focus?</div><div class="q-opts"><div class="opt opt-9" onclick="pick(9,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Achieving lowest unit manufacturing cost</div><div class="opt opt-9" onclick="pick(9,1,1)"><span style="font-weight:700;min-width:20px">B.</span>Orchestrating the entire supply network for maximum responsiveness, sustainability, and customer value</div><div class="opt opt-9" onclick="pick(9,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Reducing the number of suppliers in each category</div><div class="opt opt-9" onclick="pick(9,3,1)"><span style="font-weight:700;min-width:20px">D.</span>Automating all repetitive tasks within the company</div></div><div class="q-feedback" id="fb-9" style="display:none"><div class="fb-result" id="res-9"></div><div class="fb-exp">The highest maturity level involves end-to-end network visibility and orchestration — managing the entire ecosystem of partners to dynamically optimize for cost, service, and sustainability.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 11</div><div class="q-text">Supply chain segmentation means:</div><div class="q-opts"><div class="opt opt-10" onclick="pick(10,0,1)"><span style="font-weight:700;min-width:20px">A.</span>Dividing the workforce into specialized teams</div><div class="opt opt-10" onclick="pick(10,1,1)"><span style="font-weight:700;min-width:20px">B.</span>Designing different supply chain strategies for different product/customer segments based on their distinct needs</div><div class="opt opt-10" onclick="pick(10,2,1)"><span style="font-weight:700;min-width:20px">C.</span>Separating domestic and international supply chains</div><div class="opt opt-10" onclick="pick(10,3,1)"><span style="font-weight:700;min-width:20px">D.</span>Splitting the S&OP process into monthly and annual cycles</div></div><div class="q-feedback" id="fb-10" style="display:none"><div class="fb-result" id="res-10"></div><div class="fb-exp">Supply chain segmentation (also called multi-channel or differentiated SC strategy) recognizes that one supply chain does not fit all products or customers — different segments require different supply chain designs.</div></div></div>
+  <div class="q-block"><div class="q-num">Question 12</div><div class="q-text">Which improvement is typically achieved when moving from functional silos to internal integration?</div><div class="q-opts"><div class="opt opt-11" onclick="pick(11,0,2)"><span style="font-weight:700;min-width:20px">A.</span>Reduced number of SKUs in the product range</div><div class="opt opt-11" onclick="pick(11,1,2)"><span style="font-weight:700;min-width:20px">B.</span>Elimination of all safety stock</div><div class="opt opt-11" onclick="pick(11,2,2)"><span style="font-weight:700;min-width:20px">C.</span>A single forecast and plan that all internal functions align to</div><div class="opt opt-11" onclick="pick(11,3,2)"><span style="font-weight:700;min-width:20px">D.</span>Full real-time visibility with all tier-1 suppliers</div></div><div class="q-feedback" id="fb-11" style="display:none"><div class="fb-result" id="res-11"></div><div class="fb-exp">Internal integration produces a single set of shared data and plans — a common forecast, shared inventory visibility, and aligned objectives across functions — reducing internal conflicts and improving total cost.</div></div></div>
+</div>
+</div>
+<footer>CSCP Study Aid &mdash; 1.1.2: Supply Chain Maturity and Complexity</footer>
+<script>function showTab(id,btn){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById(id).classList.add('active');btn.classList.add('active');}
+var cards=[],ci=0;
+function initCards(){cards=Array.from(document.querySelectorAll('.flashcard'));if(cards.length)showCard(0);}
+function showCard(i){cards.forEach((c,j)=>{c.style.display=j===i?'block':'none';var inn=c.querySelector('.card-inner');if(inn)inn.classList.remove('flipped');});ci=i;var ctr=document.getElementById('fcc');if(ctr)ctr.textContent=(i+1)+' / '+cards.length;var prg=document.getElementById('prg');if(prg)prg.style.width=((i+1)/cards.length*100)+'%';}
+function flipCard(i){var el=document.getElementById('ci'+i);if(el)el.classList.toggle('flipped');}
+function prevCard(){if(ci>0)showCard(ci-1);}
+function nextCard(){if(ci<cards.length-1)showCard(ci+1);}
+function shuffleCards(){var c=cards[0].parentElement;for(var i=cards.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));c.insertBefore(cards[j],cards[i].nextSibling);}cards=Array.from(document.querySelectorAll('.flashcard'));cards.forEach((c,j)=>{c.id='fc'+j;var inn=c.querySelector('.card-inner');if(inn){inn.id='ci'+j;inn.setAttribute('onclick','flipCard('+j+')');}});showCard(0);}
+var answered={},correct=0,total=0;
+function pick(q,o,cor){if(answered[q])return;answered[q]=true;total++;document.querySelectorAll('.opt-'+q).forEach((el,i)=>{el.classList.add(i===cor?'correct':'wrong');});var fb=document.getElementById('fb-'+q);if(fb)fb.style.display='block';var res=document.getElementById('res-'+q);if(res){if(o===cor){correct++;res.textContent='\u2713 Correct!';fb.querySelector('.fb-result').className='fb-result correct-fb';}else{res.textContent='\u2717 Incorrect';fb.querySelector('.fb-result').className='fb-result wrong-fb';}}document.getElementById('score').textContent='Score: '+correct+'/'+total;}
+function resetQuiz(){answered={};correct=0;total=0;document.getElementById('score').textContent='Score: 0/0';document.querySelectorAll('.opt').forEach(o=>{o.classList.remove('correct','wrong');});document.querySelectorAll('.q-feedback').forEach(f=>{f.style.display='none';});}
+window.onload=function(){initCards();};</script></body></html>
